@@ -1,10 +1,25 @@
 <template>
   <div id="app">
+    <van-icon name="close" />
     <router-view/>
+
+   
   </div>
 </template>
 
+<script>
+import { Icon } from 'vant';
+
+
+export default {
+  components: {
+   [Icon.name]:Icon
+   }
+}
+</script>
 <style lang="less">
+@import './assets/style/resize.css';
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
