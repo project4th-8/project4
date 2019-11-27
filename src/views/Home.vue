@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    
+      
   </div>
 </template>
 
@@ -10,3 +10,7 @@ export default {
   name: 'home',
 }
 </script>
+
+<style lang="less" scoped>
+  
+</style>
