@@ -108,42 +108,6 @@ export default {
     overflow: hidden;
     width: 100%;
     background: rgb(240, 240, 240);
-<<<<<<< HEAD
-    
-    .head {
-      width: 100%;
-      height: 80px;
-      background: white;
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-
-      .headImg {
-        width: 60px;
-        height: 60px;
-        line-height: 60px;
-        text-align: center;
-        border-radius: 50%;
-        border: 1px solid #ddd;
-        overflow: hidden;
-
-        img {
-          width: 60px;
-          height: 60px;
-        }
-      }
-      .info {
-        width: 180px;
-        height: 45px;
-        font-size: 16px;
-        
-        p {
-          font-size: 22px;
-          font-weight: 500;
-        }
-      }
-      .noLogin {
-=======
   }
   .head {
     width: 100%;
@@ -153,12 +117,18 @@ export default {
     justify-content: space-evenly;
     align-items: center;
     .headImg {
+      overflow: hidden;
       width: 60px;
       height: 60px;
       line-height: 60px;
       text-align: center;
       border-radius: 50%;
       border: 1px solid #ddd;
+
+      img{
+        width: 60px;
+        height: 60px;
+      }
     }
     .info {
       width: 180px;
@@ -166,80 +136,11 @@ export default {
       font-size: 16px;
       
       p {
->>>>>>> caef8ea35186b7d35e3d3b8cea0ece8978c19c1f
         font-size: 22px;
-        transform: translateX(-70px);
-      }
-<<<<<<< HEAD
-      span {
-        font-size: 14px;
-        margin-right: 10px;
-      }
-      .authentication {
-        width: 80px;
-        height: 25px;
-        line-height: 25px;
-        text-align: center;
-        font-size: 14px;
-        color: red; 
-        border-radius: 10px;
-        background: rgb(247, 245, 245);
-
-        a {
-          color: red;
-        }
-
-        &:active {
-          background: rgb(233, 233, 233);
-        }
       }
     }
-    .functionlist,
-    .function {
-      width: 100%;
-      height: 50px;
-      margin-top: 5px;
-      border-bottom: 1px solid rgb(236, 236, 236);
-      background: white;
-      font-size: 16px;
-      line-height: 50px;
-      text-indent: 15px;
-    }
-    .functionlist {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      font-size: 15px;
-      height: 60px;
-      line-height: 60px;
-      margin: 0;
-      border-bottom: 1px solid rgb(236, 236, 236);
-
-      div {
-        width: 120px;
-        height: 40px;
-        text-align: center;
-        line-height: 40px;
-        transform: translateX(-12px);
-      }
-
-      .iconfont {
-        font-size: 18px;
-      }
-
-      span {
-        margin-left: 5px;
-        &:active {
-          color: rgb(165, 165, 165);
-        }
-      }
-    }
-  }
-
-  
-
-</style>
-=======
+    .noLogin {
+      transform: translateX(-70px);
     }
     span {
       font-size: 14px;
@@ -301,4 +202,3 @@ export default {
     }
   }
 </style>
->>>>>>> caef8ea35186b7d35e3d3b8cea0ece8978c19c1f
