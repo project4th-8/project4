@@ -1,11 +1,16 @@
 * {
-  margin: 0;
   padding: 0;
+  margin: 0;
 }
-
 a,li {
   text-decoration: none;
   list-style: none;
-  color: black;
+  color:black;
 }
-
+.clear::before,.clear::after {
+  display: table;
+  content: '';
+}
+.clear::after {
+  clear: both;
+}

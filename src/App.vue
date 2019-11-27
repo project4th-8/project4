@@ -28,7 +28,6 @@
   color: #2c3e50;
   overflow: hidden;
 }
-
 .nav {
     width: 100%;
     height: 40px;
