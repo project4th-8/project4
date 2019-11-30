@@ -10,8 +10,8 @@
 
       <div class="iphone">
 
-          <span class="yz" v-if="shows" @click="com='telyz',text='手机验证码登录',shows=!shows">{{text}} |</span>
-          <span class="yz" v-else  @click="com='telpass',text='手机号密码登录',shows=!shows">{{text}} |</span>
+          <span class="yz" v-if="shows" @click="com='telyz',text=' 密码登录  ',shows=!shows"> {{ text}} |</span>
+          <span class="yz" v-else  @click="com='telpass',text='验证码登录',shows=!shows">{{text}} |</span>
 
         <router-link to="/Forgetpassword">
           <span>忘记密码 |</span>
@@ -36,7 +36,7 @@ export default {
       username: "",
       password: "",
       com:'telpass',
-      text:'手机号密码登录',
+      text:'验证码登录',
       shows:true
     };
   },

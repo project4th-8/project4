@@ -2,7 +2,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import recommend from '../views/recommend.vue'
-
+import messageA from '../views/messageA.vue'
+import systemNotifications from '../views/systemNotifications.vue'
+import ScComment from '../views/ScComment.vue'
+ 
 Vue.use(VueRouter)
 
 const routes = [
@@ -133,7 +136,113 @@ const routes = [
     path: '/Others',
     name: 'Others',
     component: () => import('../views/Others.vue')
-  }
+  },
+  {
+    path: '/forword',
+    name: 'forword',
+    component: () => import('../views/forword.vue')
+  },
+  {
+  path: '/chat',
+  name: 'chat',
+  component: () => import('../views/chat.vue')
+} ,
+{
+  path: '/msgsearch',
+  name: 'msgsearch',
+  component: () => import('../views/msgsearch.vue')
+},
+{
+  path: '/replay',
+  name: 'replay',
+  component: () => import('../views/replay.vue')
+},
+{
+  path: '/replayt',
+  name: 'replayt',
+  component: () => import('../views/replayt.vue')
+},
+{
+  path: '/fabulous',
+  name: 'fabulous',
+  component: () => import('../views/fabulous.vue')
+},
+ {
+  path: '/message',
+  name:"message",
+  component: () => import('../views/message.vue'),
+  children: [
+    {
+      path: '',
+      name: 'messageA',
+      component:messageA,
+    }, 
+    {
+      path: '/messageB',
+      name: 'messageB',
+      component: () => import('../views/messageB.vue'),
+      children: [
+        {
+          path:'',
+          name:"systemNotifications",
+          component:systemNotifications
+        },
+        {
+          path:'/forwardNotification',
+          name:"forwardNotification",
+          component:() =>import('../views/forwardNotification.vue')
+        },
+        {
+          path:'/followNotification',
+          name:"followNotification",
+          component:() =>import('../views/followNotification.vue')
+        }
+      ]
+
+    }
+  ] 
+}, 
+{
+  path: '/comments',
+  name: 'comments',
+  component: () => import('../views/comments.vue'),
+},
+{
+  path: '/commentstwo',
+  name: 'commentstwo',
+  component: () => import('../views/commentstwo.vue'),
+},
+{
+  path:'/search',
+  name:'search',
+  component:()=>import('../components/search.vue')
+},
+{
+  path:'/searchHistory',
+  name:'searchHistory',
+  component:()=>import('../views/searchHistory.vue'),
+},
+{
+  path:'/sccomment',
+  name:"sccomment",
+  component: ScComment
+},
+{
+  path:'/scpinlun',
+  name:'sc',
+  component:()=>import('../views/ScPinlun.vue')
+},
+{
+  path:"/sctuijian",
+  name:'tuijian',
+  component:()=>import('../views/ScTuijian.vue'),
+},
+{
+  path:"/scgeren",
+  name:"geren",
+  component:()=>import('../views/Scgeren.vue')
+}
+  
 ]
 
 const router = new VueRouter({

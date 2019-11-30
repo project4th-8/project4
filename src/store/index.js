@@ -15,7 +15,7 @@ Vue.use(Vuex)
 },
 {
   title:'B基金上线',
-  userid:1,
+  userid:2,
   username:'dada',
   times:'2018-3-1',
   contents:'sasasasasasasasasasdqwdwqdwqddqw',
@@ -25,7 +25,7 @@ Vue.use(Vuex)
 },
 {
   title:'C基金上线',
-  userid:1,
+  userid:3,
   username:'dada',
   times:'2018-3-1',
   contents:'sasasasasasasasasasdqwdwqdwqddqw',

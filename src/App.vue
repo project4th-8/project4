@@ -2,13 +2,13 @@
   <div id="app">
     <ul class="nav">
         <li><router-link to="/">首页</router-link></li>
-        <li><router-link to="/">发现</router-link></li>
+        <li><router-link to="/search">发现</router-link></li>
         <li><router-link to="/createtext">
           <div class="addCon">
             +
           </div>
         </router-link></li>
-        <li><router-link to="/">消息</router-link></li>
+        <li><router-link to="/message">消息</router-link></li>
         <li><router-link to="/about">我的</router-link></li>
       </ul>
 
