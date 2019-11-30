@@ -1,14 +1,13 @@
 <template>
-  <div class="dynamic">
+  <div class="others">
     <!-- 标题 -->
     <div class="title">
       <a href="/About">取消</a>
-      <span>历史动态</span>
+      <span>他的动态</span>
     </div>
-
     <!-- 用户信息 -->
     <div class="userinfo">
-      <img src="../assets/logo.png" alt="头像" />
+      <img src="../assets/head.jpg" alt="头像" />
       <div class="myinfo">
         <span class="username">用户名</span>
         <span class="iconfont icon-v" :class="{on: false}"></span>
@@ -24,7 +23,9 @@
       <div class="top">
         <div>
           <a href class="links">
-            <div class="Img">头像</div>
+            <div class="Img">
+              <img src="../assets/head.jpg" alt="头像" />
+            </div>
             <div class="yhm">
               <p>
                 用户名
@@ -68,7 +69,7 @@
 <script>
 import { Icon, Uploader } from "vant";
 export default {
-  name: "dynamic",
+  name: "others",
   data: function() {
     return {
       isshow: false,
@@ -91,10 +92,7 @@ export default {
 <style lang="less" scoped>
 @import "../assets/font/personfont/iconfont.css";
 
-.on {
-  color: orange;
-}
-.dynamic {
+.others {
   position: absolute;
   top: 0;
   left: 0;
@@ -145,6 +143,7 @@ export default {
       height: 60px;
       border-radius: 50%;
       box-shadow: 0 0px 2px rgb(88, 88, 88);
+      overflow: hidden;
     }
     span {
       font-size: 16px;

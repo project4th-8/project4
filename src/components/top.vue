@@ -2,18 +2,15 @@
   <div class="top">
     <div class="top-list">
     <input type="text">
+    xxx
     </div>
-      <hello></hello>
+
   </div>
 </template>
 
 <script>
-import hello from './hello'
 export default {
-  name:'top',
-  components:{
-    hello
-  }
+  name:'top'
 }
 </script>
 <style lang="less" scoped>

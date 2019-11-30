@@ -36,7 +36,7 @@ http.interceptors.response.use(function (response) {
   switch(_response.status) {
     case 401:
       return router.replace({
-        path: '/login',
+        path: '/Login',
         query: {redirect: router.currentRoute.fullPath}
       })
     

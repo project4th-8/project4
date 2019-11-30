@@ -1,15 +1,54 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import recommend from '../views/recommend.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home
+    component: Home,
+    children: [
+      {
+        path: '',
+        component: recommend,
+        children: [{
+          path: 'allfund',
+          name: 'allfund',
+          component: () => import('../views/allfund.vue')
+        }]
+      },
+      {
+        path: 'text',
+        name: 'text',
+        component: () => import('../views/text.vue')
+      }
+    ]
+
   },
+  {
+    path:'/createtext',
+    name:"createtext",
+    component: () => import('../views/createtext.vue')
+  }
+  ,
+  {
+    path: '/fund',
+    name: 'fund',
+    component: () => import('../views/fund.vue')
+  },
+  {
+    path: '/createusercon',
+    name: 'createusercon',
+    component: () => import('../views/createusercon.vue')
+  },
+  {
+    path: '/recommend',
+    name: 'recommend',
+    component: () => import('../views/recommend.vue')
+  },
+
   {
     path: '/about',
     name: 'about',
@@ -54,6 +93,46 @@ const routes = [
     path: '/safety',
     name: 'safety',
     component: () => import('../views/Safety.vue')
+  },
+  {
+    path: '/Forgetnext',
+    name: 'Forgetnext',
+    component: () => import('../views/Forgetnext.vue')
+  },
+  {
+    path: '/Forgetpassword',
+    name: 'Forgetpassword',
+    component: () => import('../views/Forgetpassword.vue')
+  },
+  {
+    path: '/Login',
+    name: 'Login',
+    component: () => import('../views/Login.vue')
+  },
+  {
+    path: '/Register',
+    name: 'Register',
+    component: () => import('../views/Register.vue')
+  },
+  {
+    path: '/Registernext',
+    name: 'Registernext',
+    component: () => import('../views/Registernext.vue')
+  },
+  {
+    path: '/Yanzhenglogin',
+    name: 'Yanzhenglogin',
+    component: () => import('../views/Yanzhenglogin.vue')
+  },
+  {
+    path: '/Yanzhengpassword',
+    name: 'Yanzhengpassword',
+    component: () => import('../views/Yanzhengpassword.vue')
+  },
+  {
+    path: '/Others',
+    name: 'Others',
+    component: () => import('../views/Others.vue')
   }
 ]
 
