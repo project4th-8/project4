@@ -10,7 +10,7 @@
       <div class="info">
         <span>头像</span>
         <a href="javascript:;" @click="setHeadImg">
-          <img src="../assets/head.jpg" alt="头像">
+          <img src="../assets/logo.png" alt="头像">
         </a>
       </div>
       <div class="info">

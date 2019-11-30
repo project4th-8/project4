@@ -65,6 +65,7 @@ export default {
   height: 100vh;
   position: fixed;
   z-index: 1000;
+  top: 0;
 }
 #game {
   width: 100%;

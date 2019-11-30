@@ -4,7 +4,7 @@
       <!-- 头像 -->
       <a href="/informations" @islogin="changeLogin" :Login="Login">
         <div v-show="Login" class="headImg">
-          <img src="../assets/head.jpg" alt="头像">
+          <img src="../assets/logo.png" alt="头像">
         </div>
       </a>
       <!-- 登录后 -->
@@ -17,7 +17,7 @@
 
       <!-- 未登录 -->
       <div v-else class="noLogin">
-        <router-link to="/">登录/注册</router-link>
+        <router-link to="/Login">登录/注册</router-link>
       </div>
 
       <!-- 申请认证 -->

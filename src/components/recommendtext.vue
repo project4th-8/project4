@@ -105,7 +105,7 @@ export default {
 .top {
   display: flex;
   justify-content: space-between;
-  padding: 40px 0;
+  padding: 20px 0;
   border-bottom: 1px solid #ddd;
 }
 .Img {
