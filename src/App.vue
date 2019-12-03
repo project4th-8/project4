@@ -8,7 +8,7 @@
             +
           </div>
         </router-link></li>
-        <li><router-link to="/">消息</router-link></li>
+        <li><router-link to="/message">消息</router-link></li>
         <li><router-link to="/about">我的</router-link></li>
       </ul>
 
