@@ -2,17 +2,24 @@
   <div class="about">
     <div class="head">
       <!-- 头像 -->
-      <a href="/informations">
-        <div class="headImg">
-          头像
+      <a href="/informations" @islogin="changeLogin" :Login="Login">
+        <div v-show="Login" class="headImg">
+          <img src="../assets/logo.png" alt="头像">
         </div>
       </a>
+      <!-- 登录后 -->
       <!-- 关注粉丝 -->
-      <div class="info">
+      <div v-if="Login" class="info">
         <p><a href="/informations">用户名</a></p>
-        <span><a href="/attention">关注</a> <span>0</span></span>
-        <span><a href="/myfans">粉丝</a> <span>0</span></span>
+        <span><a href="/attention">关注</a> <span>{{attentionNum}}</span></span>
+        <span><a href="/myfans">粉丝</a> <span>{{fansNum}}</span></span>
       </div>
+
+      <!-- 未登录 -->
+      <div v-else class="noLogin">
+        <router-link to="/Login">登录/注册</router-link>
+      </div>
+
       <!-- 申请认证 -->
       <div class="authentication">
         <a href="/authentication">申请认证</a>
@@ -71,14 +78,47 @@
 </template>
 
 <script>
+// import { mapActions } from 'vue'
+
 export default {
-  name: "about"
+  name: "about",
+  data: function() {
+    return {
+      attentionNum: 1,
+      fansNum: 1,
+      Login: false
+    }
+  },
+  methods: {
+    changeLogin() {
+      this.isLogin = false;
+      console.log(this.isLogin);
+    },
+    // ...mapActions([
+    //   "requestInfo"
+    // ])
+    // getinfo() {
+    //   this.axios.post('/user/findAllUserInfo')
+    //   .then(res => {
+    //     console.log(res.data);
+    //   })
+    // }
+  },
+  created() {
+    this.attentionNum = 2;
+    this.fansNum = 2;
+    this.Login = this.$store.state.isLogin;
+
+    // this.getinfo();
+  }
 }
 </script>
 
 <style lang="less" scoped>
 @import "../assets/font/personfont/iconfont.css";
+
   .about {
+    overflow: hidden;
     width: 100%;
     background: rgb(240, 240, 240);
   }
@@ -90,12 +130,18 @@ export default {
     justify-content: space-evenly;
     align-items: center;
     .headImg {
+      overflow: hidden;
       width: 60px;
       height: 60px;
       line-height: 60px;
       text-align: center;
       border-radius: 50%;
       border: 1px solid #ddd;
+
+      img{
+        width: 60px;
+        height: 60px;
+      }
     }
     .info {
       width: 180px;
@@ -104,8 +150,11 @@ export default {
       
       p {
         font-size: 22px;
-        font-weight: 500;
       }
+    }
+    .noLogin {
+      transform: translateX(-70px);
+      font-size: 24px;
     }
     span {
       font-size: 14px;

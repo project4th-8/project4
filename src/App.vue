@@ -2,8 +2,8 @@
   <div id="app">
     <ul class="nav">
         <li><router-link to="/">首页</router-link></li>
-        <li><router-link to="/">发现</router-link></li>
-        <li><router-link to="/">
+        <li><router-link to="/search">发现</router-link></li>
+        <li><router-link to="/createtext">
           <div class="addCon">
             +
           </div>
@@ -31,7 +31,7 @@
 .nav {
     width: 100%;
     height: 40px;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     z-index: 999;
@@ -39,7 +39,7 @@
     justify-content: space-around;
     align-items: center;
     box-shadow: 0 -1px 2px #ddd;
-    
+    background: #fff;
     li {
       display: inline-block;
       font-size: 18px;

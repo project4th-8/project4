@@ -1,23 +1,460 @@
 <template>
   <div class="safety">
-    这里是安全设置页面
+    <!-- 标题 -->
+    <div class="title">
+      <a href="/About">取消</a>
+      <span>安全设置</span>
+    </div>
+
+    <!-- 功能 -->
+    <div class="infolist">
+      <div class="info" @click="settelephone">
+        <a href="javascript:;">修改手机绑定</a>
+        <span>
+          <van-icon name="arrow" />
+        </span>
+      </div>
+      <div class="info" @click="setpassword">
+        <a href="javascript:;">修改密码</a>
+        <span>
+          <van-icon name="arrow" />
+        </span>
+      </div>
+      <div class="info" @click="setmibao">
+        <a href="javascript:;">修改密保</a>
+        <span>
+          <van-icon name="arrow" />
+        </span>
+      </div>
+    </div>
+
+    <!-- 修改手机号 -->
+    <div class="settel">
+      <!-- 验证手机号 -->
+      <div>
+        <p>修改手机号</p>
+        <input type="text" v-model="tel" @input="yztel" placeholder="输入当前手机号">
+        <span v-show="showpat" class="pat">请输入正确的手机格式</span>
+        <input type="button" class="fsyzm" value="发送验证码" />
+        <input type="text" placeholder="输入验证码">
+        <input type="button" value="确认" @click="showinput"/>
+      </div>
+
+      <!-- 修改号码 -->
+      <div class="inputtel">
+        <div>
+          <van-icon class="quit" name="close" @click="quitinput"/>
+          <p>输入要绑定的手机号</p>
+          <input type="text" v-model="newtel" @input="yznewtel" placeholder="请输入手机号"> 
+          <span v-show="showpat2" class="pat">请输入正确的手机格式</span>
+          <input type="button" value="发送验证码"> 
+          <input type="text" placeholder="输入验证码"> 
+          <input type="button" value="确认修改"> 
+        </div>
+      </div>
+
+      <van-popup v-model="show" class="mtk">{{showCon}}</van-popup>
+      <!-- 取消 -->
+      <van-icon class="quit" name="close" @click="quitsettel" />
+    </div>
+
+    <!-- 修改密码 -->
+    <div class="setpwd">
+      <div>
+        <p>修改密码</p>
+        <input type="password" v-model="password" placeholder="请输入原密码" />
+        <input type="password" v-model="newpassword" placeholder="请输入新密码" />
+        <input type="password" v-model="newpassword2" placeholder="请再次输入新密码" />
+        <input type="button" value="确认" @click="submit" />
+      </div>
+
+      <van-popup v-model="show" class="mtk">{{showCon}}</van-popup>
+      <!-- 取消 -->
+      <van-icon class="quit" name="close" @click="quitsetpwd" />
+    </div>
+
+    <!-- 修改密码 -->
+    <div class="setmb">
+      <div>
+        <p>修改密保</p>
+        <input type="text" placeholder="最喜欢的水果是：" disabled />
+        <input type="password" v-model="mb1" placeholder="请输入新答案" />
+        <input type="text" placeholder="出生年份是：" disabled />
+        <input type="password" v-model="mb2" placeholder="请输入新答案" />
+        <input type="text" placeholder="喜欢的城市是：" disabled />
+        <input type="password" v-model="mb3" placeholder="请输入新答案" />
+        <input type="button" value="确认修改" @click="submitset" />
+      </div>
+
+      <van-popup v-model="show" class="mtk">{{showCon}}</van-popup>
+      <!-- 取消 -->
+      <van-icon class="quit" name="close" @click="quitsetmb" />
+    </div>
   </div>
 </template>
 
 <script>
+import { Icon, Popup } from "vant";
+
 export default {
-  name: "safety"
-}
+  name: "safety",
+  data: function() {
+    return {
+      password: "",
+      newpassword: "",
+      newpassword2: "",
+      show: false,
+      showpat: false,
+      showpat2: false,
+      showCon: "",
+      mb1: "",
+      mb2: "",
+      mb3: "",
+      tel: "",
+      newtel: ""
+    };
+  },
+  components: {
+    [Icon.name]: Icon,
+    [Popup.name]: Popup
+  },
+  methods: {
+    setpassword() {
+      document.getElementsByClassName("setpwd")[0].style.top = "0";
+    },
+    setmibao() {
+      document.getElementsByClassName("setmb")[0].style.top = "0";
+    },
+    settelephone() {
+      document.getElementsByClassName("settel")[0].style.top = "0";
+    },
+    showinput() {
+      document.getElementsByClassName("inputtel")[0].style.left = "0";
+    },
+    showPopup() {
+      this.show = true;
+    },
+    yztel() {
+      if(this.tel != "") {
+        var pat = /^1[3456789]\d{9}$/;
+        if(!pat.test(this.tel)) {
+          this.showpat = true;
+        } else {
+          this.showpat = false;
+        }
+      } else {
+        this.showpat = false;
+      }
+    },
+    yznewtel() {
+      if(this.newtel != "") {
+        var pat = /^1[3456789]\d{9}$/;
+        if(!pat.test(this.newtel)) {
+          this.showpat2 = true;
+        } else {
+          this.showpat2 = false;
+        }
+      } else {
+        this.showpat2 = false;
+      }
+    },
+    submit() {
+      if ((this.password && this.newpassword && this.newpassword2) != "") {
+        if (this.newpassword != this.newpassword2) {
+          this.showPopup();
+          this.showCon = "两次新密码不一致！";
+        } else if (this.password != "123456") {
+          this.showPopup();
+          this.showCon = "旧密码输入错误！";
+        } else if (this.password == (this.newpassword || this.newpassword2)) {
+          this.showPopup();
+          this.showCon = "新密码不能与旧密码相同！";
+        } else {
+          this.showPopup();
+          this.showCon = "密码修改成功！请重新登录！";
+          this.$store.state.isLogin = false;
+          let that = this;
+          setTimeout(function() {
+            that.$router.replace("/about");
+          }, 2000);
+        }
+
+        this.password = "";
+        this.newpassword = "";
+        this.newpassword2 = "";
+      } else {
+        this.showPopup();
+        this.showCon = "必填内容为空！";
+      }
+    },
+    submitset() {
+      if ((this.mb1 && this.mb2 && this.mb3) != "") {
+        this.showPopup();
+        this.showCon = "密保修改成功！";
+
+        this.mb1 = "";
+        this.mb2 = "";
+        this.mb3 = "";
+        let that = this;
+        setTimeout(function() {
+          that.show = false;
+          document.getElementsByClassName("setmb")[0].style.top = "800px";
+        }, 2000);
+      } else {
+        this.showPopup();
+        this.showCon = "必填内容为空！";
+      }
+    },
+    quitsetpwd() {
+      document.getElementsByClassName("setpwd")[0].style.top = "800px";
+      this.password = "";
+      this.newpassword = "";
+      this.newpassword2 = "";
+    },
+    quitsetmb() {
+      document.getElementsByClassName("setmb")[0].style.top = "800px";
+      this.mb1 = "";
+      this.mb2 = "";
+      this.mb3 = "";
+    },
+    quitsettel() {
+      document.getElementsByClassName("settel")[0].style.top = "800px";
+    },
+    quitinput() {
+      document.getElementsByClassName("inputtel")[0].style.left = "-750px";
+    }
+  }
+};
 </script>
 
 <style lang="less" scoped>
-  .safety {
-    position: absolute;
+input[type=button]:active {
+  color: rgb(233, 211, 171);
+}
+.safety {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  background: white;
+  overflow: hidden;
+
+  .title {
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000;
+    z-index: 999;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background: white;
+    box-shadow: 0 1px 1px rgb(236, 236, 236);
+
+    a {
+      font-size: 14px;
+      color: rgb(92, 92, 92);
+      position: absolute;
+      left: 10px;
+      top: 0;
+      &:active {
+        color: rgb(233, 233, 233);
+      }
+    }
+    span {
+      font-size: 18px;
+    }
+  }
+  .infolist {
+    width: 100%;
+    box-shadow: 0 -1px 1px rgb(236, 236, 236);
+    margin-top: 55px;
+    background: white;
+
+    .info {
+      width: 100%;
+      height: 40px;
+      border-bottom: 1px solid rgb(236, 236, 236);
+      font-size: 16px;
+      line-height: 40px;
+      text-indent: 10px;
+
+      a {
+        font-size: 14px;
+      }
+      span {
+        float: right;
+      }
+    }
+  }
+}
+
+.setpwd {
+  width: 100%;
+  height: 100%;
+  background: white;
+  position: absolute;
+  top: 800px;
+  left: 0;
+  z-index: 999;
+  transition: all 0.3s;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    p {
+      font-size: 25px;
+    }
+    input {
+      width: 250px;
+      height: 35px;
+      font-size: 15px;
+      margin-top: 10px;
+      text-indent: 5px;
+
+      &::-webkit-input-placeholder {
+        font-size: 15px;
+      }
+      &[type=button] {
+        background: transparent;
+        border: 1px solid black;
+      }
+    }
+  }
+
+  .mtk {
+    width: 250px;
+    height: 35px;
+    line-height: 35px;
+    font-size: 16px;
+  }
+  .quit {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+}
+.settel {
     width: 100%;
     height: 100%;
     background: white;
+    position: absolute;
+    top: 800px;
+    left: 0;
+    z-index: 999;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .pat {
+        font-size: 14px;
+        color: red;
+        margin-left: -110px;
+      }
+      p {
+        font-size: 25px;
+      }
+      input {
+        width: 250px;
+        height: 35px;
+        font-size: 15px;
+        margin-top: 10px;
+        text-indent: 5px;
+
+        &::-webkit-input-placeholder {
+          font-size: 15px;
+        }
+        &[type=button] {
+          background: transparent;
+          border: 1px solid black;
+        }
+      }
+    }
+    .mtk {
+      width: 250px;
+      height: 35px;
+      line-height: 35px;
+      font-size: 16px;
+    }
+    .quit {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    .inputtel {
+      width: 100%;
+      height: 100%;
+      background: rgb(255, 255, 255);
+      position: absolute;
+      left: -750px;
+      top: 0;
+      z-index: 999;
+      transition: all .5s;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
   }
+.setmb {
+  width: 100%;
+  height: 100%;
+  background: white;
+  position: absolute;
+  top: 800px;
+  left: 0;
+  z-index: 999;
+  transition: all 0.3s;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    p {
+      font-size: 25px;
+    }
+    input {
+      width: 250px;
+      height: 35px;
+      font-size: 15px;
+      margin-top: 10px;
+      text-indent: 5px;
+
+      &::-webkit-input-placeholder {
+        font-size: 15px;
+      }
+      &[type="button"] {
+        background: transparent;
+        border: 1px solid black;
+      }
+    }
+  }
+
+  .mtk {
+    width: 250px;
+    height: 35px;
+    line-height: 35px;
+    font-size: 16px;
+  }
+  .quit {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+}
 </style>

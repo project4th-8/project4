@@ -1,14 +1,14 @@
 <template>
  <div class="search">
    <div class="search_kuang clear"><input @focus="tosearchHistory" type="text" placeholder="请输入搜索内容">
-    <span>X</span><button><img src="../../public/img/jdtIMG/search.png" alt=""></button></div>
+   <button><img src="../../public/img/jdtIMG/search.png" alt=""></button></div>
 <!--    <div class="search_history">
 
    </div> -->
    <p>热搜：</p>
    <ul class="search_hot">
      <li v-for="(item,index) in lists" :key="index">{{item.title}}</li>
-     <li><a href="">查看更多</a></li>
+     <!-- <li><a href="">查看更多</a></li> -->
    </ul>
  </div>
 </template>
@@ -56,7 +56,7 @@ export default {
     list-style: none;
   }
    p{
-    font-size:16px;
+    font-size:14px;
     float: left;
     margin-left: 5%;
     margin-top: 60px;
@@ -67,33 +67,33 @@ export default {
   position: relative;
   width: 90%;
   margin-left: 5%;
-  font-size: 8px;
+  font-size: 14px;
   span{
-    font-size: 10px;
+    font-size: 14px;
      position: absolute;
      color: rgb(80, 78, 78);
-    right: 25px;
+    right: 2px;
     top: 7px;
   }
   input{
     width: 100%;
-     font-size: 8px;
+     font-size: 14px;
     text-indent: 2em;
-    height: 20px;
+    height: 30px;
      position: absolute;
     right: 0;
     top: 0;
     border: 1px solid rgb(80, 78, 78)
   }
   button{
-    height: 21px;
-    width: 21px;
+    height: 32px;
+    width: 32px;
      position: absolute;
     right: 0;
     top: 0;
      img{
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     position: absolute;
     right: 0;
     top: 0;
@@ -108,22 +108,21 @@ export default {
   }
 }
 .search_hot{
-  overflow: hidden;
-  padding: 5px 0;
-  
+  overflow: hidden; 
   float: left;
   width: 90%;
   padding: 0;
   margin: 0;
   margin-left: 5%;
   text-align: left;
-  text-indent: 1em;
+  // text-indent: 1em;
   li:nth-of-type(odd){
     float: left;
-     height: 15px;
-     line-height: 15px;
-    width: 49%;
-    font-size: 8px;
+    height: 15px;
+    line-height: 15px;
+    width: 48%;
+    font-size: 14px;
+    margin-top: 10px;
     border-right: 1px solid black;
    
   }
@@ -131,8 +130,9 @@ export default {
     float: right;
      height: 15px;
      line-height: 15px;
-    width: 49%;
-    font-size: 8px;
+    width: 48%;
+     margin-top: 10px;
+    font-size: 14px;
    
   }
 }
