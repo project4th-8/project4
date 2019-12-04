@@ -7,6 +7,7 @@ import 'amfe-flexible'
 import vueAxios from 'vue-axios'
 import http from './utils/http'
 import './assets/style/revant.less'
+import './assets/style/sc.less'
 
 Vue.use(vueAxios,http)
 Vue.config.productionTip = false
