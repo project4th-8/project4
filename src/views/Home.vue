@@ -16,7 +16,7 @@
           <router-link to="/">推荐</router-link>
         </li>
         <li>
-          <router-link to="/text">文章</router-link>
+          <router-link to="/mtext">文章</router-link>
         </li>
         <li>
           <router-link to="/fund">基金</router-link>
@@ -46,7 +46,7 @@ export default {
     onSearch: function() {}
   },
   created() {
-    /*  this.axios.post("/user/userLogin", {
+ /*     this.axios.get("/dynamic/findAllDUR", {
 
       })
       .then(res => {

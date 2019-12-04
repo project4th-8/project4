@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
- const cons =[{
+/*  const cons =[{
   title:'A基金上线',
   userid:1,
   username:'dada',
@@ -32,7 +32,7 @@ Vue.use(Vuex)
   fenx:'121',
   pingl:'2312',
   zan:'123'
-}] 
+}]  */
 
 const fundlists = [{
   title:'A基金',
@@ -65,7 +65,7 @@ const fundlists = [{
 
 export default new Vuex.Store({
   state: {
-    cons : [],
+    // cons : [],
     fundlists: [],
     isLogin: true,
     userInfo:{}
@@ -74,19 +74,19 @@ export default new Vuex.Store({
 
   },
   mutations: {
-    getCons(state,n) {
+   /*  getCons(state,n) {
       state.cons = n
-    },
+    }, */
     getfundlists(state,n) {
       state.fundlists = n
     }
   },
   actions: {
-    getConsSync({commit}) {
+  /*   getConsSync({commit}) {
       setTimeout(function() {
         commit('getCons',cons,1000)
       })
-    },
+    }, */
     getfundlistsSync({commit} ) {
       setTimeout(function() {
         commit('getfundlists',fundlists,1000)

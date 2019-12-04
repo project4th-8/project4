@@ -23,9 +23,9 @@ const routes = [
         }]
       },
       {
-        path: 'text',
-        name: 'text',
-        component: () => import('../views/text.vue')
+        path: 'mtext',
+        name: 'mtext',
+        component: () => import('../views/Mtext.vue')
       }
     ]
 
@@ -169,7 +169,6 @@ const routes = [
 },
  {
   path: '/message',
-  name:"message",
   component: () => import('../views/message.vue'),
   children: [
     {
@@ -178,8 +177,7 @@ const routes = [
       component:messageA,
     }, 
     {
-      path: '/messageB',
-      name: 'messageB',
+      path: 'messageB',
       component: () => import('../views/messageB.vue'),
       children: [
         {
@@ -188,12 +186,12 @@ const routes = [
           component:systemNotifications
         },
         {
-          path:'/forwardNotification',
+          path:'forwardNotification',
           name:"forwardNotification",
           component:() =>import('../views/forwardNotification.vue')
         },
         {
-          path:'/followNotification',
+          path:'followNotification',
           name:"followNotification",
           component:() =>import('../views/followNotification.vue')
         }
@@ -241,8 +239,23 @@ const routes = [
   path:"/scgeren",
   name:"geren",
   component:()=>import('../views/Scgeren.vue')
-}
-  
+},
+  {
+    path:'/funddetails',
+    name:'funddetails',
+    component:()=>import('../views/Funddetails.vue')
+  },
+  {
+    path:'/chart',
+    name:'chart',
+    component:()=>import('../views/chart.vue')
+  },
+  {
+    path: '/isselectdynamic',
+    name: 'isselectdynamic',
+    component: () => import('../views/Isselectdynamic.vue')
+  },
+ 
 ]
 
 const router = new VueRouter({

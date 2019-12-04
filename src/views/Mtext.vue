@@ -1,17 +1,13 @@
 <template>
   <div class="text">
     <div class="fix-top"></div>
-    <div
-      class="content"
-      v-for="(item,index) in cons"
-      :key="index"
-      :info="item"
-      v-show="item.mismaster"
-    >
+    <div class="content" v-for="(item,index) in cons" :key="index" :info="item">
       <div class="top">
         <div>
-          <div @click="isselectuser(item.userId)" class="links">
-            <div class="Img"><img :src="item.userImg" alt=""></div>
+          <div class="links" @click="isselectuser(item.userId)">
+            <div class="Img">
+              <img :src="item.userImg" alt />
+            </div>
             <div>
               <p>
                 {{item.userName}}
@@ -23,7 +19,6 @@
         </div>
         <div class="down-list">
           <van-icon name="arrow-down" class="down" @click="isshow=!isshow,state=index " />
-
           <div
             class="Report"
             v-show="index===state && isshow"
@@ -34,14 +29,13 @@
       <div class="center" @click="sccomment(index)">
         <h5>{{item.dynamicTitle}}</h5>
         <div class="main-content">
-        <p> {{item.dynamicContent}}</p> 
-        <div  class="textimg">
-           <p v-for="(item,index) in item.imgUrl" :key="index" > 
-            <img :src="item" alt />
-        </p> 
-        </div>
-      
+          <p class="dynamiccontent">{{item.dynamicContent}}</p>
+          <div class="textimg">
+            <p v-for="(item,index) in item.imgUrl" :key="index">
+              <img :src="item" alt />
+            </p>
           </div>
+        </div>
       </div>
       <div class="bottom">
         <div @click="forword(item.userId,item.dynamicId)">
@@ -52,12 +46,12 @@
           <i class="iconfont icon-duanxin"></i>
           {{item.pingl}}
         </div>
-        <div @click="iszan(item.userId,item.dynamicId)">
+        <div @click="zan(item.userId)">
           <i class="iconfont icon-zang"></i>
           {{item.dynamicLikeCount}}
         </div>
       </div>
-      <div class="moduls" v-show="showclient">
+      <div class="textmoduls" v-show="showclient">
         <component :is="com" @clickbox="boxshow" :showpopsub="popsub"></component>
       </div>
     </div>
@@ -65,9 +59,9 @@
 </template>
 <script>
 import { Icon } from "vant";
-import popupsub from "./popupsub.vue";
+import popupsub from "../components/popupsub";
 export default {
-  name: "Recommendtext",
+  name: "mtext",
   data: function() {
     return {
       isshow: false,
@@ -91,57 +85,49 @@ export default {
       this.cons = this.cons.map(item => {
         if (item.isMaster == 0) {
           item.mismaster = true;
+        } else {
+          item.mismaster = false;
         }
+
         return item;
       });
+      console.log("txt", this.cons);
     });
- 
-
-   /*  this.axios.post("/dynamic/findOneById",{
-      dynamicId:3
-    })
-    .then(res=> {
-      console.log(res.data)
-    }) */
-
-
   },
   methods: {
     showPopup(/* index */) {
       this.showclient = !this.showclient;
-      let that = this
+      let that = this;
       setTimeout(function() {
         that.isshow = false;
       }, 1000);
     },
     boxshow: function(res) {
       this.showclient = res;
+      console.log(this.showclient);
     },
-    forword: function(userId,dynamicId) {
+    forword: function(userId, dynamicId) {
       sessionStorage.setItem("forworduserId", userId);
       sessionStorage.setItem("forworddynamicId", dynamicId);
 
       this.$router.push("/forword");
     },
-    sccomment: function(index) {
-      sessionStorage.setItem("textId", index);
-      this.$router.push("/sccomment");
-    },
     isselectuser: function(isselectuser) {
       sessionStorage.setItem("isselectuserid", isselectuser);
       this.$router.push("/isselectdynamic");
     },
-    iszan: function(userid,dynamicId) {
-      console.log(userid)
-      console.log(dynamicId)
-
-      this.axios.post("/dynamic/addLike", {
-        dynamicId: dynamicId,
-        userId: userid
+    sccomment: function(index) {
+      sessionStorage.setItem("textId", index);
+      this.$router.push("/sccomment");
+    },
+    zan: function(isuserId) {
+      console.log(isuserId);
+      /*        this.axios.post("/reply/givealike", {
+           userId: userId
       })
       .then(res => {
-        console.log(res.data.code)
-      })
+        console.log(res.state)
+      }) */
     }
   }
 };
@@ -165,15 +151,14 @@ export default {
   word-wrap: break-word;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+  .dynamiccontent {
+    overflow: hidden;
+  }
 }
-.textimg {
-  display: flex;
-  justify-content: start;
-}
-.moduls {
+.textmoduls {
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.07);
+  background: rgba(0, 0, 0, 0.01);
   position: fixed;
   z-index: 1000;
   top: 0;
@@ -184,10 +169,15 @@ export default {
 }
 .text {
   overflow: auto;
+  margin-top: 90px;
 }
 .time {
   font-size: 12px;
   color: #ddd;
+}
+.textimg {
+  display: flex;
+  justify-content: start;
 }
 .top {
   display: flex;

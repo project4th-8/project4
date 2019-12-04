@@ -1,9 +1,9 @@
 <template>
   <div class="messageB">    
     <div class="cai">
-      <div><router-link to="/messageB">系统通知</router-link></div>
-     <div><router-link to="/forwardNotification">转发通知</router-link></div>
-     <div><router-link to="/followNotification">关注提醒</router-link></div>
+      <div><router-link to="/message/messageB">系统通知</router-link></div>
+     <div><router-link to="/message/messageB/forwardNotification">转发通知</router-link></div>
+     <div><router-link to="/message/messageB/followNotification">关注提醒</router-link></div>
     </div>
      <div>
       <router-view/>

@@ -2,7 +2,7 @@
   <div class="message">
     <div class="top">
       <router-link class="tt" to="/message">消息</router-link>  |
-      <router-link class="tt" to="/messageB">公告</router-link>
+      <router-link class="tt" to="/message/messageB">公告</router-link>
       
       
     </div>
