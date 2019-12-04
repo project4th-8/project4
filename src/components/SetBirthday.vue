@@ -27,8 +27,25 @@ export default {
     },
     submit() {
       var bir = this.currentDate.toLocaleDateString().split("/").join("-");
-      console.log(bir);
-      this.$emit('changeCom','');
+
+      this.axios.post("/user/updateUserBirth",{
+        userBirth: bir
+      })
+      .then(res => {
+        console.log(res.data);
+        this.$emit('changeCom','');
+        this.axios.post("/user/findAllUserInfo")
+          .then(res => {
+            if(res.data.data.user.userSex == 1) {
+              res.data.data.userSex = "男";
+            } else {
+              res.data.data.user.userSex = "女";
+            }
+            this.$store.state.userInfo = res.data.data.user;
+            console.log("拿到数据：",res.data.data.user);
+            sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
+          });
+      })
     },
 
   },

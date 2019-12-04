@@ -18,6 +18,9 @@
         <van-button class="ok" type="primary" size="large" @click="ok">完成</van-button>
       </van-cell-group>
     </div>
+
+    <!-- 提示框 -->
+    <div v-show="showtishi" class="tishi">必填信息不能为空!</div>
   </div>
 </template>
 
@@ -28,7 +31,8 @@ export default {
   data() {
     return {
       password: "",
-      passwordok: ""
+      passwordok: "",
+      showtishi: false
     };
   },
   components: {
@@ -40,7 +44,24 @@ export default {
   },
   methods: {
     ok: function() {
-      this.$router.replace("/Login");
+      if(this.password && this.passwordok != 0) {
+        this.axios.post("/user/updatePassword",{
+          userPhone: sessionStorage.getItem("tel"),
+          userPassword: this.password
+        })
+        .then(res => {
+          console.log(res.data);
+          if(res.data.code == "200") {
+            this.$router.replace("/Login");
+            sessionStorage.removeItem("tel");
+          }
+        })
+      } else {
+        this.showtishi = true;
+        setTimeout(() => {
+          this.showtishi = false;
+        }, 2500);
+      }
     }
   }
 };
@@ -48,6 +69,17 @@ export default {
 
 <style lang="less" scoped>
 @import "../assets/style/resize.css";
+
+.tishi {
+  position: fixed;
+  bottom: 30px;
+  left: 125px;
+  background: black;
+  color: white;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 7px;
+}
 .Forgetpassword {
   position: fixed;
   width: 100%;

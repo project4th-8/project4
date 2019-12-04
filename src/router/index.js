@@ -129,11 +129,6 @@ const routes = [
     name: 'Yanzhengpassword',
     component: () => import('../views/Yanzhengpassword.vue')
   },
-  {
-    path: '/Others',
-    name: 'Others',
-    component: () => import('../views/Others.vue')
-  }
 ]
 
 const router = new VueRouter({

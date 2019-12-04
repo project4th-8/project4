@@ -2,7 +2,7 @@
   <div class="setuser">
     <div class="list">
       <h4>请输入你的昵称</h4>
-      <textarea maxlength="16" class="input" cols="30" rows="10" @input="pattest">用户xxx</textarea>
+      <textarea maxlength="16" v-model="myname" class="input" cols="30" rows="10" @input="pattest"></textarea>
       <span class="fontnum"><span>{{num}}</span>/16</span><br>
       <span class="pat">仅支持中英文和数字</span>
       <button type="button" class="btn" @click="quit">取消</button>
@@ -16,7 +16,8 @@ export default {
   name: "setuser",
   data: function() {
     return {
-      num: ""
+      num: 0,
+      myname: ""
     }
   },
   methods: {
@@ -26,23 +27,40 @@ export default {
     pattest() {
       var pat = /^[\u4e00-\u9fa5a-zA-Z0-9]{1,16}$/;
       var con = document.getElementsByClassName("input")[0].value;
-      console.log(con);
+
       if(con.length < 17) {
-        this.num = con.length;
+        this.num = this.myname.length;
       }
-      if(!pat.test(con)) {
-        document.getElementsByClassName("pat")[0].style.display = "inline";
+      if(con != "") {
+        if(!pat.test(con)) {
+          document.getElementsByClassName("pat")[0].style.display = "inline";
+        } else {
+          document.getElementsByClassName("pat")[0].style.display = "none";
+        }
       } else {
         document.getElementsByClassName("pat")[0].style.display = "none";
       }
     },
     submit() {
-      console.log("保存成功！")
-      this.$emit('changeCom','');
+      this.axios.post("/user/updateUserName",{
+        userName: this.myname
+      })
+      .then(res => {
+        console.log(res.data);
+        this.$emit('changeCom','');
+          this.axios.post("/user/findAllUserInfo")
+          .then(res => {
+            if(res.data.data.user.userSex == 1) {
+              res.data.data.userSex = "男";
+            } else {
+              res.data.data.user.userSex = "女";
+            }
+            this.$store.state.userInfo = res.data.data.user;
+            console.log("拿到数据：",res.data.data.user);
+            sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
+          });
+      })
     }
-  },
-  created() {
-    this.num = 5;
   }
 }
 </script>

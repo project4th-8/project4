@@ -2,16 +2,18 @@
   <div class="dynamic">
     <!-- 标题 -->
     <div class="title">
-      <a href="/About">取消</a>
+      <router-link to="/About">取消</router-link>
       <span>历史动态</span>
     </div>
 
     <!-- 用户信息 -->
     <div class="userinfo">
-      <img src="../assets/logo.png" alt="头像" />
+      <div class="myhead">
+        <img :src="userInfo.imgs[0].imgUrl" alt="头像" />
+      </div>
       <div class="myinfo">
-        <span class="username">用户名</span>
-        <span class="iconfont icon-v" :class="{on: false}"></span>
+        <span class="username"><router-link to="/informations">{{userInfo.userName}}</router-link></span>
+        <span class="iconfont icon-v" :class="{on: userInfo.inMaster==1}"></span>
       </div>
       <span class="ll">
         浏览：
@@ -20,46 +22,48 @@
     </div>
 
     <!-- 动态 -->
-    <div class="dt">
+    <div class="dt" v-for="(item,index) in mydynamic" :key="index">
       <div class="top">
         <div>
-          <a href class="links">
-            <div class="Img">头像</div>
+          <span class="links">
+            <div class="Img">
+              <img :src="userInfo.imgs[0].imgUrl" alt="头像">
+            </div>
             <div class="yhm">
               <p>
-                用户名
-                <span class="iconfont icon-v"></span>
+                <router-link to="/informations">{{userInfo.userName}}</router-link>
+                <span class="iconfont icon-v" :class="{on: userInfo.inMaster==1}"></span>
               </p>
-              <p class="time">17:20</p>
+              <p class="time">{{item.dynamicTime}}</p>
             </div>
-          </a>
+          </span>
         </div>
         <div class="down-list">
-          <van-icon name="arrow-down" class="down" @click="isshow=!isshow" />
-          <div class="Report" v-show="isshow">举报</div>
         </div>
       </div>
-      <div class="center">
-        <h5>重大新闻</h5>
-        <div>sssssssssssssssssssssssssssss</div>
-      </div>
+      <router-link to="/sccomment">
+        <div class="center" @click="sccommentCon(item.dynamicId)">
+          <h5>{{item.dynamicTitle}}</h5>
+          <div>{{item.dynamicContent}}</div>
+        </div>
+      </router-link>
       <div class="bottom">
-        <a href="javascript:;">
+        <span>
           <div>
             <i class="iconfont icon-fenxiang"></i> 10
           </div>
-        </a>
-        <a href="javascript:;">
+        </span>
+        <span>
           <div>
             <i class="iconfont icon-comment"></i> 20
           </div>
-        </a>
-        <a href="javascript:;" @click="dz">
+        </span>
+        <span>
           <div>
             <i class="iconfont icon-dianzan"></i>
-            {{zan}}
+            {{item.dynamicLikeCount}}
           </div>
-        </a>
+        </span>
       </div>
     </div>
   </div>
@@ -67,30 +71,44 @@
 
 <script>
 import { Icon, Uploader } from "vant";
+import { mapState } from "vuex"
+
 export default {
   name: "dynamic",
   data: function() {
     return {
       isshow: false,
-      zan: 0,
-      isdz: true
+      isdz: true,
+      mydynamic: [],
     };
+  },
+  computed: {
+    ...mapState([
+      "userInfo"
+    ])
   },
   components: {
     [Icon.name]: Icon,
     [Uploader.name]: Uploader
   },
   methods: {
-    dz() {
-      this.zan += 1;
+    sccommentCon(id) {
+      console.log("文章id：",id);
+      sessionStorage.setItem("dynamicId",id);
     }
+  },
+  created() {
+    this.mydynamic = this.$store.state.userInfo.dynamics;
+    console.log("我的动态：",this.mydynamic);
   }
 };
 </script>
 
 <style lang="less" scoped>
 @import "../assets/font/personfont/iconfont.css";
-
+.icon-v {
+  color: #ddd;
+}
 .on {
   color: orange;
 }
@@ -139,12 +157,17 @@ export default {
     justify-content: space-around;
     align-items: center;
     flex-direction: column;
-
-    img {
+    .myhead {
       width: 60px;
       height: 60px;
+      overflow: hidden;
       border-radius: 50%;
       box-shadow: 0 0px 2px rgb(88, 88, 88);
+      margin-top: 5px;
+      img {
+        width: auto;
+        height: 60px;
+      }
     }
     span {
       font-size: 16px;
@@ -198,8 +221,8 @@ export default {
   overflow: hidden;
 
   img {
-    width: 40px;
-    height: auto;
+    width: auto;
+    height: 40px;
   }
 }
 .down {
@@ -224,6 +247,13 @@ export default {
 
   div {
     margin-top: 10px;
+     display: -webkit-box;
+     overflow: hidden;
+     white-space: normal!important;
+     text-overflow: ellipsis;
+     word-wrap: break-word;
+     -webkit-line-clamp: 4;
+     -webkit-box-orient: vertical
   }
 }
 .bottom {
