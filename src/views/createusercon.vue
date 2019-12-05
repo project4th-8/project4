@@ -151,7 +151,7 @@ export default {
           }
         })
         .then(res => {
-          console.log(res.data);
+   
           if (res.data.code == "200") {
             this.showtishi = true
             setTimeout(() => {

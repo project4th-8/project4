@@ -52,12 +52,12 @@ export default {
     })
     this.axios.post("/findAllAdvice")
     .then(res=>{
-      console.log(res.data.data)
+
       // for(var i =0;i<res.data.data.length;i++){
         this.comlists = res.data.data.filter(function(item){
         return item.datestate==4 
         });
-        console.log(this.comlists)
+    
     })
   },
   components: {

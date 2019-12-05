@@ -60,12 +60,12 @@ export default {
   },
   methods: {
     delcomment(id) {
-      console.log("删除的是id为：",id,"的评论");
+
       this.axios.post("/dynamic/deleteReplyById",{
         replyId: id
       })
       .then(res => {
-        console.log(res.data);
+        res.data
         this.showtishi = 1;
         this.axios.post("/user/findAllReplyById",{
           userId: sessionStorage.getItem("userId")

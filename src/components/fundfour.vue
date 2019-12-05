@@ -63,7 +63,6 @@ export default {
      this.axios.post("/fund/findByType", {
        typeId: 4
      }).then(res => {
-      console.log(res.data.data.data);
       this.cons = res.data.data.data;
     });
   },

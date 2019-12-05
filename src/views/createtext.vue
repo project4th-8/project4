@@ -135,7 +135,7 @@ export default {
         .then(res => {
 
           if(res.data.code == "200") {
-            console.log(res.data)
+           res.data
            Toast('发布成功');
            setTimeout( ()=>{
            this.$router.replace('/Mtext')

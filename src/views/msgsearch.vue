@@ -104,10 +104,7 @@ export default {
   },
   created() {
     this.lists = lists;
-    // var i = sessionStorage.getItem("shuzu");
-    // sessionStorage.removeItem("shuzu");
-    // this.lists = i;
-    // console.log(this.lists)
+   
   },
   components: {
     [List.name]: List,

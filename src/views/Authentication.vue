@@ -94,7 +94,7 @@ export default {
           masterDescrib: null
         })
         .then(res => {
-          console.log(res.data);
+       
           if (res.data.code == "200") {
             this.showPopup();
             setTimeout(() => {
@@ -107,7 +107,7 @@ export default {
                 res.data.data.user.userSex = "女";
               }
               this.$store.state.userInfo = res.data.data.user;
-              console.log("拿到数据：", res.data.data.user);
+         
               sessionStorage.setItem(
                 "userId",
                 this.$store.state.userInfo.userId

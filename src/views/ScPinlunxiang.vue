@@ -127,17 +127,12 @@ export default {
     }
   },
   created(){
-    // for(var i=0;i<pinlun.length;i++){
-    //   if(this.$route.query.id==pinlun[i].id){
-    //     this.pinlun=pinlun[i];
-    //   }
-    // }
-    // console.log(this.pinlun.children)
+ 
     this.axios.post("/dynamic/findOneById",{
       dynamicId:1
     })
     .then(res=>{
-      console.log(res.data.data.replies);
+ 
       for(let i=0;i<res.data.data.replies.length;i++){
         if(res.data.data.replies[i].replyId==this.$route.query.pinlunid){
           this.moni.pinlun=res.data.data.replies[i];
@@ -146,9 +141,7 @@ export default {
           this.moni.pinlunSon.push(res.data.data.replies[i]);
         }
       }
-      console.log(this.moni.pinlunSon);
-      console.log(this.moni.pinlun);
-      console.log(this.moni.pinlun.userInfo.userName);
+ 
 
     })
   },
@@ -169,7 +162,7 @@ export default {
     },
     fasong(){
       this.showSon=false;
-      console.log(this.moni.linshi)
+    
       this.axios.post("/reply/addReply",{
         dynamicId:this.moni.wenzhang,
         replyId:this.moni.pinlun.replyId,
@@ -177,8 +170,8 @@ export default {
         replyContent:this.moni.zishu
       })
       .then(res=>{
-        console.log(res);
-        console.log("成功");
+       res.data
+    
         this.moni.zishu='';
 
 this.moni.pinlunSon=[];
@@ -186,7 +179,7 @@ this.moni.pinlunSon=[];
       dynamicId:1
     })
     .then(res=>{
-      console.log(res.data.data.replies);
+
       for(let i=0;i<res.data.data.replies.length;i++){
         if(res.data.data.replies[i].replyId==this.$route.query.pinlunid){
           this.moni.pinlun=res.data.data.replies[i];
@@ -195,9 +188,7 @@ this.moni.pinlunSon=[];
           this.moni.pinlunSon.push(res.data.data.replies[i]);
         }
       }
-      console.log(this.moni.pinlunSon);
-      console.log(this.moni.pinlun);
-      console.log(this.moni.pinlun.userInfo.userName);
+  
 
     })
       })

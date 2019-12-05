@@ -50,7 +50,7 @@ export default {
           userPassword: this.password
         })
         .then(res => {
-          console.log(res.data);
+     
           if(res.data.code == "200") {
             document.getElementsByClassName("tishi")[0].innerHTML = "修改成功，请重新登录！";
             this.showtishi = true;

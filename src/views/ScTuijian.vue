@@ -196,15 +196,15 @@ export default {
     this.shequ=shequ;
     this.axios.post("/user/recommendedUser")
     .then(res=>{
-      console.log(res.data.data);
+
       this.daka=res.data.data;
       for(let i=0;i<this.daka.length;i++){
         this.axios.post("/checkAtt",{
           userId:this.daka[i].userId
         }).then(res=>{
-          console.log(res.data.data)
+      
           this.daka[i].guanzhu=res.data.data;
-          console.log(this.daka)
+      
         })
       }
     })

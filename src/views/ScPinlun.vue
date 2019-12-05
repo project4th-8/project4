@@ -100,14 +100,14 @@ export default {
       dynamicId:1
     })
     .then(res=>{
-      console.log(res.data);
+
       res=res.data.data;
       for(let i=0;i<res.replies.length;i++){
         if(res.replies[i].parentId==0){
           pinlun.push(res.replies[i]);      
         }
       }
-      console.log(this.moni.pinlun);
+ 
     })
     .catch(err=>{
       console.log(err)
@@ -143,7 +143,6 @@ export default {
     },
     huifu(){
       // this.lisnhizishu='';
-      console.log("文章："+this.moni.dynamicId,this.linshi.pinlunid,this.moni.userid,this.moni.zishu)
       this.show=false;
       this.axios.post("/reply/addReply",{
         dynamicId:this.moni.dynamicId,
@@ -152,20 +151,18 @@ export default {
         replyContent:this.moni.zishu,
         })
         .then(res=>{
-          console.log(res);
+          res.data
           pinlun=[];
               this.axios.post("/dynamic/findOneById",{
       dynamicId:1
     })
     .then(res=>{
-      console.log(res.data);
       res=res.data.data;
       for(let i=0;i<res.replies.length;i++){
         if(res.replies[i].parentId==0){
           pinlun.push(res.replies[i]);      
         }
       }
-      console.log(this.moni.pinlun);
     })
     .catch(err=>{
       console.log(err)
@@ -180,14 +177,12 @@ this.axios.post("/dynamic/findOneById",{
     })
     .then(res=>{
       pinlun=[];
-      console.log(res.data);
       res=res.data.data;
       for(let i=0;i<res.replies.length;i++){
         if(res.replies[i].parentId==0){
           pinlun.push(res.replies[i]);      
         }
       }
-      console.log(this.moni.pinlun);
     })
     .catch(err=>{
       console.log(err)
@@ -196,7 +191,6 @@ this.axios.post("/dynamic/findOneById",{
 
     },
     del(a){
-      console.log(a);
       this.axios.post("/dynamic/deleteReplyById",{
         replyId:a
       })
@@ -225,6 +219,7 @@ this.axios.post("/dynamic/findOneById",{
   padding: 0 5px;
   align-items: center;
   justify-content: space-between;
+  
 }
   #scpinlun{
     span{font-size: 14px}

@@ -40,13 +40,13 @@ export default {
   },
   methods: {
     Attention(e) {
-      console.log(e.target.id);
+
       if(document.getElementById(e.target.id).innerText == "互相关注") {
         this.axios.post("/AttentionSomePeople",{
           userId: Number(e.target.id)
         })
         .then(res => {
-          console.log("收到数据：",res.data);
+       
           if(res.data.code == "200") {
             document.getElementById(e.target.id).innerText = "取消关注";
           }
@@ -56,7 +56,7 @@ export default {
           userId: Number(e.target.id)
         })
         .then(res => {
-          console.log("收到数据：",res.data);
+          res.data
           document.getElementById(e.target.id).innerText = "互相关注";
         })
       }
@@ -73,7 +73,7 @@ export default {
             item.state = true;
             return item;
           })
-          console.log(this.fans);
+         
         } else {
           this.nobody = false;
         }  

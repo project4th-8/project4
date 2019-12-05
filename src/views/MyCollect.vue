@@ -67,7 +67,7 @@ export default {
         userId: sessionStorage.getItem("userId")
       })
       .then(res => {
-        console.log(res.data);
+
         if(res.data.code == "200") {
           this.axios
           .post("/user/dynamicList", {
@@ -84,7 +84,7 @@ export default {
       })
     },
     todynamic(id) {
-      console.log("动态id为：",id);
+
       sessionStorage.setItem("dynamicId",id);
       this.$router.replace("/ScComment");
     }

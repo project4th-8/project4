@@ -65,7 +65,7 @@ export default {
       userId: sessionStorage.getItem("userId")
     })
     .then(res => {
-      console.log(res.data);
+
       if(res.data.code == "200") {
         if(res.data.data != null) {
           this.attention = res.data.data;
@@ -74,7 +74,7 @@ export default {
             item.state = true
             return item
           })
-          console.log("我的关注：",this.attention)
+ 
         } else {
           this.nobody = false;
         }    

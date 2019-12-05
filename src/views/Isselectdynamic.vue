@@ -115,8 +115,7 @@ export default {
       .then(res => {
         this.list = res.data.data.dynamics[0].user;
         this.lists = res.data.data.dynamics;
-        console.log("xx",res.data.data.dynamics);
-        console.log(this.list.isMaster);
+   
         this.imgurl = this.list.imgs[0].imgUrl
         this.isMaster = this.list.isMaster
       });
@@ -160,7 +159,7 @@ export default {
           userId: sessionStorage.getItem("isselectuserid")
         })
         .then(res => {
-          console.log("收到数据：",res.data);
+   
           if(res.data.code == "200") {
             document.getElementById('attention').innerText = "关注";
           }

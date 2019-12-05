@@ -65,8 +65,7 @@ export default {
   },
   created() {
     sessionStorage.setItem("oldroute",this.$route.fullPath);
-    console.log("我的信息：",this.userInfo);
-    console.log("账号年龄：",this.accountAge);
+
   }
 };
 </script>

@@ -87,12 +87,12 @@ export default {
         this.myname = res.data.data.userNickname;
       });
     this.axios.post("/findAllAdvice").then(res => {
-      console.log(res.data.data);
+   
       // for(var i =0;i<res.data.data.length;i++){
       this.comlists = res.data.data.filter(function(item) {
         return item.datestate == 5;
       });
-      console.log(this.comlists);
+  
     });
   },
   // components:{

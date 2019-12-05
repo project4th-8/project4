@@ -11,7 +11,7 @@ const http = axios.create({
 })
 
 http.interceptors.request.use(function (config) {
-  // console.log(config.url != '/api/user/uploadImg', config.url)
+
   if (config.method === "post" && config.url != "/dynamic/uploadImg" && config.url != '/user/uploadImg'&& config.url != '/user/userRegisSetInfo') { // 这一步主要取决于后端是否可以接受 json
     config.headers = {
       'Content-Type':'application/x-www-form-urlencoded'

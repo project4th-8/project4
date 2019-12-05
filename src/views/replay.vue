@@ -29,7 +29,7 @@ export default {
         dynamicId:1
       })
       .then(res=>{
-        console.log(res.data)
+       res.data
       })
       .cacth(err=>{
         console.log(err)

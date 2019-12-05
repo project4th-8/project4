@@ -206,7 +206,7 @@
           
         </div>
       </van-popup>
-      <div class="bottom-bar" @click="user.isshoucang=!user.isshoucang;wenzhang.shoucangshu=user.isshoucang?wenzhang.shoucangshu+1:wenzhang.shoucangshu-1 ">
+      <div class="bottom-bar" @click="collect">
         <van-icon name="like-o" :class="{on:user.isshoucang}" />
         <span>{{wenzhang.shoucangshu}}</span>
       </div>
@@ -299,18 +299,18 @@ export default {
   },
   created(){
     this.wenzhang.wenzhangId=sessionStorage.getItem('dynamicId');
-    console.log(this.wenzhang.wenzhangId)
+  
       this.axios.post("/dynamic/findOneById",{
       dynamicId:this.wenzhang.wenzhangId
     })
     .then(res => {
-      console.log(res.data);
+   
       //文章用户信息：
       res=res.data.data;
       this.yonghu.username=res.userName;
       this.yonghu.userid=res.userId;
       this.yonghu.userimg=res.userImg[0];
-      console.log(res.userImg[0]);
+   
       this.yonghu.isdaka=res.isMaster;
       //文章信息：
       this.wenzhang.zhuanfashu=res.dynamicTransmit;
@@ -327,8 +327,8 @@ export default {
       this.wenzhang.date=res.dynamicLastTime;
       this.wenzhang.wenzhangId=res.dynamicId;
       //热门信息：
-      this.repin.zan=res.replies[0].replyLikecount+10;
-      this.repin.circle=res.replies[0].replyContent;
+      // this.repin.zan=Number(res.replies[0].replyLikecount)+10;
+      // this.repin.circle=res.replies[0].replyContent;
       
     });
   //获取可以@的对象
@@ -337,11 +337,22 @@ export default {
     })
     .then(res=>{
       this.aiteData=res.data.data;
-      console.log(this.aiteData);
+ 
     })
     //获取是否关注该用户
   },
   methods:{
+    collect() {
+      this.user.isshoucang=!this.user.isshoucang;
+      this.wenzhang.shoucangshu = this.user.isshoucang?this.wenzhang.shoucangshu-1 : this.wenzhang.shoucangshu+1 
+      this.axios.post("/dynamic/changeCollect",{
+        userId: sessionStorage.getItem("userId"),
+        dynamicId: sessionStorage.getItem("dynamicId")
+      })
+      .then(res => {
+        res.data.code;
+      })
+    },
     quit() {
       var route = sessionStorage.getItem("quitpathTwo") ? sessionStorage.getItem("quitpathTwo") : sessionStorage.getItem("quitpath")
       this.$router.replace(route);
@@ -351,7 +362,7 @@ export default {
       this.show=true;
     },
     jisuan(){
-      console.log(this.zishu.split("").length)
+    
       this.zonggong=this.zishu.split('').length;
     },
 
@@ -367,7 +378,7 @@ export default {
     },
     //关注
     guanzhufangfa(){
-      console.log(this.user.isguanzhu)
+
       this.user.isguanzhu=!this.user.isguanzhu;
     },
     yulanimg(a){
@@ -392,13 +403,13 @@ export default {
       this.showAite=true;
     },
     aaa(a){
-      console.log('输出姓名'+a);
+    
       this.aiteyonghu=a;
       this.zishu+="@"+a+'';
       this.showAite=false;
     },
     fasong(){
-      console.log("发送信息"+this.wenzhang.wenzhangId,this.loginUser.userid)
+      
       this.show=false;
       this.axios.post("/reply/addReply",{
         dynamicId:this.wenzhang.wenzhangId,
@@ -406,12 +417,12 @@ export default {
         replyContent:this.zishu,
       })
       .then(res=>{
-        console.log(res);
+        res.data
 this.axios.post("/dynamic/findOneById",{
       dynamicId:this.wenzhang.wenzhangId
     })
     .then(res => {
-      console.log(res.data);
+     res.data
       this.yonghu={}
       this.wenzhang={
         liuyanshu:0
@@ -422,7 +433,7 @@ this.axios.post("/dynamic/findOneById",{
       this.yonghu.username=res.userName;
       this.yonghu.userid=res.userId;
       this.yonghu.userimg=res.userImg[0];
-      console.log(res.userImg[0]);
+ 
       this.yonghu.isdaka=res.isMaster;
       //文章信息：
       this.wenzhang.zhuanfashu=res.dynamicTransmit;
@@ -439,7 +450,7 @@ this.axios.post("/dynamic/findOneById",{
       this.wenzhang.date=res.dynamicLastTime;
       this.wenzhang.wenzhangId=res.dynamicId;
       //热门信息：
-      this.repin.zan=res.replies[0].replyLikecount+10;
+      this.repin.zan=Number(res.replies[0].replyLikecount)+10;
       this.repin.circle=res.replies[0].replyContent;
       
     });

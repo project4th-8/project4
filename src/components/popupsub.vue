@@ -74,8 +74,6 @@ export default {
         })
         .then(res => {
           if (res.data.code == 200) {
-            console.log("ok");
-            console.log(this.dynamicId);
             this.message = "";
             this.$emit("clickbox", false);
           }

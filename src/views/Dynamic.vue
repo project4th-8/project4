@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     sccommentCon(id) {
-      console.log("文章id：",id);
+    
       sessionStorage.setItem("dynamicId",id);
     }
   },
@@ -117,7 +117,7 @@ export default {
     } else {
       this.nobody = false;
     }
-    console.log("我的动态：",this.mydynamic);
+   
   }
 };
 </script>

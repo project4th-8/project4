@@ -46,8 +46,8 @@ export default {
         userName: this.myname
       })
       .then(res => {
-        console.log(res.data);
-        this.$emit('changeCom','');
+       if(res.data.code == "200") {
+           this.$emit('changeCom','');
           this.axios.post("/user/findAllUserInfo")
           .then(res => {
             if(res.data.data.user.userSex == 1) {
@@ -56,9 +56,11 @@ export default {
               res.data.data.user.userSex = "女";
             }
             this.$store.state.userInfo = res.data.data.user;
-            console.log("拿到数据：",res.data.data.user);
+          
             sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
           });
+       }
+      
       })
     }
   }
