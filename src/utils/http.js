@@ -28,7 +28,6 @@ http.interceptors.request.use(function (config) {
   }
   return config;
 }, function (error) {
-  console.log('请求拦截错误：', error)
   return Promise.reject(error)
 });
 
@@ -63,7 +62,6 @@ http.interceptors.response.use(function (response) {
 
   return response;
 }, function (error) {
-  console.log('服务器响应错误：', error)
   const _response = error.response
 
   switch(_response.status) {
