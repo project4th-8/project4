@@ -6,12 +6,17 @@ import store from './store'
 import 'amfe-flexible'
 import vueAxios from 'vue-axios'
 import http from './utils/http'
-import './assets/style/revant.less'
+// import './assets/style/revant.less'
 import './assets/style/sc.less'
+import { Step, Steps ,Cell,Icon } from 'vant';
+import echarts from 'echarts'
 
 
 
-Vue.use(vueAxios,http)
+Vue.use(Step).use(Steps).use(Cell).use(Icon);
+
+Vue.use(vueAxios,http,echarts)
+
 Vue.config.productionTip = false
 
 new Vue({

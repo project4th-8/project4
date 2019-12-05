@@ -1,39 +1,38 @@
 <template>
   <div class="fix-top">
 
- <Recommendtext v-for="(item,index) in cons" :key='index' :info='item'></Recommendtext>
+ <Recommendtext ></Recommendtext>
   </div>
 </template>
 <script>
 import Recommendtext from '../components/recommendtext'
-import { mapState,mapActions } from 'vuex'
+
 export default {
   name:'recommend',
   data () {
     return {
+      cons:[]
     }
   },
   components: {
     Recommendtext
   },
   computed:{
-    ...mapState([
-      'cons'
-    ])
+
   },
   created(){
-    this.getConsSync()
+
+    
+  
   },
   methods:{
-    ...mapActions([
-      'getConsSync'
-    ])
+ 
   }
 }
 </script>
 <style lang="less" scoped>
 .fix-top {
-  margin-top:90px; 
+  margin-top: 90px;
   margin-bottom:40px; 
 }
 </style>

@@ -1,4 +1,8 @@
 module.exports = {
+  transpileDependencies: [
+    'vue-echarts',
+    'resize-detector'
+  ],
   devServer: { // webpack 的一个插件，搭建本地服务器
     proxy: { // 反向代理
       '/api': {
@@ -23,5 +27,5 @@ module.exports = {
     }
   }
  
-  
+ 
 }
