@@ -22,7 +22,7 @@
           <div
             class="Report"
             v-show="index===state && isshow"
-            @click="showPopup(index),popsub.userId=item.userId,popsub.dynamicId=item.dynamicId"
+            @click="showPopup(index),popsub.isuserId=item.userId,popsub.dynamicId=item.dynamicId"
           >举报</div>
         </div>
       </div>
@@ -46,7 +46,7 @@
           <i class="iconfont icon-duanxin"></i>
           {{item.pingl}}
         </div>
-        <div @click="zan(item.userId)">
+        <div @click="iszan(item.dynamicId,$event,index),mzan[index]=!mzan[index]">
           <i class="iconfont icon-zang"></i>
           {{item.dynamicLikeCount}}
         </div>
@@ -69,8 +69,11 @@ export default {
       showclient: false,
       cons: [],
       state: "",
+      myzan: true,
+      states: "",
+      mzan: [],
       popsub: {
-        userId: "",
+        isuserId: "",
         dynamicId: ""
       }
     };
@@ -82,7 +85,9 @@ export default {
   created() {
     this.axios.get("/dynamic/findAllDUR", {}).then(res => {
       this.cons = res.data.data.data;
-      this.cons = this.cons.map(item => {
+      this.cons = this.cons.map((item, index) => {
+        item.mzn = false;
+        this.mzan[index] = item.mzn;
         if (item.isMaster == 0) {
           item.mismaster = true;
         } else {
@@ -92,6 +97,8 @@ export default {
         return item;
       });
       console.log("txt", this.cons);
+      console.log("xx", this.mzan);
+
     });
   },
   methods: {
@@ -106,8 +113,8 @@ export default {
       this.showclient = res;
       console.log(this.showclient);
     },
-    forword: function(userId, dynamicId) {
-      sessionStorage.setItem("forworduserId", userId);
+    forword: function(isuserId, dynamicId) {
+      sessionStorage.setItem("forworduserId", isuserId);
       sessionStorage.setItem("forworddynamicId", dynamicId);
 
       this.$router.push("/forword");
@@ -120,14 +127,15 @@ export default {
       sessionStorage.setItem("textId", index);
       this.$router.push("/sccomment");
     },
-    zan: function(isuserId) {
-      console.log(isuserId);
-      /*        this.axios.post("/reply/givealike", {
-           userId: userId
-      })
-      .then(res => {
-        console.log(res.state)
-      }) */
+    iszan: function(dynamicId, e, index) {
+      if (!this.mzan[index]) {
+        e.currentTarget.innerText = Number(e.currentTarget.innerText) + 1;
+        e.currentTarget.innerHTML = `<i class="iconfont icon-zang" style="color:orange"></i> ${e.currentTarget.innerText}`;
+      } else {
+        e.currentTarget.innerText = Number(e.currentTarget.innerText) - 1;
+        e.currentTarget.innerHTML = `<i class="iconfont icon-zang" ></i> ${e.currentTarget.innerText}`;
+      }
+   
     }
   }
 };

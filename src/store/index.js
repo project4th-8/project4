@@ -65,33 +65,30 @@ const fundlists = [{
 
 export default new Vuex.Store({
   state: {
-    // cons : [],
+    account:0,
     fundlists: [],
-    isLogin: true,
-    userInfo:{}
+    userInfo:{},
+    accountAge: 0
   },
   getters:{
 
   },
   mutations: {
-   /*  getCons(state,n) {
-      state.cons = n
-    }, */
+ 
     getfundlists(state,n) {
       state.fundlists = n
+    },
+    changeAccount(state) {
+      state.account++;
     }
   },
   actions: {
-  /*   getConsSync({commit}) {
-      setTimeout(function() {
-        commit('getCons',cons,1000)
-      })
-    }, */
+
     getfundlistsSync({commit} ) {
       setTimeout(function() {
         commit('getfundlists',fundlists,1000)
       });
-    }
+    },
   },
   modules: {
   }

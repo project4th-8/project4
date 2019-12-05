@@ -41,7 +41,7 @@
         </li>
       </ul>
     </div>
-    <component :is="com"/>
+    <component :is="com" :findfund="inputtxt" />
   </div>
 </template>
 <script>
@@ -62,8 +62,7 @@ export default {
       com: "allfund",
       inputtxt: "",
       shows:false,
-      issure:1
-
+      issure:1,
     };
   },
   components: {
@@ -86,7 +85,9 @@ export default {
       this.shows =!this.shows;
     },
     onSearch: function() {
-
+      this.findfund = this.inputtxt
+      this.com = "allfund"
+      this.issure = 1
     }
   }
   

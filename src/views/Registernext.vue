@@ -40,7 +40,8 @@ export default {
   },
   methods: {
     ok: function() {
-      this.$router.replace("/createusercon");
+      // this.$router.replace("/createusercon");
+      // this.axios.post("")
     }
   }
 };

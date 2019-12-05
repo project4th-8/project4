@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+        
     <div class="name-list">
       <div>基金简称</div>
       <div>
@@ -19,30 +20,34 @@
       <div>收藏</div>
     </div>
     <div v-for="(item,index) in cons" :key="index" :info="item">
-      <div @click="funddetails(index)">
+      <div>
         <div class="content con-top">
-          <div class="names">
+          <div class="names" @click="funddetails(index)">
             <p class="title">{{item.fundName}}</p>
           </div>
-          <div>{{item.fundCount}}</div>
-          <div>{{item.fundEarnings}}</div>
+          <div @click="funddetails(index)">{{item.fundCount}}</div>
+          <div @click="funddetails(index)">{{item.fundEarnings}}</div>
           <div
-            class="starall"
-            :class="{star:state===index&&isshow}"
-            @click="isshow=!isshow,state=index "
+            class="starall "
+          
+            @click="iszan(item.fundId,$event,index),mzan[index]=!mzan[index]"
           >
             <van-icon name="star" />
           </div>
         </div>
         <div class="content bottom-content">
           <div>
-            <span class="code">123213</span>
+            <span class="code">{{item.fundId}}3{{item.fundState}}2412</span>
           </div>
           <div class="time">
             <span class="code time">{{item.fundBuytime}}</span>
           </div>
           <div></div>
           <div></div>
+          <span class="findfund">
+            {{findfunds = fundtitle}}
+          </span>
+         
         </div>
       </div>
     </div>
@@ -52,22 +57,48 @@
 import { Icon } from "vant";
 export default {
   name: "allfunds",
+  props: ["fundtitle"],
   data: function() {
     return {
       isshow: false,
       isShowt: true,
       isShowsub: true,
       cons: [],
-      state: "",
-      sortid: false
+      mzan:[],
+      sortid: false,
+      findfunds: "",
+      state:''
+    
     };
   },
+
   created() {
     this.axios.post("/fund/findAllFund", {}).then(res => {
       this.cons = res.data.data.data;
+      this.cons = this.cons.map((item,index)=> {
+        item.mzn = false;
+        this.mzan[index] = item.mzn
+
+        return item
+      })
+   
     });
   },
-  watch: {},
+  watch: {
+
+    findfunds(val) {
+      console.log(val)
+      this.axios.post("/fund/findFundByFundName", {
+        fundName:val
+      }).then(res => {
+        console.log(res.data)
+        this.cons = res.data.data;
+      });
+    },
+    test() {
+      this.test = !this.test
+    }
+  },
   components: {
     [Icon.name]: Icon
   },
@@ -75,6 +106,15 @@ export default {
     funddetails: function(index) {
       sessionStorage.setItem("fundId", this.cons[index].fundId);
       this.$router.push("/funddetails");
+    },
+    iszan:function(fundId,e,index) {
+      
+        if(!this.mzan[index]) {
+      e.currentTarget.innerHTML = ` <i  class="van-icon van-icon-star" style="color:orange"></i> `
+    } else {
+      e.currentTarget.innerHTML = ` <i  class="van-icon van-icon-star"></i> `
+    }
+ 
     },
     sort: function(sortid) {
       this.cons = "";
@@ -97,7 +137,7 @@ export default {
           });
       }
     },
-      sortcount: function(sortid) {
+    sortcount: function(sortid) {
       this.cons = "";
       if (sortid) {
         this.axios
@@ -142,6 +182,9 @@ export default {
     width: 100px;
   }
 
+.findfund {
+  display: none;
+}
   .time {
     width: 110px;
     margin-left: 20px;
@@ -166,7 +209,7 @@ export default {
     color: #ddd;
   }
   .star {
-    color: #333;
+    color: orange;
   }
 }
 .name-list {

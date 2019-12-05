@@ -11,8 +11,8 @@ const http = axios.create({
 })
 
 http.interceptors.request.use(function (config) {
-  console.log(config.url != '/api/user/uploadImg', config.url)
-  if (config.method === "post" && config.url != "/dynamic/uploadImg") { // 这一步主要取决于后端是否可以接受 json
+  // console.log(config.url != '/api/user/uploadImg', config.url)
+  if (config.method === "post" && config.url != "/dynamic/uploadImg" && config.url != '/user/uploadImg') { // 这一步主要取决于后端是否可以接受 json
     config.headers = {
       'Content-Type':'application/x-www-form-urlencoded'
     }
@@ -26,7 +26,6 @@ http.interceptors.request.use(function (config) {
     // config.headers['Authorization'] = 'Bearer ' + token
     config.headers['Authorization'] = token
   }
-  console.log('请求配置：', config)
   return config;
 }, function (error) {
   console.log('请求拦截错误：', error)

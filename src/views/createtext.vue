@@ -29,7 +29,7 @@
         </van-field>
    
         <div>
-          <van-uploader v-model="fileList" multiple :max-count="2" />
+          <van-uploader v-model="fileList" multiple :max-count="3" />
         </div>
       </van-cell-group>
     </div>

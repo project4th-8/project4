@@ -4,18 +4,22 @@
     <div class="title">
       <a href="javascript:;" @click="mreturn">取消</a>
       <span>历史动态</span>
+      <a href="javascript:;" class="right-attention" @click="attention" id="attention">关注</a>
+
     </div>
 
     <!-- 用户信息 -->
     <div class="userinfo">
-      <img src="../assets/logo.png" alt="头像" />
+      <div class="headimg">
+      <img :src="imgurl" alt="头像" />
+      </div>
       <div class="myinfo">
         <span class="username">{{list.userName}}</span>
-        <span class="iconfont icon-v isMatsercolor" :class="{on: list.isMaster==0}"></span>
+        <span class="iconfont icon-v isMatsercolor" :class="{on:isMaster==0}"></span>
       </div>
       <span class="ll">
-        浏览：
-        <span>20</span>
+        今日浏览：
+        <span>{{account}}</span>
       </span>
     </div>
 
@@ -24,7 +28,7 @@
       <div class="top">
         <div>
           <a href class="links">
-          <div class="Img"><img :src="item.userImg" alt=""></div>
+          <div class="Img"><img :src="item.user.imgs[0].imgUrl" alt=""></div>
             <div class="yhm">
               <p>
                 {{list.userName}}
@@ -76,7 +80,7 @@
 
 <script>
 import popupsub from "../components/popupsub";
-
+import { mapState,mapMutations } from "vuex"
 import { Icon, Uploader } from "vant";
 export default {
   name: "Isselectdynamic",
@@ -90,6 +94,8 @@ export default {
       showclient: false,
       com: "popupsub",
       lists: [],
+      imgurl:'',
+      isMaster:5,
       popsub: {
         userId: "",
         dynamicId: ""
@@ -97,23 +103,34 @@ export default {
     };
   },
   created() {
+    this.changeAccount;
     this.userID = sessionStorage.getItem("isselectuserid");
-    console.log(this.userID);
     this.axios
       .post("/user/findOneById", {
         userId: this.userID,
         id: null
       })
       .then(res => {
-        this.list = res.data.data;
+        this.list = res.data.data.dynamics[0].user;
         this.lists = res.data.data.dynamics;
         console.log("xx",res.data.data.dynamics);
+        console.log(this.list.isMaster);
+        this.imgurl = this.list.imgs[0].imgUrl
+        this.isMaster = this.list.isMaster
       });
   },
   components: {
     [Icon.name]: Icon,
     [Uploader.name]: Uploader,
     popupsub
+  },
+  computed:{
+    ...mapMutations([
+      'changeAccount'
+    ]),
+    ...mapState([
+      'account'
+    ])
   },
   methods: {
     showPopup(/* index */) {
@@ -129,6 +146,31 @@ export default {
     mreturn:function() {
       this.$router.push('/')
       sessionStorage.removeItem('isselectuserid')
+    },
+    attention:function() {
+  
+     
+      if(document.getElementById('attention').innerText == "取关") {
+        this.axios.post("/egnolSomePeople",{
+          userId: sessionStorage.getItem("isselectuserid")
+        })
+        .then(res => {
+          console.log("收到数据：",res.data);
+          if(res.data.code == "200") {
+            document.getElementById('attention').innerText = "关注";
+          }
+        })
+      } else {
+        this.axios.post("/AttentionSomePeople",{
+          userId: sessionStorage.getItem("isselectuserid")
+        })
+        .then(res => {
+          console.log("收到数据：",res.data);
+          document.getElementById('attention').innerText = "取关";
+        })
+      }
+  
+
     }
   }
 };
@@ -137,9 +179,11 @@ export default {
 <style lang="less" scoped>
 @import "../assets/font/personfont/iconfont.css";
 
-.on {
-  color: orange;
+.right-attention {
+  display: inline-block;
+  transform: translateX(320px);
 }
+
 .dynamic {
   position: absolute;
   top: 0;
@@ -188,7 +232,7 @@ export default {
   .moduls {
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.03);
     position: fixed;
     z-index: 1000;
     top: 0;
@@ -203,12 +247,15 @@ export default {
     justify-content: space-around;
     align-items: center;
     flex-direction: column;
-
-    img {
+    .headimg {
       width: 60px;
       height: 60px;
       border-radius: 50%;
       box-shadow: 0 0px 2px rgb(88, 88, 88);
+      overflow: hidden;
+    }
+    img {
+     height: 60px;
     }
     span {
       font-size: 16px;
@@ -262,8 +309,8 @@ export default {
   overflow: hidden;
 
   img {
-    width: 40px;
-    height: auto;
+    width:  auto;
+    height: 40px;
   }
 }
 .down {
@@ -292,6 +339,9 @@ export default {
 }
 .isMatsercolor {
   color: #ddd;
+}
+.on {
+  color: orange;
 }
 .bottom {
   display: flex;

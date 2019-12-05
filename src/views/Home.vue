@@ -43,16 +43,8 @@ export default {
     [Search.name]: Search
   },
   methods: {
-    onSearch: function() {}
+    onSearch: function() {},
   },
-  created() {
- /*     this.axios.get("/dynamic/findAllDUR", {
-
-      })
-      .then(res => {
-        console.log(res)
-      })  */
-  }
 };
 </script>
 

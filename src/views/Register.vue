@@ -11,13 +11,30 @@
       <van-cell-group>
         <van-field v-model="username" label="+86" placeholder="请输入手机号" />
         <van-cell-group>
-          <van-field v-model="sms" center clearable label="短信验证码" placeholder="请输入短信验证码">
-            <van-button slot="button" size="small" type="primary">发送验证码</van-button>
+          <van-field v-model="yzm" center clearable label="短信验证码" placeholder="请输入短信验证码">
+            <van-button
+              v-if="isfs"
+              slot="button"
+              size="small"
+              type="primary"
+              @click="sendCode"
+            >发送验证码</van-button>
+            <van-button
+              v-else
+              slot="button"
+              size="small"
+              type="primary"
+              class="yzm2"
+              disabled
+            >{{seconds}}s后发送</van-button>
           </van-field>
         </van-cell-group>
         <van-button class="ok" type="primary" size="large" @click="ok">下一步</van-button>
       </van-cell-group>
     </div>
+
+    <!-- 提示框 -->
+    <div v-show="showtishi" class="tishi">必填信息不能为空!</div>
   </div>
 </template>
 
@@ -28,7 +45,10 @@ export default {
   data() {
     return {
       username: "",
-      sms: ""
+      isfs: true,
+      seconds: 60,
+      yzm: "",
+      showtishi: false
     };
   },
   components: {
@@ -39,9 +59,60 @@ export default {
     [CellGroup.name]: CellGroup
   },
   methods: {
-    ok:function() {
+    sendCode() {
+      if(this.username != "") {
+        this.isfs = false;
+        var timer = setInterval(() => {
+          if (this.seconds == 1) {
+            this.isfs = true;
+            this.seconds = 60;
+          } else {
+            this.seconds--;
+          }
+        }, 1000);
 
-      this.$router.replace("/Registernext");
+        if (this.username != "") {
+          this.axios
+            .post("/user/regisSendPhone", {
+              userPhone: this.username
+            })
+            .then(res => {
+              console.log("发送成功：", res.data);
+            });
+        } else {
+          alert("请输入手机号！");
+          this.isfs = true;
+          clearInterval(timer);
+        }
+      } else {
+        this.showtishi = true;
+        setTimeout(() => {
+          this.showtishi = false;
+        }, 2500);
+      }
+    },
+    ok: function() {
+        if (this.username && this.yzm != 0) {
+          this.axios
+          .post("user/checkCode", {
+            verifyCode: this.yzm
+          })
+          .then(res => {
+            console.log(res.data);
+            if (res.data.code == "200") {
+              sessionStorage.setItem("tel", this.username);
+              this.$router.replace("/Registernext");
+              this.username = "";
+              this.isfs = true;
+              this.yzm = "";
+            }
+          });
+        } else {
+          this.showtishi = true;
+          setTimeout(() => {
+            this.showtishi = false;
+          }, 2500);
+        }
     }
   }
 };
@@ -49,6 +120,21 @@ export default {
 
 <style lang="less" scoped>
 @import "../assets/style/resize.css";
+.tishi {
+  position: fixed;
+  bottom: 30px;
+  left: 125px;
+  background: black;
+  color: white;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 7px;
+}
+.yzm2 {
+  background: #ddd;
+  color: black;
+  border: none;
+}
 .Forgetpassword {
   position: fixed;
   width: 100%;

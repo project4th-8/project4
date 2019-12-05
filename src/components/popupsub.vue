@@ -30,7 +30,7 @@
       <van-button type="default" @click="quit">取消</van-button>
       <van-button type="default" color="red" class="ok" @click="sure">确定</van-button>
     </div>
-    <div class="ids">{{ userId = showpopsub.userId}}{{dynamicId = showpopsub.dynamicId}}</div>
+    <div class="ids">{{ userId = showpopsub.isuserId}}{{dynamicId = showpopsub.dynamicId}}</div>
   </div>
 </template>
 <script>

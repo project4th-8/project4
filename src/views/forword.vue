@@ -1,13 +1,13 @@
 <template>
   <div class="create">
     <div>
-      <van-nav-bar title="转发正文" left-text="返回" left-arrow right-text="发布" @click-left="re"></van-nav-bar>
+      <van-nav-bar title="转发正文" left-text="返回" left-arrow right-text="发布" @click-left="re"   @click-right="submittxt"></van-nav-bar>
     </div>
     
     <div>
       <van-cell-group class="autocontent">
         <van-field
-          v-model="message"
+          v-model="dynamicTitle"
           rows="2"
           autosize
           label="内容"
@@ -62,13 +62,15 @@ export default {
       message: "",
       date: [],
       dynamicId: "",
-      userId: ""
+      userId: "",
+      dynamicTitle:'',
+      token:''
     };
   },
   created() {
     this.dynamicId = sessionStorage.getItem("forworddynamicId");
     this.userId = sessionStorage.getItem("forworduserId");
-
+    this.token = sessionStorage.getItem("token")
     this.axios
       .post("/dynamic/findOneById", {
         dynamicId: this.dynamicId
@@ -98,6 +100,17 @@ export default {
     },
     fund: function() {
       this.message += "$";
+    },
+    submittxt:function () {
+      this.axios.post("/dynamic/returnBy",{
+        ids: null ,
+        dynamicId: this.dynamicId,
+        dynamicTitle:this.dynamicTitle,
+        token:this.token
+      })
+      .then(res=> {
+        console.log(res.data)
+      })
     }
   }
 };

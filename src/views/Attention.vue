@@ -2,27 +2,18 @@
   <div class="attention">
     <!-- 标题 -->
     <div class="title">
-      <a href="/About">取消</a>
+      <router-link to="/About">取消</router-link>
       <span>我的关注</span>
     </div>
     <!-- 详细资料 -->
     <div class="fanslist">
-      <div class="info">
-        <img src="../assets/logo.png" alt="头像">
-        <a href="javascript:;" class="infoL">attention1</a>
-        <span class="iconfont icon-v" :class="{on: true}"></span>
+      <div class="info" v-for="(item,index) in attention" :key="index">
+        <img :src="item.imgs[0].imgUrl" alt="头像">
+        <a href="javascript:;" class="infoL">{{item.userName}}</a>
+        <span class="iconfont icon-v" :class="{on: item.isMaster==1}"></span>
         <div class="authentication">
-          <a v-if="noattention" href="javascript:;" @click="noattention=!noattention">已关注</a>
-          <a v-else href="javascript:;" @click="noattention=!noattention">关注</a>
-        </div>
-      </div>
-      <div class="info">
-        <img src="../assets/logo.png" alt="头像">
-        <a href="javascript:;" class="infoL">attention1</a>
-        <span class="iconfont icon-v"></span>
-        <div class="authentication">
-          <a v-if="noattention" href="javascript:;" @click="noattention=!noattention">已关注</a>
-          <a v-else href="javascript:;" @click="noattention=!noattention">关注</a>
+          <a v-if="item.state" href="javascript:;" @click="qxAttention(index)">已关注</a>
+          <a v-else href="javascript:;" @click="Attention(index)">关注</a>
         </div>
       </div>
     </div>
@@ -34,21 +25,55 @@ export default {
   name: "attention",
   data: function() {
     return {
-      noattention: true,
+      attention: [],
     }
   },
   components: {
     
   },
   methods: {
-    
+    qxAttention(index) {
+      this.axios.post("/egnolSomePeople",{
+        userId: this.attention[index].userId
+      })
+      .then(res => {
+        console.log("收到数据：",res.data);
+        this.attention[index].state = false;
+        console.log(this.attention[index].state);
+      })
+    },
+    Attention(index) {
+      this.axios.post("/AttentionSomePeople",{
+        userId: this.attention[index].userId
+      })
+      .then(res => {
+        console.log("收到数据：",res.data);
+        this.attention[index].state = true;
+      })
+    }
+  },
+  created() {
+    this.axios.post("/findAllAttention",{
+      userId: sessionStorage.getItem("userId")
+    })
+    .then(res => {
+      this.attention = res.data.data;
+      
+      this.attention = this.attention.map(item => {
+        item.state = true
+        return item
+      })
+      console.log("我的关注：",this.attention)
+    })
   }
 }
 </script>
 
 <style lang="less" scoped>
 @import "../assets/font/personfont/iconfont.css";
-
+  .icon-v {
+    color: #ddd;
+  }
   .on {
     color: orange;
   }

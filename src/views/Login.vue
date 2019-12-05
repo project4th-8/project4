@@ -6,11 +6,9 @@
 
     <div class="rob">
        <component :is="com" />
-
-
       <div class="iphone">
 
-          <span class="yz" v-if="shows" @click="com='telyz',text=' 密码登录  ',shows=!shows"> {{ text}} |</span>
+          <span class="yz" v-if="shows" @click="com='telyz',text='密码登录',shows=!shows">{{text}} |</span>
           <span class="yz" v-else  @click="com='telpass',text='验证码登录',shows=!shows">{{text}} |</span>
 
         <router-link to="/Forgetpassword">

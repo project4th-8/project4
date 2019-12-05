@@ -4,14 +4,14 @@
       <div>基金简称</div>
       <div>
         基金购买数量
-        <span @click="isShowt=!isShowt,sortcount(sortid=!sortid)">
+        <span @click="isShowt=!isShowt">
           <van-icon name="ascending" v-if="isShowt" />
           <van-icon name="descending" v-else />
         </span>
       </div>
       <div>
         基金收益
-        <span @click="isShowsub=!isShowsub,sort(sortid=!sortid)">
+        <span @click="isShowsub=!isShowsub">
           <van-icon name="ascending" v-if="isShowsub" />
           <van-icon name="descending" v-else />
         </span>
@@ -20,11 +20,11 @@
     </div>
     <div v-for="(item,index) in cons" :key="index" :info="item">
       <div class="content con-top">
-        <div class="names">
+        <div class="names" @click="funddetails(index)">
           <p class="title">{{item.fundName}}</p>
         </div>
-        <div>{{item.fundCount}}</div>
-        <div>{{item.fundEarnings}}</div>
+        <div @click="funddetails(index)">{{item.fundCount}}</div>
+        <div @click="funddetails(index)">{{item.fundEarnings}}</div>
         <div
           class="starall"
           :class="{star:state===index&&isshow}"
@@ -54,7 +54,9 @@ export default {
     return {
    isshow: false,
       cons: [],
-      state:''
+      state:'',
+      isShowt: true,
+      isShowsub: true,
     }
   },
   created () {
@@ -66,7 +68,10 @@ export default {
     });
   },
   methods:{
-
+ funddetails: function(index) {
+      sessionStorage.setItem("fundId", this.cons[index].fundId);
+      this.$router.push("/funddetails");
+    },
   }
 }
 

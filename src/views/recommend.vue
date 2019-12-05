@@ -32,7 +32,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .fix-top {
-  margin-top:90px; 
+  margin-top: 90px;
   margin-bottom:40px; 
 }
 </style>

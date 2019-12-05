@@ -116,6 +116,7 @@ export default {
   methods: {
     starbtn: function() {},
     re: function() {
+      sessionStorage.removeItem('fundId')
       this.$router.push("/fund");
     }
   }

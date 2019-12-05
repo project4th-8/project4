@@ -2,7 +2,7 @@
   <div class="myinfo">
     <!-- 标题 -->
     <div class="title">
-      <a href="/About">取消</a>
+      <router-link to="/About">取消</router-link>
       <span>编辑资料</span>
     </div>
     <!-- 详细资料 -->
@@ -10,28 +10,28 @@
       <div class="info">
         <span>头像</span>
         <a href="javascript:;" @click="setHeadImg">
-          <img src="../assets/logo.png" alt="头像">
+          <img :src="userInfo.imgs[0].imgUrl" alt="头像">
         </a>
       </div>
-      <div class="info">
+      <div class="info" @click="setUser">
         <span>昵称</span>
-        <a href="javascript:;" @click="setUser" class="infoL">用户xxx</a>
+        <a href="javascript:;" class="infoL">{{userInfo.userName}}</a>
       </div>
-      <div class="info">
+      <div class="info" @click="setSex">
         <span>性别</span>
-        <a href="javascript:;" @click="setSex" class="infoL">男</a>
+        <a href="javascript:;" class="infoL">{{userInfo.userSex}}</a>
       </div>
-      <div class="info">
+      <div class="info" @click="setBirthday">
         <span>生日</span>
-        <a href="javascript:;" @click="setBirthday" class="infoL">1998-10-26</a>
+        <a href="javascript:;" class="infoL">{{userInfo.userBirth}}</a>
       </div>
-      <div class="info">
+      <div class="info" @click="setEmail">
         <span>邮箱</span>
-        <a href="javascript:;" @click="setEmail" class="infoL">1533804761@qq.com</a>
+        <a href="javascript:;" class="infoL">{{userInfo.userEmail}}</a>
       </div>
-      <div class="info">
+      <div class="info"  @click="setSign">
         <span>个性签名</span>
-        <a href="javascript:;" @click="setSign" class="infoL">今天的风甚是喧嚣。。</a>
+        <a href="javascript:;" class="infoL">{{userInfo.userSign.substr(0,10) + '...'}}</a>
       </div>
     </div>
 
@@ -54,13 +54,16 @@ import SetSex from '../components/SetSex'
 import SetEmail from '../components/SetEmail'
 import SetSign from '../components/SetSign'
 import SetBirthday from '../components/SetBirthday'
+import { mapState } from 'vuex'
 
 export default {
   name: "informations",
   data: function() {
     return {
       ismb: false,
-      com: ""
+      com: "",
+      myInfo: {},
+      mysign: ""
     }
   },
   components: {
@@ -70,6 +73,11 @@ export default {
     SetEmail,
     SetSign,
     SetBirthday
+  },
+  computed: {
+    ...mapState([
+      'userInfo'
+    ])
   },
   methods: {
     setHeadImg() {
@@ -101,9 +109,14 @@ export default {
       this.com = com;
     },
     quitLogin() {
-      this.$router.replace("/about");
-      this.$store.state.isLogin = false;
-    }
+      this.$router.replace("/About");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("userId");
+      sessionStorage.removeItem("dynamicId");
+    },
+  },
+  created() {
+    console.log("我的信息：",this.userInfo);
   }
 }
 </script>

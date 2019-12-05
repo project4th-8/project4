@@ -2,7 +2,7 @@
   <div class="setemail">
     <div class="list">
       <h4>请输入你的邮箱</h4>
-      <textarea maxlength="30" class="input" cols="30" rows="10" @input="pattest">1533804761@qq.com</textarea>
+      <textarea maxlength="30" v-model="myemail" class="input" cols="30" rows="10" @input="pattest"></textarea>
       <span class="fontnum"><span>{{num}}</span>/30</span><br>
       <span class="pat">请输入邮箱格式</span>
       <button type="button" class="btn" @click="quit">取消</button>
@@ -16,7 +16,8 @@ export default {
   name: "setemail",
   data: function() {
     return {
-      num: ""
+      num: 0,
+      myemail: ""
     }
   },
   methods: {
@@ -26,23 +27,39 @@ export default {
     pattest() {
       var pat = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
       var con = document.getElementsByClassName("input")[0].value;
-      console.log(con);
       if(con.length < 31) {
-        this.num = con.length;
+        this.num = this.myemail.length;
       }
-      if(!pat.test(con)) {
-        document.getElementsByClassName("pat")[0].style.display = "inline";
+      if(con != "") {
+        if(!pat.test(con)) {
+          document.getElementsByClassName("pat")[0].style.display = "inline";
+        } else {
+          document.getElementsByClassName("pat")[0].style.display = "none";
+        }
       } else {
         document.getElementsByClassName("pat")[0].style.display = "none";
       }
     },
     submit() {
-      console.log("保存成功！")
-      this.$emit('changeCom','');
+      this.axios.post("/user/updateUserEmail",{
+        userEmail: this.myemail
+      })
+      .then(res => {
+        console.log(res.data);
+        this.$emit('changeCom','');
+          this.axios.post("/user/findAllUserInfo")
+          .then(res => {
+            if(res.data.data.user.userSex == 1) {
+              res.data.data.userSex = "男";
+            } else {
+              res.data.data.user.userSex = "女";
+            }
+            this.$store.state.userInfo = res.data.data.user;
+            console.log("拿到数据：",res.data.data.user);
+            sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
+          });
+      })
     }
-  },
-  created() {
-    this.num = 17;
   }
 }
 </script>

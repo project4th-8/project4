@@ -133,11 +133,6 @@ const routes = [
     component: () => import('../views/Yanzhengpassword.vue')
   },
   {
-    path: '/Others',
-    name: 'Others',
-    component: () => import('../views/Others.vue')
-  },
-  {
     path: '/forword',
     name: 'forword',
     component: () => import('../views/forword.vue')

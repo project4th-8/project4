@@ -1,6 +1,7 @@
 <template>
   <div class="allfunds">
-    <allfunds> </allfunds>
+    
+    <allfunds :fundtitle="findfund" > </allfunds>
   </div>
 
 </template>
@@ -9,8 +10,10 @@ import allfunds from '../components/allfunds.vue'
 
 export default {
   name: "allfund",
+  props:['findfund'],
   data () {
     return {
+
     }
   },
   components: {

@@ -2,27 +2,18 @@
   <div class="myfans">
     <!-- 标题 -->
     <div class="title">
-      <a href="/About">取消</a>
+      <router-link to="/About">取消</router-link>
       <span>我的粉丝</span>
     </div>
     <!-- 详细资料 -->
     <div class="fanslist">
-      <div class="info">
-        <img src="../assets/logo.png" alt="头像">
-        <a href="javascript:;" class="infoL">fans1</a>
-        <span class="iconfont icon-v" :class="{on: true}"></span>
+      <div class="info" v-for="(item,index) in fans" :key="index">
+        <img :src="item.imgs[0].imgUrl" alt="头像">
+        <a href="javascript:;" class="infoL">{{item.userName}}</a>
+        <span class="iconfont icon-v" :class="{on: item.isMaster==1}"></span>
         <div class="authentication">
-          <a v-if="attention" href="javascript:;" @click="attention=!attention">互相关注</a>
-          <a v-else href="javascript:;" @click="attention=!attention">已关注</a>
-        </div>
-      </div>
-      <div class="info">
-        <img src="../assets/logo.png" alt="头像">
-        <a href="javascript:;" class="infoL">fans1</a>
-        <span class="iconfont icon-v"></span>
-        <div class="authentication">
-          <a v-if="attention" href="javascript:;" @click="attention=!attention">互相关注</a>
-          <a v-else href="javascript:;" @click="attention=!attention">已关注</a>
+          <a v-if="item.state" href="javascript:;" @click="Attention(index)">互相关注</a>
+          <a v-else href="javascript:;" @click="qxAttention(index)">取消关注</a>
         </div>
       </div>
     </div>
@@ -36,21 +27,52 @@ export default {
   name: "myfans",
   data: function() {
     return {
-      attention: false,
-      isvip: false
+      fans: [],
     }
   },
   components: {
     
   },
   methods: {
-    
+    Attention(i) {
+      this.axios.post("/AttentionSomePeople",{
+        userId: this.fans[i].userId
+      })
+      .then(res => {
+        console.log("收到数据：",res.data);
+        this.fans[i].state = false;
+        console.log(this.fans[i].state);
+      })
+    },
+    qxAttention(i) {
+      this.axios.post("/egnolSomePeople",{
+        userId: this.fans[i].userId
+      })
+      .then(res => {
+        console.log("收到数据：",res.data);
+        this.fans[i].state = true;
+      })
+    }
+  },
+  created() {
+    this.axios.post("/findAllFans")
+    .then(res => {
+      this.fans = res.data.data;
+      this.fans = this.fans.map(item => {
+        item.state = true;
+        return item;
+      })
+      console.log(this.fans);
+    })
   }
 }
 </script>
 
 <style lang="less" scoped>
 @import "../assets/font/personfont/iconfont.css";
+  .icon-v {
+    color: #ddd;
+  }
   .on {
     color: orange;
   }
