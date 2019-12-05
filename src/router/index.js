@@ -92,11 +92,11 @@ const routes = [
     name: 'account',
     component: () => import('../views/Account.vue')
   },
-  {
-    path: '/safety',
-    name: 'safety',
-    component: () => import('../views/Safety.vue')
-  },
+  // {
+  //   path: '/safety',
+  //   name: 'safety',
+  //   component: () => import('../views/Safety.vue')
+  // },
   {
     path: '/Forgetnext',
     name: 'Forgetnext',
@@ -236,6 +236,11 @@ const routes = [
   path:"/scgeren",
   name:"geren",
   component:()=>import('../views/Scgeren.vue')
+},{
+  path:"/scpinlunxiang",
+  name:"pinlunxiang",
+  component:()=>import('../views/ScPinlunxiang.vue')
+
 }
   
 ]
