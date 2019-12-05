@@ -21,7 +21,7 @@
       </div>
 
       <!-- 申请认证 -->
-      <div class="authentication">
+      <div v-show="token" class="authentication">
         <router-link to="/authentication">申请认证</router-link>
       </div>
     </div>
@@ -39,7 +39,7 @@
       </div>
       <div>
         <span class="iconfont icon-shoucang"></span>
-        <span><router-link to="/">收藏</router-link></span>
+        <span><router-link to="/mycollect">收藏</router-link></span>
       </div>
       <div>
         <span class="iconfont icon-caogaoxiang"></span>
@@ -115,6 +115,14 @@ export default {
           this.attentionNum = res.data.data;
         })
     }
+    sessionStorage.removeItem('oldroute');
+    document.body.addEventListener(
+      "touchmove",
+      function(e) {
+        e.preventDefault();
+      },
+      { passive: false }
+    );
   }
 }
 </script>
@@ -158,7 +166,7 @@ export default {
       }
     }
     .noLogin {
-      transform: translateX(-70px);
+      transform: translateX(-140px);
       font-size: 24px;
     }
     span {

@@ -29,6 +29,7 @@
 
     <!-- 提示框 -->
     <div v-show="showtishi" class="tishi">必填信息不能为空!</div>
+    <div v-show="showtishi2" class="tishi">用户不存在，请先注册!</div>
   </div>
 </template>
 
@@ -42,7 +43,8 @@ export default {
       sms: "",
       isfs: true,
       seconds: 60,
-      showtishi: false
+      showtishi: false,
+      showtishi2: false,
     };
   },
   components: {
@@ -54,22 +56,30 @@ export default {
   },
   methods: {
     fsyzm() {
-      if (this.username != 0) {
-        this.isfs = false;
-        setInterval(() => {
-          if (this.seconds == 0) {
-            this.isfs = true;
-            this.seconds = 60;
-          } else {
-            this.seconds--;
-          }
-        }, 1000);
+      if (this.username != "") {
         this.axios
           .post("/user/sendCode", {
-            userPhone: this.tel
+            userPhone: this.username
           })
           .then(res => {
             console.log(res.data);
+            if(res.data.code == "2002") {
+              this.showtishi2 = true;
+              setTimeout(() => {
+                this.showtishi2 = false;
+              }, 2500);
+            } else {
+              this.isfs = false;
+              var timer = setInterval(() => {
+                if (this.seconds > 1) {
+                  this.seconds--;
+                } else {
+                  clearInterval(timer);
+                  this.isfs = true;
+                  this.seconds = 60;
+                }
+              }, 1000);
+            }
           });
       } else {
         this.showtishi = true;
@@ -79,12 +89,14 @@ export default {
       }
     },
     ok() {
-      if (this.username && this.sms != 0) {
+      if (this.username && this.sms != "") {
         this.axios
           .post("/user/checkCode", {
+            userPhone: this.username,
             verifyCode: this.sms
           })
           .then(res => {
+            this.sms = "";
             console.log(res.data);
             if (res.data.code == "200") {
               sessionStorage.setItem("tel", this.username);

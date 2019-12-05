@@ -68,13 +68,16 @@ export default new Vuex.Store({
     account:0,
     fundlists: [],
     userInfo:{},
-    accountAge: 0
+ 
   },
   getters:{
 
   },
   mutations: {
- 
+  
+    getCons(state,n) {
+      state.cons = n
+    },
     getfundlists(state,n) {
       state.fundlists = n
     },

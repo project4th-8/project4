@@ -8,7 +8,7 @@
 
     <!-- 用户信息 -->
     <div class="userinfo">
-      <img :src="userInfo.imgs[0].imgUrl" alt="头像">
+      <img :src="userInfo.imgs[0].imgUrl" alt="头像" />
       <div class="myinfo">
         <span class="username">{{userInfo.userName}}</span>
         <span class="iconfont icon-v" :class="{on: userInfo.isMaster==0}"></span>
@@ -66,56 +66,69 @@
 </template>
 
 <script>
-import { Popup } from 'vant';
-import { mapState } from 'vuex'
+import { Popup } from "vant";
+import { mapState } from "vuex";
 
 export default {
   name: "authentication",
   data: function() {
     return {
       show: false,
-      showCon: "申请已提交，请等待审核",
-    }
+      showCon: "申请已提交，请等待审核"
+    };
   },
   computed: {
-    ...mapState([
-      "userInfo",
-    ])
+    ...mapState(["userInfo"])
   },
   components: {
-    [Popup.name]:Popup
+    [Popup.name]: Popup
   },
   methods: {
     showPopup() {
       this.show = true;
     },
     rzbtn() {
-      
-      this.axios.post("/master/setMaster",{
-        userId: sessionStorage.getItem("userId"),
-        masterDescrib: null
-      })
-      .then(res => {
-        if(res.data.code == "200") {
-          this.showPopup();
-          setTimeout(() => {
-            this.show = false;
-          },2000);
-          this.axios.post("/user/findAllUserInfo")
-          .then(res => {
-            if(res.data.data.userSex == 1) {
-              res.data.data.userSex = "男";
-            } else {
-              res.data.data.userSex = "女";
-            }
-            this.$store.state.userInfo = res.data.data;
-            sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
-          });
-        }
-      })
+      this.axios
+        .post("/master/setMaster", {
+          userId: sessionStorage.getItem("userId"),
+          masterDescrib: null
+        })
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == "200") {
+            this.showPopup();
+            setTimeout(() => {
+              this.show = false;
+            }, 2000);
+            this.axios.post("/user/findAllUserInfo").then(res => {
+              if (res.data.data.user.userSex == 1) {
+                res.data.data.user.userSex = "男";
+              } else {
+                res.data.data.user.userSex = "女";
+              }
+              this.$store.state.userInfo = res.data.data.user;
+              console.log("拿到数据：", res.data.data.user);
+              sessionStorage.setItem(
+                "userId",
+                this.$store.state.userInfo.userId
+              );
+            });
+          }
+        });
     }
   },
-}
+  created() {
+    sessionStorage.setItem("oldroute",this.$route.fullPath);
+
+    document.body.addEventListener(
+      "touchmove",
+      function(e) {
+        e.preventDefault();
+      },
+      { passive: false }
+    );
+  }
+};
 </script>
 
 <style lang="less" scoped>
@@ -127,135 +140,134 @@ export default {
   color: orange;
 }
 .authentication {
-    position: absolute;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  background: rgb(247, 247, 247);
+
+  .title {
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000;
+    z-index: 999;
     width: 100%;
-    height: 100%;
-    background: rgb(247, 247, 247);
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background: white;
+    box-shadow: 0 1px 1px rgb(236, 236, 236);
 
-    .title {
-      position: fixed;
+    a {
+      font-size: 14px;
+      color: rgb(92, 92, 92);
+      position: absolute;
+      left: 10px;
       top: 0;
-      left: 0;
-      z-index: 999;
-      width: 100%;
-      height: 50px;
-      line-height: 50px;
-      text-align: center;
-      background: white;
-      box-shadow: 0 1px 1px rgb(236, 236, 236);
-
-      a {
-        font-size: 14px;
-        color: rgb(92, 92, 92);
-        position: absolute;
-        left: 10px;
-        top: 0;
-        &:active {
-          color: rgb(233, 233, 233);
-        }
-      }
-      span {
-        font-size: 18px;
+      &:active {
+        color: rgb(233, 233, 233);
       }
     }
-    .userinfo {
-      width: 90%;
-      height: 100px;
-      background: white;
-      margin: 55px auto 0;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      flex-direction: column;
-      .myinfo {
-        transform: translateX(-4px);
-        .scorenum {
-          font-size: 15px;
-          font-weight: bold;
-          margin-left: 5px;
-          color: orange;
-        }
+    span {
+      font-size: 18px;
+    }
+  }
+  .userinfo {
+    width: 90%;
+    height: 100px;
+    background: white;
+    margin: 55px auto 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    .myinfo {
+      transform: translateX(-4px);
+      .scorenum {
+        font-size: 15px;
+        font-weight: bold;
+        margin-left: 5px;
+        color: orange;
       }
+    }
 
-      img {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        box-shadow: 0 0px 2px rgb(88, 88, 88);
-      }
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 0px 2px rgb(88, 88, 88);
+    }
+    span {
+      font-size: 16px;
+    }
+    .hr {
+      margin: 0 10px 0 -2px;
+    }
+  }
+  .content {
+    width: 85%;
+    height: 130px;
+    background: white;
+    margin: 10px auto 0;
+    font-size: 14px;
+    padding: 10px;
+    .ltitle {
       span {
         font-size: 16px;
+        font-weight: 900;
       }
-      .hr {
-        margin: 0 10px 0 -2px;
+      button {
+        width: 70px;
+        height: 23px;
+        border: none;
+        background: red;
+        color: white;
+        border-radius: 3px;
+        float: right;
       }
-    }
-    .content {
-      width: 85%;
-      height: 130px;
-      background: white;
-      margin: 10px auto 0;
-      font-size: 14px;
-      padding: 10px;
-      .ltitle {
-        span {
-          font-size: 16px;
-          font-weight: 900;
-        }
-        button {
-          width: 70px;
-          height: 23px;
-          border: none;
-          background: red;
-          color: white;
-          border-radius: 3px;
-          float: right;
-        }
-        .btn2 {
-          width: 70px;
-          height: 23px;
-          border: none;
-          background: rgb(216, 216, 216);
-          color: rgb(66, 66, 66);
-          border-radius: 3px;
-          float: right;
-        }
-      }
-      .con {
-        margin-top: 10px;
-        color: rgb(139, 139, 139);
+      .btn2 {
+        width: 70px;
+        height: 23px;
+        border: none;
+        background: rgb(216, 216, 216);
+        color: rgb(66, 66, 66);
+        border-radius: 3px;
+        float: right;
       }
     }
-    .viprecommend {
-      width: 90%;
-      height: 200px;
-      margin: 50px auto 0;
-      
-      .rz {
-        text-align: center;
-      }
-      .tq {
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        font-size: 13px;
-        margin-top: 20px;
-        padding: 0 10px;
-      }
+    .con {
+      margin-top: 10px;
+      color: rgb(139, 139, 139);
     }
   }
-  .iconfont {
-    font-size: 30px;
-    margin-right: 10px;
-  }
-  .mtk {
-      width: 250px;
-      height: 35px;
-      line-height: 35px;
-      font-size: 16px;
+  .viprecommend {
+    width: 90%;
+    margin: 50px auto 0;
+
+    .rz {
       text-align: center;
     }
+    .tq {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      font-size: 13px;
+      margin-top: 20px;
+      padding: 0 10px;
+    }
+  }
+}
+.iconfont {
+  font-size: 30px;
+  margin-right: 10px;
+}
+.mtk {
+  width: 250px;
+  height: 35px;
+  line-height: 35px;
+  font-size: 16px;
+  text-align: center;
+}
 </style>

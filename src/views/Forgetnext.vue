@@ -13,7 +13,7 @@
           <van-field v-model="password" type="password" label="密码" placeholder="请输入密码" required />
         </van-cell-group>
         <van-cell-group>
-          <van-field v-model="password" type="passwordok" label="重复密码" placeholder="请输入密码" required />
+          <van-field v-model="passwordok" type="password" label="重复密码" placeholder="请输入密码" required />
         </van-cell-group>
         <van-button class="ok" type="primary" size="large" @click="ok">完成</van-button>
       </van-cell-group>

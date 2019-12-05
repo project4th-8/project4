@@ -13,11 +13,20 @@
           <van-field v-model="password" type="password" label="密码" placeholder="请输入密码" required />
         </van-cell-group>
         <van-cell-group>
-          <van-field v-model="password" type="passwordok" label="重复密码" placeholder="请输入密码" required />
+          <van-field
+            v-model="passwordok"
+            type="password"
+            label="重复密码"
+            placeholder="请输入密码"
+            required
+          />
         </van-cell-group>
         <van-button class="ok" type="primary" size="large" @click="ok">完成</van-button>
       </van-cell-group>
     </div>
+
+    <!-- 提示框 -->
+    <div v-show="showtishi" class="tishi">输入信息错误!</div>
   </div>
 </template>
 
@@ -28,7 +37,8 @@ export default {
   data() {
     return {
       password: "",
-      passwordok: ""
+      passwordok: "",
+      showtishi: false
     };
   },
   components: {
@@ -40,8 +50,28 @@ export default {
   },
   methods: {
     ok: function() {
-      // this.$router.replace("/createusercon");
-      // this.axios.post("")
+      if (this.password != "" && this.passwordok != "") {
+        this.axios
+          .post("/user/userRegis", {
+            userPhone: sessionStorage.getItem("tel"),
+            userPassword: this.password
+          })
+          .then(res => {
+            if (res.data.code == "200") {
+              this.$router.replace("/createusercon");
+            } else {
+              this.showtishi = true;
+              setTimeout(() => {
+                this.showtishi = false;
+              }, 2500);
+            }
+          });
+      } else {
+        this.showtishi = true;
+        setTimeout(() => {
+          this.showtishi = false;
+        }, 2500);
+      }
     }
   }
 };
@@ -49,6 +79,17 @@ export default {
 
 <style lang="less" scoped>
 @import "../assets/style/resize.css";
+.tishi {
+  position: fixed;
+  bottom: 30px;
+  left: 125px;
+  background: black;
+  color: white;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 7px;
+  transition: all 0.5s;
+}
 .Forgetpassword {
   position: fixed;
   width: 100%;

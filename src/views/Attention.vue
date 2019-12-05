@@ -6,16 +6,20 @@
       <span>我的关注</span>
     </div>
     <!-- 详细资料 -->
-    <div class="fanslist">
+    <div v-show="nobody" class="fanslist">
       <div class="info" v-for="(item,index) in attention" :key="index">
         <img :src="item.imgs[0].imgUrl" alt="头像">
         <a href="javascript:;" class="infoL">{{item.userName}}</a>
         <span class="iconfont icon-v" :class="{on: item.isMaster==1}"></span>
-        <div class="authentication">
-          <a v-if="item.state" href="javascript:;" @click="qxAttention(index)">已关注</a>
-          <a v-else href="javascript:;" @click="Attention(index)">关注</a>
+        <div class="authentication" @click="qxAttention($event)">
+          <a href="javascript:;" :id="item.userId">已关注</a>
         </div>
       </div>
+    </div>
+
+    <!-- 没有任何关注 -->
+    <div v-show="!nobody" class="nobody">
+      <span>我没有关注任何人</span>
     </div>
   </div>
 </template>
@@ -26,44 +30,55 @@ export default {
   data: function() {
     return {
       attention: [],
+      nobody: true
     }
   },
   components: {
     
   },
   methods: {
-    qxAttention(index) {
-      this.axios.post("/egnolSomePeople",{
-        userId: this.attention[index].userId
-      })
-      .then(res => {
-        console.log("收到数据：",res.data);
-        this.attention[index].state = false;
-        console.log(this.attention[index].state);
-      })
+    qxAttention(e) {
+      console.log(e.target.id);
+      if(document.getElementById(e.target.id).innerText == "已关注") {
+        this.axios.post("/egnolSomePeople",{
+          userId: Number(e.target.id)
+        })
+        .then(res => {
+          console.log("收到数据：",res.data);
+          if(res.data.code == "200") {
+            document.getElementById(e.target.id).innerText = "互相关注";
+          }
+        })
+      } else {
+        this.axios.post("/AttentionSomePeople",{
+          userId: Number(e.target.id)
+        })
+        .then(res => {
+          console.log("收到数据：",res.data);
+          document.getElementById(e.target.id).innerText = "已关注";
+        })
+      }
     },
-    Attention(index) {
-      this.axios.post("/AttentionSomePeople",{
-        userId: this.attention[index].userId
-      })
-      .then(res => {
-        console.log("收到数据：",res.data);
-        this.attention[index].state = true;
-      })
-    }
   },
   created() {
     this.axios.post("/findAllAttention",{
       userId: sessionStorage.getItem("userId")
     })
     .then(res => {
-      this.attention = res.data.data;
-      
-      this.attention = this.attention.map(item => {
-        item.state = true
-        return item
-      })
-      console.log("我的关注：",this.attention)
+      console.log(res.data);
+      if(res.data.code == "200") {
+        if(res.data.data != null) {
+          this.attention = res.data.data;
+        
+          this.attention = this.attention.map(item => {
+            item.state = true
+            return item
+          })
+          console.log("我的关注：",this.attention)
+        } else {
+          this.nobody = false;
+        }    
+      }
     })
   }
 }
@@ -85,7 +100,15 @@ export default {
     width: 100%;
     height: 100%;
     background: rgb(247, 247, 247);
-
+    .nobody {
+      position: absolute;
+      left: 128px;
+      top: 70px;
+      width: 200px;
+      height: 20px;
+      font-size: 15px;
+      color: rgb(158, 158, 158);
+    }
     .title {
       position: fixed;
       top: 0;
