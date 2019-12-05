@@ -109,9 +109,6 @@ export default {
       }
  
     })
-    .catch(err=>{
-      console.log(err)
-    })
   },
   components:{
     [List.name]:List,
@@ -164,12 +161,6 @@ export default {
         }
       }
     })
-    .catch(err=>{
-      console.log(err)
-    })
-        })
-        .catch(err=>{
-          console.log(err);
         })
         
 this.axios.post("/dynamic/findOneById",{
@@ -184,21 +175,12 @@ this.axios.post("/dynamic/findOneById",{
         }
       }
     })
-    .catch(err=>{
-      console.log(err)
-    })
 
 
     },
     del(a){
       this.axios.post("/dynamic/deleteReplyById",{
         replyId:a
-      })
-      .then(res=>{
-        console.log(res)
-      })
-      .catch(err=>{
-        console.log(err);
       })
 
     }

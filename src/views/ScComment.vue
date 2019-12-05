@@ -365,13 +365,6 @@ export default {
     
       this.zonggong=this.zishu.split('').length;
     },
-
-    //检测回车事件
-    EnterKey(e){
-      if(e.keyCode==13){
-        console.log("huiche")
-      }
-    },
     //点赞
     dianzanfangfa(){
       this.user.good=!this.user.good;
@@ -455,9 +448,6 @@ this.axios.post("/dynamic/findOneById",{
       
     });
 
-      })
-      .catch(err=>{
-        console.log(err);
       })
     },
     share(){

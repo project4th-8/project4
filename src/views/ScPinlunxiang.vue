@@ -192,9 +192,6 @@ this.moni.pinlunSon=[];
 
     })
       })
-      .catch(err=>{
-        console.log(err);
-      })
     },
   },
 }
