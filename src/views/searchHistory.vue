@@ -159,7 +159,7 @@ export default {
       overflow: hidden;
       img{
         vertical-align: middle;
-
+  
         float: left;
         margin-top: 10px;
       }
