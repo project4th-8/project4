@@ -4,9 +4,9 @@
       <div><input @focus="toall" type="text" placeholder="请点击搜索"></div>
     </div>
     <ul class="memu">
-      <li><div class="aite"><img src="../../public/img/jdtIMG/aite.png" alt=""></div><div class="jilu"><span><router-link to="/comments">@我的</router-link></span><div>{{msgList.length}}</div></div> <img src="../../public/img/jdtIMG/left.png" alt=""></li>
-      <li><div class="liuyan"><img src="../../public/img/jdtIMG/liuyan.png" alt=""></div><div class="jilu"><span><router-link to="/commentstwo">评论</router-link></span><div>{{msgList.length}}</div></div><img src="../../public/img/jdtIMG/left.png" alt=""></li>
-       <li><div class="zan"><img src="../../public/img/jdtIMG/zan.png" alt=""></div><div class="jilu"><span><router-link to="/fabulous">赞</router-link></span><div >{{msgList.length}}</div></div><img src="../../public/img/jdtIMG/left.png" alt=""></li>
+      <li ><div class="aite"><img src="../../public/img/jdtIMG/aite.png" alt=""></div><div class="jilu"><span><router-link to="/comments">@我的</router-link></span>未读<div>{{comlists.length}}</div></div> <img src="../../public/img/jdtIMG/left.png" alt=""></li>
+      <li @click="clearA"><div class="liuyan"><img src="../../public/img/jdtIMG/liuyan.png" alt=""></div><div class="jilu"><span><router-link to="/commentstwo">评论</router-link></span><div>{{plists.length}}</div></div><img src="../../public/img/jdtIMG/left.png" alt=""></li>
+       <li><div class="zan"><img src="../../public/img/jdtIMG/zan.png" alt=""></div><div class="jilu"><span><router-link to="/fabulous">赞</router-link></span><div >{{zlists.length}}</div></div><img src="../../public/img/jdtIMG/left.png" alt=""></li>
     </ul>
     <ul class="chat_list">
       <li v-for="(item,index) in msgList" :key="index">
@@ -48,22 +48,46 @@ export default {
     return{
       msgList:[],
       hisname:'',
+      comlists:[],
+      data:false,
+      plists:[],
+      zlists:[]
     }
   },
   created(){
     this.msgList = msgList;
-    // this.axios
-    // .post('/findAllAdvice')
-    // .then(res=>{
-    //   console.log(res.data.data)
-    // })
-    // .catch(err=>{
-    //  console.log(err)
-    // })
+
+    this.axios.post("/findAllAdvice").then(res => {
+      console.log(res.data.data);
+      // for(var i =0;i<res.data.data.length;i++){
+      this.comlists = res.data.data.filter(function(item) {
+        return item.datestate == 4 && item.isRead == 0;
+      });
+
+      console.log(this.comlists);
+    });
+    this.axios.post("/findAllAdvice").then(res => {
+      console.log(res.data.data);
+      // for(var i =0;i<res.data.data.length;i++){
+      this.plists = res.data.data.filter(function(item) {
+        return item.datestate == 5 && item.isRead == 0;
+      });
+    });
+    this.axios.post("/findAllAdvice").then(res => {
+      console.log(res.data.data);
+      // for(var i =0;i<res.data.data.length;i++){
+      this.zlists = res.data.data.filter(function(item) {
+        return item.datestate == 2 && item.isRead == 0;
+      });
+    });
   },
 
 
   methods:{
+    clearA(){
+     this.plists.length=0
+    },
+
     tochat(index){
       console.log(this.msgList[0].hisname)
       sessionStorage.setItem('userName',this.msgList[index].hisname)
@@ -149,7 +173,7 @@ export default {
         width: 25px;
         height: 25px;
         border-radius: 50%;
-         background: red;
+         background: rgb(231, 230, 164);
         display: flex;
         justify-content: center;
         align-items: center;

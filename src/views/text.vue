@@ -1,20 +1,24 @@
 <template>
-  <div class="fix-top">
+  <div  class="fix-top">
+    <textcon v-for="(item,index) in cons" :key='index' :info='item' ></textcon>
 
- <Recommendtext v-for="(item,index) in cons" :key='index' :info='item'></Recommendtext>
+
+    这里是indexs页面
   </div>
 </template>
+
 <script>
-import Recommendtext from '../components/recommendtext'
+import textcon from '../components/textcon'
 import { mapState,mapActions } from 'vuex'
 export default {
-  name:'recommend',
+  name: "texts",
   data () {
     return {
+
     }
   },
   components: {
-    Recommendtext
+    textcon
   },
   computed:{
     ...mapState([
@@ -31,9 +35,10 @@ export default {
   }
 }
 </script>
+
 <style lang="less" scoped>
 .fix-top {
-  margin-top:90px; 
-  margin-bottom:40px; 
+  margin-top:60px; 
+  margin-bottom:80px; 
 }
 </style>

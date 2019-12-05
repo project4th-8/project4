@@ -1,17 +1,22 @@
 <template>
   <div class="searchAll">
-    <ul>
-      <li>这是山嗯</li>
-      <li>这是山嗯</li>
-      <li>这是山嗯</li>
-      <li>这是山嗯</li>
-      <li>这是山嗯</li>
-    </ul>
+    <p>
+      <span></span>
+    </p>
   </div>
 </template>
 <script>
 export default {
-  name:"searchAll"
+  name:"searchAll",
+  data(){
+    return{
+     userId:'',
+     myname:'' 
+    }
+  },
+  created(){
+   
+  }
 }
 </script>
 <style lang="less" scoped>
