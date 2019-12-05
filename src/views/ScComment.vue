@@ -403,21 +403,16 @@ export default {
       })
       .then(res=>{
         console.log(res);
-        this.zishu='';
-      })
-      .catch(err=>{
-        console.log(err);
-      });
 this.axios.post("/dynamic/findOneById",{
       dynamicId:this.wenzhang.wenzhangId
     })
     .then(res => {
       console.log(res.data);
-      this.yonghu={};
+      this.yonghu={}
       this.wenzhang={
         liuyanshu:0
-      };
-      this.repin={};
+      }
+      this.repin=[]
       //文章用户信息：
       res=res.data.data;
       this.yonghu.username=res.userName;
@@ -445,7 +440,10 @@ this.axios.post("/dynamic/findOneById",{
       
     });
 
-
+      })
+      .catch(err=>{
+        console.log(err);
+      })
     },
     share(){
       sessionStorage.setItem("forworddynamicId",this.wenzhang.wenzhangId);

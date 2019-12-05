@@ -2,9 +2,11 @@
 <!--  -->
   <div id="scpinlun">
     <div class="toubu">
-      <van-icon name="arrow-left"/>
+      <a href="javascript:history.go(-1)"><van-icon name="arrow-left"/></a>
       <span>评论页</span>
-      <van-icon name="wap-home-o" />
+            <router-link to="/">
+        <van-icon name="wap-home-o" />
+      </router-link>
     </div>
         <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
           <div v-for="(item,index) in moni.pinlun" :key="index" :title="item.title">
@@ -151,16 +153,33 @@ export default {
         })
         .then(res=>{
           console.log(res);
-          
+          pinlun=[];
+              this.axios.post("/dynamic/findOneById",{
+      dynamicId:1
+    })
+    .then(res=>{
+      console.log(res.data);
+      res=res.data.data;
+      for(let i=0;i<res.replies.length;i++){
+        if(res.replies[i].parentId==0){
+          pinlun.push(res.replies[i]);      
+        }
+      }
+      console.log(this.moni.pinlun);
+    })
+    .catch(err=>{
+      console.log(err)
+    })
         })
         .catch(err=>{
           console.log(err);
         })
-        pinlun=[];
+        
 this.axios.post("/dynamic/findOneById",{
       dynamicId:1
     })
     .then(res=>{
+      pinlun=[];
       console.log(res.data);
       res=res.data.data;
       for(let i=0;i<res.replies.length;i++){
