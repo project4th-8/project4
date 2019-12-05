@@ -14,6 +14,13 @@
 
 export default {
    name:"messageB",
+   data(){
+     return{
+
+     }
+   },
+   created(){
+   }
 }
 </script>
 <style lang="less" scoped>

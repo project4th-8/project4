@@ -103,6 +103,10 @@ export default {
   },
   created(){
     this.lists = lists
+    // var i = sessionStorage.getItem("shuzu");
+    // sessionStorage.removeItem("shuzu");
+    // this.lists = i;
+    // console.log(this.lists)
   },
   components:{
     [List.name]:List,
@@ -111,7 +115,7 @@ export default {
   ,
   methods: {
     esc(){
-      this.$router.replace('/message') 
+      this.$router.push('/message') 
        },
     onLoad() {
       // 异步更新数据

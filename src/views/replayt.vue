@@ -15,10 +15,10 @@ export default {
   name:"replay",
   methods:{
     esct(){
-      this.$router.replace("/commentstwo")
+      this.$router.push("/commentstwo")
     },
      esc(){
-      this.$router.replace("/comments")
+      this.$router.push("/comments")
     }
   }
 }

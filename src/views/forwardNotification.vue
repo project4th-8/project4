@@ -1,16 +1,16 @@
 <template>
   <div class="forwardNotification">
     <ul>
-      <li>
+      <li v-for="(item,index) in flists" :key="index">
         <div class="title">
           <img src="../assets/img/1.jpg" alt="">
-          <p><a href="javascript:;">某某某</a> 转发了</p>
-          <span>12:00</span>
+          <p><router-link to="">{{item.optionUser.userNickname}}</router-link> 转发了</p>
+          <span>{{item.adviceTime}}</span>
         </div>
         <div class="content">
-          <h4>这是文章标题</h4>
+          <h4>{{item.dynamic.dynamicTitle}}</h4>
           <div>
-            这是文章内容
+            {{item.dynamic.dynamicContent}}
           </div>
         </div>
       </li>
@@ -20,7 +20,22 @@
 <script>
 export default {
   name:"forwardNotification",
-
+  data(){
+    return{
+      flists:[]
+    }
+  },
+ created(){
+    this.axios.post("/findAllAdvice")
+    .then(res=>{
+      console.log(res.data.data)
+      // for(var i =0;i<res.data.data.length;i++){
+        this.flists = res.data.data.filter(function(item){
+        return item.datestate == 3 
+        });
+        console.log(this.flists)
+    })
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -51,7 +66,7 @@ export default {
         display: flex;
         justify-content: flex-start;
         align-items:flex-end;
-         width: 70vw;
+         width: 50vw;
        }
      }
      .content{
@@ -66,9 +81,13 @@ export default {
 
        }
        div{
+         font-size: 14px;
          height: 40px;
          width: 100%;
-         background: #000;
+         overflow: hidden;
+         white-space: nowrap;
+         text-overflow: ellipsis;
+        //  background: #000;
        }
      }
     }

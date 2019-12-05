@@ -5,7 +5,8 @@ import recommend from '../views/recommend.vue'
 import messageA from '../views/messageA.vue'
 import systemNotifications from '../views/systemNotifications.vue'
 import ScComment from '../views/ScComment.vue'
- 
+import searchHis from '../views/searchHis.vue'
+// import searchAll from '../views/searchAll.vue' 
 Vue.use(VueRouter)
 
 const routes = [
@@ -178,7 +179,7 @@ const routes = [
   component: () => import('../views/msgsearch.vue')
 },
 {
-  path: '/replay',
+  path: '/replay:id',
   name: 'replay',
   component: () => import('../views/replay.vue')
 },
@@ -246,6 +247,19 @@ const routes = [
   path:'/searchHistory',
   name:'searchHistory',
   component:()=>import('../views/searchHistory.vue'),
+  children:[
+    {
+      path:'',
+      name:'searchHis',
+      component:searchHis
+    },
+    {
+      path:'/saerchAll',
+      name:'searchAll',
+      component:()=>import('../views/searchAll.vue'),
+      // component:searchAll
+    }
+  ]
 },
 {
   path:'/sccomment',

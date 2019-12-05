@@ -2,7 +2,7 @@
   <div class="safety">
     <!-- 标题 -->
     <div class="title">
-      <a href="/About">取消</a>
+      <router-link to="/About">取消</router-link>
       <span>安全设置</span>
     </div>
 
@@ -35,8 +35,8 @@
         <p>修改手机号</p>
         <input type="text" v-model="tel" @input="yztel" placeholder="输入当前手机号">
         <span v-show="showpat" class="pat">请输入正确的手机格式</span>
-        <input type="button" class="fsyzm" value="发送验证码" />
-        <input type="text" placeholder="输入验证码">
+        <input type="button" class="fsyzm" value="发送验证码" @click="sendoldcode"/>
+        <input type="text" v-model="teloldyzm" placeholder="输入验证码">
         <input type="button" value="确认" @click="showinput"/>
       </div>
 
@@ -47,9 +47,9 @@
           <p>输入要绑定的手机号</p>
           <input type="text" v-model="newtel" @input="yznewtel" placeholder="请输入手机号"> 
           <span v-show="showpat2" class="pat">请输入正确的手机格式</span>
-          <input type="button" value="发送验证码"> 
-          <input type="text" placeholder="输入验证码"> 
-          <input type="button" value="确认修改"> 
+          <input type="button" value="发送验证码" @click="sendnewcode"> 
+          <input type="text" v-model="telnewyzm" placeholder="输入验证码"> 
+          <input type="button" value="确认修改" @click="updatatel"> 
         </div>
       </div>
 
@@ -73,16 +73,14 @@
       <van-icon class="quit" name="close" @click="quitsetpwd" />
     </div>
 
-    <!-- 修改密码 -->
+    <!-- 修改密保 -->
     <div class="setmb">
       <div>
         <p>修改密保</p>
-        <input type="text" placeholder="最喜欢的水果是：" disabled />
-        <input type="password" v-model="mb1" placeholder="请输入新答案" />
-        <input type="text" placeholder="出生年份是：" disabled />
-        <input type="password" v-model="mb2" placeholder="请输入新答案" />
-        <input type="text" placeholder="喜欢的城市是：" disabled />
-        <input type="password" v-model="mb3" placeholder="请输入新答案" />
+        <input type="text" v-model="userInfo.encrypteds[0].encryptedQuestion" disabled/>
+        <input type="text" v-model="oldanswer" placeholder="请输入旧问题答案" />
+        <input type="text" v-model="newquestion" placeholder="请输入新问题"/>
+        <input type="text" v-model="newanswer" placeholder="请输入新问题答案" />
         <input type="button" value="确认修改" @click="submitset" />
       </div>
 
@@ -95,6 +93,7 @@
 
 <script>
 import { Icon, Popup } from "vant";
+import { mapState } from 'vuex'
 
 export default {
   name: "safety",
@@ -107,12 +106,19 @@ export default {
       showpat: false,
       showpat2: false,
       showCon: "",
-      mb1: "",
-      mb2: "",
-      mb3: "",
+      oldanswer: "",
+      newquestion: "",
+      newanswer: "",
       tel: "",
-      newtel: ""
+      newtel: "",
+      telnewyzm: "",
+      teloldyzm: ""
     };
+  },
+  computed: {
+    ...mapState([
+      "userInfo"
+    ])
   },
   components: {
     [Icon.name]: Icon,
@@ -129,7 +135,15 @@ export default {
       document.getElementsByClassName("settel")[0].style.top = "0";
     },
     showinput() {
-      document.getElementsByClassName("inputtel")[0].style.left = "0";
+      this.axios.post("/user/updateOldUserPhone",{
+        oldPhoneCode: this.teloldyzm
+      })
+      .then(res => {
+        console.log(res.data);
+        if(res.data.code == "200") {
+          document.getElementsByClassName("inputtel")[0].style.left = "0";
+        }
+      })
     },
     showPopup() {
       this.show = true;
@@ -159,48 +173,86 @@ export default {
       }
     },
     submit() {
-      if ((this.password && this.newpassword && this.newpassword2) != "") {
-        if (this.newpassword != this.newpassword2) {
-          this.showPopup();
-          this.showCon = "两次新密码不一致！";
-        } else if (this.password != "123456") {
-          this.showPopup();
-          this.showCon = "旧密码输入错误！";
-        } else if (this.password == (this.newpassword || this.newpassword2)) {
-          this.showPopup();
-          this.showCon = "新密码不能与旧密码相同！";
+      this.axios.post("/user/updateMyPassword",{
+        oldPassword: this.password,
+        newPassword: this.newpassword
+      })
+      .then(res => {
+        console.log(res.data);
+        if ((this.password && this.newpassword && this.newpassword2) != "") {
+          if (this.newpassword != this.newpassword2) {
+            this.showPopup();
+            this.showCon = "两次新密码不一致！";
+          } else if (res.data.code == "2001") {
+            this.showPopup();
+            this.showCon = "旧密码输入错误！";
+          } else if (this.password == (this.newpassword || this.newpassword2)) {
+            this.showPopup();
+            this.showCon = "新密码不能与旧密码相同！";
+          } else {
+            if(res.data.code == "200"){
+              this.showPopup();
+              this.showCon = "密码修改成功！请重新登录！";
+              setTimeout(() => {
+                sessionStorage.removeItem("token");
+                sessionStorage.removeItem("userId");
+                sessionStorage.removeItem("dynamicId");
+                this.$router.replace("/Login");
+              }, 2000);
+            }
+            
+          }
+
+          this.password = "";
+          this.newpassword = "";
+          this.newpassword2 = "";
         } else {
           this.showPopup();
-          this.showCon = "密码修改成功！请重新登录！";
-          this.$store.state.isLogin = false;
-          let that = this;
-          setTimeout(function() {
-            that.$router.replace("/about");
-          }, 2000);
+          this.showCon = "必填内容为空！";
         }
-
-        this.password = "";
-        this.newpassword = "";
-        this.newpassword2 = "";
-      } else {
-        this.showPopup();
-        this.showCon = "必填内容为空！";
-      }
+      })
+      
     },
     submitset() {
-      if ((this.mb1 && this.mb2 && this.mb3) != "") {
-        this.showPopup();
-        this.showCon = "密保修改成功！";
+      if ((this.newquestion && this.oldanswer && this.newanswer) != "") {
+        console.log("旧问题：",this.userInfo.encrypteds[0].encryptedQuestion);
+        this.axios.post("/user/updateUserEncrypted",{
+          oldQuestion: this.userInfo.encrypteds[0].encryptedQuestion,
+          oldAnswer: this.oldanswer,
+          encryptedQuestion: this.newquestion,
+          encryptedAnswer: this.newanswer
+        })
+        .then(res => {
+          console.log(res.data);
+          if(res.data.code == "200") {
+            this.showPopup();
+            this.showCon = "密保修改成功！";
 
-        this.mb1 = "";
-        this.mb2 = "";
-        this.mb3 = "";
-        let that = this;
-        setTimeout(function() {
-          that.show = false;
-          document.getElementsByClassName("setmb")[0].style.top = "800px";
-        }, 2000);
+            this.newquestion = "";
+            this.oldanswer = "";
+            this.newanswer = "";
+            setTimeout(() => {
+              this.show = false;
+              document.getElementsByClassName("setmb")[0].style.top = "800px";
+            }, 2000);
+            this.axios.post("/user/findAllUserInfo")
+            .then(res => {
+              if(res.data.data.user.userSex == 1) {
+                res.data.data.user.userSex = "男";
+              } else {
+                res.data.data.user.userSex = "女";
+              }
+              this.$store.state.userInfo = res.data.data.user;
+              console.log("拿到数据：",res.data.data.user);
+              sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
+            });
+          } else {
+            this.showPopup();
+            this.showCon = "旧密保答案错误！";
+          }
+        })
       } else {
+        console.log(this.newquestion,this.newanswer,this.oldanswer)
         this.showPopup();
         this.showCon = "必填内容为空！";
       }
@@ -222,6 +274,34 @@ export default {
     },
     quitinput() {
       document.getElementsByClassName("inputtel")[0].style.left = "-750px";
+    },
+    sendoldcode() {
+      console.log("当前手机号：",this.tel);
+      this.axios.post("/user/sendOldUserPhoneCode",{
+        oldPhone: this.tel
+      })
+      .then(res => {
+        console.log(res.data);
+      });
+    },
+    sendnewcode() {
+      this.axios.post("/user/sendNewUserPhoneCode",{
+        newPhone: this.newtel
+      })
+      .then(res => {
+        console.log(res.data);
+      })
+    },
+    updatatel() {
+      this.axios.post("/user/updateNewUserPhone",{
+        newPhone: this.newtel,
+        newPhoneCode: this.telnewyzm
+      })
+      .then(res => {
+        if(res.data.code == "200") {
+          this.$router.replace("/About");
+        }
+      })
     }
   }
 };

@@ -2,19 +2,21 @@
   <div class="account">
     <!-- 标题 -->
     <div class="title">
-      <a href="/About">取消</a>
+      <router-link to="/About">取消</router-link>
       <span>我的账号</span>
     </div>
 
     <!-- 用户信息 -->
     <div class="userinfo">
-      <img src="../assets/head.jpg" alt="头像" />
+      <div class="myhead">
+        <img :src="userInfo.imgs[0].imgUrl" alt="头像" />
+      </div>
       <div class="myinfo">
-        <span class="username">用户名</span>
-        <span class="iconfont icon-v" :class="{on: false}"></span>
+        <span class="username"><router-link to="/informations">{{userInfo.userName}}</router-link></span>
+        <span class="iconfont icon-v" :class="{on: userInfo.inMaster==1}"></span>
         <span class="hr">|</span>
         <span class="score">积分</span>
-        <span class="scorenum">0</span>
+        <span class="scorenum">{{userInfo.integrals[0]}}</span>
       </div>
     </div>
 
@@ -27,7 +29,7 @@
         
         <div class="sjsm">
           <p class="tit">积分说明</p>
-          <p class="sm">登录，+1积分</p>
+          <p class="sm">登录，+2积分</p>
           <p class="sm">发表一篇文章，+5积分</p>
           <p class="sm">发表一次评论，+3积分</p>
         </div>
@@ -38,6 +40,7 @@
 
 <script>
 import { Progress } from 'vant';
+import { mapState } from 'vuex'
 
 export default {
   name: "account",
@@ -45,19 +48,32 @@ export default {
     return {
       isLoading: false,
       show: false,
-      jy: 20,
-      zjy: 1000,
-      accountAge: 0
+      myhead: ""
     };
+  },
+  computed: {
+    ...mapState([
+      "userInfo",
+      "accountAge"
+    ])
   },
   components: {
     [Progress.name]:Progress
   },
-  methods: {}
+  methods: {
+
+  },
+  created() {
+    console.log("我的信息：",this.userInfo);
+    console.log("账号年龄：",this.accountAge);
+  }
 };
 </script>
 
 <style lang="less" scoped>
+.icon-v {
+  color: #ddd;
+}
 .account {
   position: absolute;
   top: 0;
@@ -104,14 +120,25 @@ export default {
     align-items: center;
     flex-direction: column;
     .myinfo {
-      transform: translateX(-10px);
+      transform: translateX(-4px);
+      .scorenum {
+        font-size: 15px;
+        font-weight: bold;
+        margin-left: 5px;
+        color: orange;
+      }
     }
-
-    img {
+    .myhead {
       width: 60px;
       height: 60px;
+      overflow: hidden;
       border-radius: 50%;
       box-shadow: 0 0px 2px rgb(88, 88, 88);
+      margin-top: 5px;
+      img {
+        width: auto;
+        height: 60px;
+      }
     }
     span {
       font-size: 16px;

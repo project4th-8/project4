@@ -11,6 +11,7 @@ export default {
   name:'recommend',
   data () {
     return {
+
     }
   },
   components: {
@@ -30,10 +31,14 @@ export default {
     ])
   }
 }
+
+
+
+
 </script>
 <style lang="less" scoped>
 .fix-top {
-  margin-top:90px; 
+  margin-top:30px; 
   margin-bottom:40px; 
 }
 </style>

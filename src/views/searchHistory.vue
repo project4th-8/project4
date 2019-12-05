@@ -1,15 +1,13 @@
 <template>
- <div class="search">
+ <div class="searchHistory">
    <div class="search_kuang clear"><input v-model="Xtext" type="text" placeholder="请输入搜索内容" clearable>
     <span  @click="removeX">X</span>
      <button @click="addHistory"><img src="../../public/img/jdtIMG/search.png" alt=""></button>
+     <p><router-link class="a" to="searchAll">haha</router-link></p>
     </div>
-
-   <p>历史搜索：</p>
-   <ul class="search_history">
-     <li v-for="(item,index) in lists" :key="index"><img src="../../public/img/jdtIMG/history.png" alt="">{{item.title}}<span @click="removeHistory(index)">X</span></li>
-     <li @click="removeAll()" ><a v-text="Atext"  href="javscript:;"></a></li>
-   </ul>
+    <div>
+      <router-view/>
+    </div>
  </div>
 </template>
 
@@ -32,30 +30,36 @@ var lists=[
   },
 ]
 export default {
-  name:'search',
+  name:'searchHistory',
  data () {
  
     return {
       lists,
       // gai:true,
       Atext:"清除历史信息",
-      Xtext:""
+      Xtext:"",
+      li:[]
     }
   },
   created () {
     this.lists = lists;
-    this.axios
-    .post('/checkAtt',{userId:1})
+     this.axios.post("/search/findAllSearch")
+    .then(res=>{
+      console.log(res.data)
+    })
+
+ /*    this.axios
+    .post('/search/findAllSearch')
     .then(res=>{
       console.log(res.data)
       }
     ).catch(err =>{
       console.log('错了',err)
-    })
+    }) */
   },
   methods: {
     tosousuo(){
-    this.$router.replace('/searchsou')
+    this.$router.push('/searchsou')
   },
   removeHistory: function (index) {
         this.lists.splice(index, 1);
@@ -92,24 +96,24 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.search{
+.searchHistory{
+   font-size:14px;
   overflow: hidden;
+  p{
+    height: 100px;
+    line-height: 100px;
+    margin-top: 50px;
+  }
   ul li {
     list-style: none;
   }
-   p{
-    font-size:14px;
-    text-align: left;
-    margin-left: 5%;
-    margin-top: 50px;
-    color: rgb(224, 108, 12);
-  }
+
   // text-align: left;
   .search_kuang{
   position: relative;
   width: 90%;
   margin-left: 5%;
-  font-size: 14px;
+  // font-size: 14px;
   span{
     font-size: 16px;
      position: absolute;
@@ -145,39 +149,7 @@ export default {
     margin: auto;
   }
   }
-  
-  }
-  .search_history{
-    margin-top: 10px;
-    width: 80%;
-    margin: 0 auto;
-    li{
-      text-align: center;
-      font-size: 14px;
-      height: 40px;
-      line-height: 40px;
-      overflow: hidden;
-      img{
-        vertical-align: middle;
-  
-        float: left;
-        margin-top: 10px;
-      }
-      span{
-        display: block;
-        width: 50px;
-        height: 30px;
-        text-align: center;
-        line-height: 30px;
-        float: right;
-        cursor: pointer;
-      }
     }
-  
- 
- 
-
-  }
 }
 
 </style>

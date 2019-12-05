@@ -10,7 +10,7 @@
         <p>{{item.sendTime}}</p>
         <div class="chatK">
           <div>{{item.rong}}</div>
-          <img src="../assets/img/1.jpg" alt />
+          <img :src="head" alt />
         </div>
       </li>
     </ul>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex"
 import moment from "moment";
 var lists = [];
 export default {
@@ -31,16 +32,22 @@ export default {
     return {
       nei: "",
       hisname: "",
-      lists: []
+      lists: [],
+      head:"",
     };
   },
+   computed: {
+    ...mapState([
+      "userInfo"
+    ])
+  },
   created() {
+    this.head = this.userInfo.imgs[0].imgUrl;
     this.lists = lists;
     this.getParams();
-    var i = sessionStorage.getItem("to");
-    sessionStorage.removeItem("to");
-    this.hisname = i;
+     this.hisname = sessionStorage.getItem("userName");
   },
+  
   methods: {
     clears() {
       this.lists.splice(0, this.lists.length);
@@ -49,6 +56,7 @@ export default {
       if(this.nei ==""){
         console.log('泵')
       }else{
+
          var rong = this.nei;
       var data = new Date();
       var sendTime = moment(data).format("YYYY-MM-DD hh:mm:ss");
@@ -70,7 +78,8 @@ export default {
       this.hisname = routerParams;
     },
     tomessage() {
-      this.$router.replace("/message");
+      this.$router.push("/message");
+      sessionStorage.removeItem("userName");
     }
   },
   updated: function() {

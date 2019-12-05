@@ -2,17 +2,17 @@
   <div class="about">
     <div class="head">
       <!-- 头像 -->
-      <a href="/informations" @islogin="changeLogin" :Login="Login">
-        <div v-show="Login" class="headImg">
-          <img src="../assets/logo.png" alt="头像">
+      <router-link to="/informations">
+        <div v-show="token" class="headImg">
+          <img :src="head" alt="头像">
         </div>
-      </a>
+      </router-link>
       <!-- 登录后 -->
       <!-- 关注粉丝 -->
-      <div v-if="Login" class="info">
-        <p><a href="/informations">用户名</a></p>
-        <span><a href="/attention">关注</a> <span>{{attentionNum}}</span></span>
-        <span><a href="/myfans">粉丝</a> <span>{{fansNum}}</span></span>
+      <div v-if="token" class="info">
+        <p><router-link to="/informations">{{userInfo.userName}}</router-link></p>
+        <span><router-link to="/attention">关注</router-link> <span>{{attentionNum}}</span></span>
+        <span><router-link to="/myfans">粉丝</router-link> <span>{{fansNum}}</span></span>
       </div>
 
       <!-- 未登录 -->
@@ -22,7 +22,7 @@
 
       <!-- 申请认证 -->
       <div class="authentication">
-        <a href="/authentication">申请认证</a>
+        <router-link to="/authentication">申请认证</router-link>
       </div>
     </div>
 
@@ -35,81 +35,86 @@
     <div class="functionlist">
       <div>
         <span class="iconfont icon-sixin"></span>
-        <span><a href="/">私信</a></span>
+        <span><router-link to="/">私信</router-link></span>
       </div>
       <div>
         <span class="iconfont icon-shoucang"></span>
-        <span><a href="/">收藏</a></span>
+        <span><router-link to="/">收藏</router-link></span>
       </div>
       <div>
         <span class="iconfont icon-caogaoxiang"></span>
-        <span><a href="/">草稿箱</a></span>
+        <span><router-link to="/">草稿箱</router-link></span>
       </div>
     </div>
     <div class="functionlist">
       <div>
         <span class="iconfont icon-xiaoxi"></span>
-        <span><a href="/">消息通知</a></span>
+        <span><router-link to="/">消息通知</router-link></span>
       </div>
       <div>
         <span class="iconfont icon-dongtaitixing"></span>
-        <span><a href="/dynamic">历史动态</a></span>
+        <span><router-link to="/dynamic">历史动态</router-link></span>
       </div>
       <div>
         <span class="iconfont icon-comment"></span>
-        <span><a href="/comment">历史评论</a></span>
+        <span><router-link to="/comment">历史评论</router-link></span>
       </div>
     </div>
     <div class="functionlist">
       <div>
         <span class="iconfont icon-jijin"></span>
-        <span><a href="/">自选基金</a></span>
+        <span><router-link to="/">自选基金</router-link></span>
       </div>
       <div>
         <span class="iconfont icon-zhanghao"></span>
-        <span><a href="/account">账号信息</a></span>
+        <span><router-link to="/account">账号信息</router-link></span>
       </div>
       <div>
         <span class="iconfont icon-17"></span>
-        <span><a href="/safety">安全设置</a></span>
+        <span><router-link to="/safety">安全设置</router-link></span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import { mapActions } from 'vue'
+import { mapState } from "vuex"
 
 export default {
   name: "about",
   data: function() {
     return {
-      attentionNum: 1,
-      fansNum: 1,
-      Login: false
+      attentionNum: 0,
+      fansNum: 0,
+      token: '',
+      myInfo: {},
+      head: ""
     }
   },
+  computed: {
+    ...mapState([
+      "userInfo"
+    ])
+  },
   methods: {
-    changeLogin() {
-      this.isLogin = false;
-      console.log(this.isLogin);
-    },
-    // ...mapActions([
-    //   "requestInfo"
-    // ])
-    // getinfo() {
-    //   this.axios.post('/user/findAllUserInfo')
-    //   .then(res => {
-    //     console.log(res.data);
-    //   })
-    // }
+
   },
   created() {
-    this.attentionNum = 2;
-    this.fansNum = 2;
-    this.Login = this.$store.state.isLogin;
-
-    // this.getinfo();
+    if(sessionStorage.getItem("token")) {
+      this.head = this.userInfo.imgs[0].imgUrl;
+      this.token = sessionStorage.getItem("token");
+        console.log("我的信息：",this.userInfo);
+        /* 查询粉丝数 */
+        this.axios.post("/fansCount")
+        .then(res => {
+          this.fansNum = res.data.data;
+        })
+        /* 查询关注数 */
+        this.axios.post("/AttentionCount")
+        .then(res => {
+          this.attentionNum = res.data.data;
+        })
+    }
   }
 }
 </script>
@@ -139,7 +144,7 @@ export default {
       border: 1px solid #ddd;
 
       img{
-        width: 60px;
+        width: auto;
         height: 60px;
       }
     }

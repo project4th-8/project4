@@ -20,12 +20,12 @@
           <div class="Report" v-show="isshow" @click="showPopup">举报</div>
         </div>
       </div>
-      <div class="center" @click="sccomment">
+      <div class="center">
         <h5>{{info.title}}</h5>
         <div>{{info.contents}}</div>
       </div>
       <div class="bottom">
-        <div @click="forword">
+        <div>
           <i class="iconfont icon-tubiao-"></i>
           {{info.fenx}}
         </div>
@@ -69,13 +69,6 @@ export default {
     boxshow: function(res) {
       this.showclient = res;
       console.log(this.showclient)
-    },
-    forword:function() {
-      this.$router.push('/forword')
-    },
-    sccomment:function() {
-      this.$router.push('/sccomment')
-
     }
   }
 };
@@ -84,6 +77,7 @@ export default {
 .content {
   font-size: 16px;
 }
+
 .icon-v {
   font-size: 20px;
   color: #ddd;
@@ -96,13 +90,13 @@ export default {
   z-index: 1000;
   top: 0;
 }
+
 .links {
   display: flex;
   justify-content: space-around;
 }
 .text {
   overflow: auto;
-
 }
 .time {
   font-size: 12px;
@@ -147,6 +141,7 @@ export default {
   display: flex;
   justify-content: space-around;
   border-bottom: 6px solid #ddd;
+
   div {
     width: 70px;
     height: 40px;

@@ -7,7 +7,7 @@
    </div> -->
    <p>热搜：</p>
    <ul class="search_hot">
-     <li v-for="(item,index) in lists" :key="index">{{item.title}}</li>
+     <li v-for="(item,index) in lists" :key="index" @click="toji(index)">{{item.fundName}}</li>
      <!-- <li><a href="">查看更多</a></li> -->
    </ul>
  </div>
@@ -39,11 +39,25 @@ export default {
     }
   },
   created () {
-    this.lists = lists
+    this.lists = lists;
+    this.axios
+    .post('/search/hotFund')
+    .then(res=>{
+      console.log(res.data.data)
+      this.lists = res.data.data
+    })
+    .catch(err=>{
+      console.log(err)
+     })
   },
   methods:{
     tosearchHistory(){
-      this.$router.replace("/searchHistory")
+      this.$router.push("/searchHistory")
+
+    },
+    toji(index){
+      sessionStorage.setItem('fundId',this.lists[index].fundId)
+      console.log(this.lists[index].fundId)
     }
   }
 
@@ -114,7 +128,7 @@ export default {
   padding: 0;
   margin: 0;
   margin-left: 5%;
-  text-align: left;
+  text-align: center;
   // text-indent: 1em;
   li:nth-of-type(odd){
     float: left;
@@ -123,7 +137,7 @@ export default {
     width: 48%;
     font-size: 14px;
     margin-top: 10px;
-    border-right: 1px solid black;
+    // border-right: 1px solid black;
    
   }
   li:nth-of-type(even){

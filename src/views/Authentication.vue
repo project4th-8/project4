@@ -2,27 +2,27 @@
   <div class="authentication">
     <!-- 标题 -->
     <div class="title">
-      <a href="/About">取消</a>
+      <router-link to="/About">取消</router-link>
       <span>申请认证大咖</span>
     </div>
 
     <!-- 用户信息 -->
     <div class="userinfo">
-      <img src="../assets/logo.png" alt="头像">
+      <img :src="userInfo.imgs[0].imgUrl" alt="头像">
       <div class="myinfo">
-        <span class="username">用户名</span>
-        <span class="iconfont icon-v" :class="{on: false}"></span>
+        <span class="username">{{userInfo.userName}}</span>
+        <span class="iconfont icon-v" :class="{on: userInfo.isMaster==0}"></span>
         <span class="hr">|</span>
         <span class="score">积分</span>
-        <span class="scorenum">0</span>
+        <span class="scorenum">{{userInfo.integrals[0]}}</span>
       </div>
     </div>
     <!-- 内容 -->
     <div class="content">
       <div class="ltitle">
         <span>大咖认证</span>
-        <button v-if="showbtn==1" @click="rzbtn">申请认证</button>
-        <button v-else-if="showbtn==2" class="btn2" disabled>等待审核</button>
+        <button v-if="userInfo.isMaster==1" @click="rzbtn">申请认证</button>
+        <button v-else-if="userInfo.isMaster==2" class="btn2" disabled>等待审核</button>
         <button v-else class="btn2" disabled>申请成功</button>
       </div>
       <div class="con">
@@ -67,14 +67,20 @@
 
 <script>
 import { Popup } from 'vant';
+import { mapState } from 'vuex'
+
 export default {
   name: "authentication",
   data: function() {
     return {
       show: false,
       showCon: "申请已提交，请等待审核",
-      showbtn: 1
     }
+  },
+  computed: {
+    ...mapState([
+      "userInfo",
+    ])
   },
   components: {
     [Popup.name]:Popup
@@ -84,20 +90,39 @@ export default {
       this.show = true;
     },
     rzbtn() {
-      this.showPopup();
-      this.showbtn = 2;
-      let that = this;
-      setTimeout(function() {
-        that.show = false;
-      },2000)
+      
+      this.axios.post("/master/setMaster",{
+        userId: sessionStorage.getItem("userId"),
+        masterDescrib: null
+      })
+      .then(res => {
+        if(res.data.code == "200") {
+          this.showPopup();
+          setTimeout(() => {
+            this.show = false;
+          },2000);
+          this.axios.post("/user/findAllUserInfo")
+          .then(res => {
+            if(res.data.data.userSex == 1) {
+              res.data.data.userSex = "男";
+            } else {
+              res.data.data.userSex = "女";
+            }
+            this.$store.state.userInfo = res.data.data;
+            sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
+          });
+        }
+      })
     }
-  }
+  },
 }
 </script>
 
 <style lang="less" scoped>
 @import "../assets/font/personfont/iconfont.css";
-
+.icon-v {
+  color: #ddd;
+}
 .on {
   color: orange;
 }
@@ -146,7 +171,13 @@ export default {
       align-items: center;
       flex-direction: column;
       .myinfo {
-        transform: translateX(-10px);
+        transform: translateX(-4px);
+        .scorenum {
+          font-size: 15px;
+          font-weight: bold;
+          margin-left: 5px;
+          color: orange;
+        }
       }
 
       img {

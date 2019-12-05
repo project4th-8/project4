@@ -1,18 +1,30 @@
 <template>
   <div class="followNotification">
     <ul>
-      <li>
-       <p> <i>某某某 关注了你哟</i> <span>12:00</span></p>
-      </li>
-       <li>
-        <p><i>某某某 取关了你</i> <span>12:00</span></p>
+      <li v-for="(item,index) in lists" :key="index">
+       <p> <i>{{item.optionUser.userNickname}}&nbsp;&nbsp;关注了你</i> <span>{{item.adviceTime}}</span></p>
       </li>
     </ul>
   </div>
 </template>
 <script>
 export default {
-  name:"followNotification"
+  name:"followNotification",
+  data(){
+    return{
+      lists:[],
+      flists:[]
+    }
+  },
+  created(){
+    this.axios.post("/findAllAdvice")
+    .then(res=>{
+     
+        this.lists = res.data.data.filter(function(item){
+        return item.datestate == 1 
+        });
+    })
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -35,6 +47,11 @@ export default {
         color: rgb(236, 136, 22);
         font-weight: 500;
       }
+        span{
+          height: 40px;
+          width: 80px;
+          font-size: 14px;
+        }
      }
     }
   }

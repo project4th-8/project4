@@ -1,8 +1,6 @@
 <template>
   <div>
     <allfunds v-for="(item,index) in fundlists" :key='index' :infos='item'></allfunds>
-   
-
   </div>
 
 </template>

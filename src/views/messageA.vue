@@ -4,20 +4,20 @@
       <div><input @focus="toall" type="text" placeholder="请点击搜索"></div>
     </div>
     <ul class="memu">
-      <li><div class="aite"><img src="../../public/img/jdtIMG/aite.png" alt=""></div><div class="jilu"><span><a href="/comments">@我的</a></span><div>{{msgList.length}}</div></div> <img src="../../public/img/jdtIMG/left.png" alt=""></li>
-      <li><div class="liuyan"><img src="../../public/img/jdtIMG/liuyan.png" alt=""></div><div class="jilu"><span><a href="/commentstwo">评论</a></span><div>{{msgList.length}}</div></div><img src="../../public/img/jdtIMG/left.png" alt=""></li>
-       <li><div class="zan"><img src="../../public/img/jdtIMG/zan.png" alt=""></div><div class="jilu"><span><a href="/fabulous">赞</a></span><div>{{msgList.length}}</div></div><img src="../../public/img/jdtIMG/left.png" alt=""></li>
+      <li><div class="aite"><img src="../../public/img/jdtIMG/aite.png" alt=""></div><div class="jilu"><span><router-link to="/comments">@我的</router-link></span><div>{{msgList.length}}</div></div> <img src="../../public/img/jdtIMG/left.png" alt=""></li>
+      <li><div class="liuyan"><img src="../../public/img/jdtIMG/liuyan.png" alt=""></div><div class="jilu"><span><router-link to="/commentstwo">评论</router-link></span><div>{{msgList.length}}</div></div><img src="../../public/img/jdtIMG/left.png" alt=""></li>
+       <li><div class="zan"><img src="../../public/img/jdtIMG/zan.png" alt=""></div><div class="jilu"><span><router-link to="/fabulous">赞</router-link></span><div >{{msgList.length}}</div></div><img src="../../public/img/jdtIMG/left.png" alt=""></li>
     </ul>
     <ul class="chat_list">
       <li v-for="(item,index) in msgList" :key="index">
         <div class="tou"><img :src="item.url" alt=""  class="touimg"></div>
-        <div class="nei" @click="tochat">
+        <div class="nei" @click="tochat(index)">
            <h4>{{item.hisname}}</h4> 
            <p>{{item.text}}</p>
            </div>
           <div class="wei">
             <p><span>{{item.time}}</span></p>
-            <div class="mes_count">{{item.count}}</div>
+            <div class="mes_count" >{{item.count}}</div>
           </div>
       </li>
     </ul>
@@ -51,17 +51,27 @@ export default {
     }
   },
   created(){
-    this.msgList = msgList
+    this.msgList = msgList;
+    // this.axios
+    // .post('/findAllAdvice')
+    // .then(res=>{
+    //   console.log(res.data.data)
+    // })
+    // .catch(err=>{
+    //  console.log(err)
+    // })
   },
 
 
   methods:{
-    tochat(){
+    tochat(index){
       console.log(this.msgList[0].hisname)
-      this.$router.replace("/chat")
+      sessionStorage.setItem('userName',this.msgList[index].hisname)
+      this.$router.push("/chat")
     },
     toall(){
-       this.$router.replace("/msgsearch")
+       this.$router.push("/msgsearch")
+      //  sessionStorage.setItem('shuzu',this.msgList)
     }
   }
 }
