@@ -181,6 +181,25 @@ export default {
         console.log("成功");
         this.moni.zishu='';
 
+this.moni.pinlunSon=[];
+    this.axios.post("/dynamic/findOneById",{
+      dynamicId:1
+    })
+    .then(res=>{
+      console.log(res.data.data.replies);
+      for(let i=0;i<res.data.data.replies.length;i++){
+        if(res.data.data.replies[i].replyId==this.$route.query.pinlunid){
+          this.moni.pinlun=res.data.data.replies[i];
+        }
+        if(res.data.data.replies[i].parentId==this.$route.query.pinlunid){
+          this.moni.pinlunSon.push(res.data.data.replies[i]);
+        }
+      }
+      console.log(this.moni.pinlunSon);
+      console.log(this.moni.pinlun);
+      console.log(this.moni.pinlun.userInfo.userName);
+
+    })
       })
       .catch(err=>{
         console.log(err);

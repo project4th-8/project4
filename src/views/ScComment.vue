@@ -403,7 +403,43 @@ export default {
       })
       .then(res=>{
         console.log(res);
-        this.zishu='';
+this.axios.post("/dynamic/findOneById",{
+      dynamicId:this.wenzhang.wenzhangId
+    })
+    .then(res => {
+      console.log(res.data);
+      this.yonghu={}
+      this.wenzhang={
+        liuyanshu:0
+      }
+      this.repin=[]
+      //文章用户信息：
+      res=res.data.data;
+      this.yonghu.username=res.userName;
+      this.yonghu.userid=res.userId;
+      this.yonghu.userimg=res.userImg[0];
+      console.log(res.userImg[0]);
+      this.yonghu.isdaka=res.isMaster;
+      //文章信息：
+      this.wenzhang.zhuanfashu=res.dynamicTransmit;
+      for(let i=0;i<res.replies.length;i++){
+        if(res.replies[i].parentId==0){
+          this.wenzhang.liuyanshu++;
+        }
+      }
+      this.wenzhang.shoucangshu=res.dynamicHeat;
+      this.wenzhang.dianzanshu=res.dynamicLikeCount;
+      this.wenzhang.circle=res.dynamicContent;
+      this.wenzhang.title=res.dynamicTitle;
+      this.wenzhang.url=res.imgUrl;
+      this.wenzhang.date=res.dynamicLastTime;
+      this.wenzhang.wenzhangId=res.dynamicId;
+      //热门信息：
+      this.repin.zan=res.replies[0].replyLikecount+10;
+      this.repin.circle=res.replies[0].replyContent;
+      
+    });
+
       })
       .catch(err=>{
         console.log(err);

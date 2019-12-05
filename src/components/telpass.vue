@@ -8,7 +8,7 @@
     <van-button type="primary" size="large" @click="login">登录</van-button>
 
     <!-- 提示框 -->
-    <div v-show="showtishi" class="tishi">
+    <div v-show="showtishi" class="tishi" id="tishi">
       请输入正确的手机号和密码
     </div>
     <div v-show="showtishi2" class="tishi">
@@ -59,6 +59,13 @@ export default {
               console.log("拿到数据：",res.data);
               sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
             });
+          } else if(res.data.code == "2022") {
+            document.getElementsById("tishi").innerHTML = "该账号已被拉黑，暂时无法登录";
+            this.showtishi1 = true;
+            setTimeout(() => {
+              this.showtishi1 = false;
+              document.getElementsById("tishi").innerHTML = "请输入正确的手机号和密码";
+            },2500)
           } else {
             console.log("密码错误！");
             this.showtishi2 = true;
