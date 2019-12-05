@@ -5,7 +5,8 @@ import recommend from '../views/recommend.vue'
 import messageA from '../views/messageA.vue'
 import systemNotifications from '../views/systemNotifications.vue'
 import ScComment from '../views/ScComment.vue'
- 
+// import searchHis from '../views/searchHis.vue'
+// import searchAll from '../views/searchAll.vue' 
 Vue.use(VueRouter)
 
 const routes = [
@@ -88,6 +89,31 @@ const routes = [
     component: () => import('../views/Dynamic.vue')
   },
   {
+    path: '/chat',
+    name: 'chat',
+    component: () => import('../views/chat.vue')
+  },
+  {
+    path: '/msgsearch',
+    name: 'msgsearch',
+    component: () => import('../views/msgsearch.vue')
+  },
+  {
+    path: '/replay',
+    name: 'replay',
+    component: () => import('../views/replay.vue')
+  },
+  {
+    path: '/replayt',
+    name: 'replayt',
+    component: () => import('../views/replayt.vue')
+  },
+  {
+    path: '/fabulous',
+    name: 'fabulous',
+    component: () => import('../views/fabulous.vue')
+  },
+  {
     path: '/comment',
     name: 'comment',
     component: () => import('../views/Comment.vue')
@@ -97,11 +123,11 @@ const routes = [
     name: 'account',
     component: () => import('../views/Account.vue')
   },
-  // {
-  //   path: '/safety',
-  //   name: 'safety',
-  //   component: () => import('../views/Safety.vue')
-  // },
+  {
+    path: '/safety',
+    name: 'safety',
+    component: () => import('../views/Safety.vue')
+  },
   {
     path: '/Forgetnext',
     name: 'Forgetnext',
@@ -153,7 +179,7 @@ const routes = [
   component: () => import('../views/msgsearch.vue')
 },
 {
-  path: '/replay',
+  path: '/replay:id',
   name: 'replay',
   component: () => import('../views/replay.vue')
 },

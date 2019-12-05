@@ -52,8 +52,14 @@ export default {
         .then(res => {
           console.log(res.data);
           if(res.data.code == "200") {
-            this.$router.replace("/Login");
-            sessionStorage.removeItem("tel");
+            document.getElementsByClassName("tishi")[0].innerHTML = "修改成功，请重新登录！";
+            this.showtishi = true;
+            var timer = setTimeout(() => {
+              this.showtishi = false;
+              document.getElementsByClassName("tishi")[0].innerHTML = "必填信息不能为空！";
+              clearTimeout(timer);
+              this.$router.replace("/Login");
+            },1000)
           }
         })
       } else {

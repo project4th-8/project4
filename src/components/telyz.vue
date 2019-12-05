@@ -71,6 +71,7 @@ export default {
       if (this.yzm != "" && this.tel != "") {
         this.axios
           .post("user/checkCode", {
+            userPhone: this.tel,
             verifyCode: this.yzm
           })
           .then(res => {

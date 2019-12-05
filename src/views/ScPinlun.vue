@@ -2,7 +2,7 @@
 <!--  -->
   <div id="scpinlun">
     <div class="toubu">
-      <van-icon name="arrow-left" />
+      <van-icon name="arrow-left"/>
       <span>评论页</span>
       <van-icon name="wap-home-o" />
     </div>
@@ -221,8 +221,7 @@ this.axios.post("/dynamic/findOneById",{
       box-sizing: border-box;
       padding: 3px 30px;
       margin-bottom: 30px;
-      a{
-      }
+
       .van-popup{
         display: flex;
         justify-content: center;

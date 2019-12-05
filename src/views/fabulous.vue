@@ -4,17 +4,17 @@
       <div @click="tomessage"></div>
       <p>赞</p>
     </div>
-    <ul>
-      <li>
+    <ul class="booton">
+      <li v-for="(item,index) in lis" :key="index">
         <div class="title">
-          <img src="../assets/img/1.jpg" alt="">
-          <p><a href="javascript:;">某某某</a> 赞了</p>
-          <span>12:00</span>
+          <img :src="item.optionUser.imgs[0].imgUrl" alt="">
+          <p><a href="javascript:;">{{item.optionUser.userNickname}}</a> 赞了</p>
+          <span>{{item.adviceTime}}</span>
         </div>
         <div class="content">
-          <h4>这是文章标题</h4>
+          <h4>{{item.dynamic.dynamicTitle}}</h4>
           <div>
-            这是文章内容
+            {{item.dynamic.dynamicContent}}
           </div>
         </div>
       </li>
@@ -30,11 +30,19 @@ export default {
   name:"fabulous",
   data(){
     return{
-
+      lis:[],
     }
   },
-   created(){
-    // this.comlists = comlists
+   created() {
+    this.axios.post("/findAllAdvice")
+    .then(res=>{
+      console.log(res.data.data)
+      // for(var i =0;i<res.data.data.length;i++){
+        this.lis = res.data.data.filter(function(item){
+        return item.datestate==3 
+        });
+        console.log(this.lis)
+    })
   },
   /* components:{
     [Skeleton.name]:Skeleton,
@@ -42,7 +50,7 @@ export default {
   }, */
   methods:{
     tomessage(){
-      this.$router.replace('/message')
+      this.$router.push('/message')
     }
   }
 }
@@ -56,16 +64,21 @@ export default {
     list-style: none;
   }
   width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  // align-items: center;
+  
   .top{
-    height: 30px;
-    font-size: 14px;
+    height: 40px;
+    font-size: 18px;
     display: flex;
     align-items: center;
     border-bottom:1px solid rgb(150, 148, 148);
     // overflow: hidden;
     div{
-      width: 15px;
-      height: 15px;
+      width: 20px;
+      height: 20px;
       background: url(../assets/img/exit.png) no-repeat center;
       background-size: cover;
       margin-left: 20px;
@@ -77,12 +90,17 @@ export default {
   }
   ul li{
     list-style: none;
-    font-size: 8px;
+    font-size: 14px;
   }
-  ul{
-    margin-top: 10px;
+  .booton{
+    height:calc(100vh - 40px) ;
+    overflow:scroll;
+    background: rgb(255, 254, 254);
+    z-index: 2000;
+    margin-top: 20px;
     width: 100%;
     li{
+      border-bottom:1px solid black;
       // height: 60px;
       width: 90%;
       // height: 60px;
@@ -97,24 +115,32 @@ export default {
          border-radius: 50%;
        }
        p{
-         height: 30px;
+         width: 50vw;
+         height: 40px;
         display: flex;
         justify-content: flex-start;
         align-items:flex-end;
          width: 70vw;
        }
+       span{
+         font-size: 12px;
+         width: 80px;
+         color: rgb(168, 179, 179);
+       }
      }
      .content{
        p{
         //  width: 100%;
-         height: 20px;
+         height: 30px;
         //  line-height: 40px;
 
        }
        div{
-         height: 30px;
+         height: 40px;
          width: 100%;
-         background: #000;
+            overflow: hidden;
+           white-space: nowrap;
+          text-overflow: ellipsis
        }
      }
     }
