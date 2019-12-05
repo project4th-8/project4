@@ -16,7 +16,7 @@
         <span @click="removeHistory(index)">X</span>
       </li>
     </ul>
-    <ul v-show="isTrue" class="searchAll">
+    <ul v-if="isShow" class="searchAll">
       <li v-for="(item,index) in items " :key="index">{{items[index]}}</li>
     </ul>
  </div>
@@ -39,35 +39,47 @@ export default {
      searchRecords:'',
      isShow:true,
      isTrue:false,
-     allList:[]
+     allList:[],
+     token:''
     }
   },
   created () {
-  this.userId = sessionStorage.getItem('userId')
-    this.axios.post('/fund/fuzzyQuery',{
-    userId:this.userId,
-    fuzzyName:this.Xtext
-    })
-    .then(res=>{
-      for(var i=0;i<res.data.data[0].length;i++){
-        this.allList.push(res.data.data[0][i].dynamicTitle)
-      }
-      for(var j=0;j<res.data.data[1].length;j++){
-        this.allList.push(res.data.data[1][j].userNickname)
-      }
-      for(var e=0;e<res.data.data[2].length;e++){
-        this.allList.push(res.data.data[2][e].fundName)
-      }
-      console.log(this.allList)
+     this.axios.post("/search/someSearch",{
+         searchText:this.Xtext
+       })
+       .then(res=>{
+        this.allList = res.data.data
+        //  console.log(res.data.data)
+       })
+       .catch(err=>{
+         console.log(err)
+       })
+  // this.token=sessionStorage.getItem('token')
+  // this.userId = sessionStorage.getItem('userId')
+  //   this.axios.post('/fund/fuzzyQuery',{
+  //   userId:this.userId,
+  //   fuzzyName:this.Xtext,
+  //   })
+  //   .then(res=>{
+  //     for(var i=0;i<res.data.data[0].length;i++){
+  //       this.allList.push(res.data.data[0][i].dynamicTitle)
+  //     }
+  //     for(var j=0;j<res.data.data[1].length;j++){
+  //       this.allList.push(res.data.data[1][j].userNickname)
+  //     }
+  //     for(var e=0;e<res.data.data[2].length;e++){
+  //       this.allList.push(res.data.data[2][e].fundName)
+  //     }
+  //     console.log(this.allList)
       
-    })
-    .catch(err=>{
-      console.log(err)
-    })
+  //   })
+  //   .catch(err=>{
+  //     console.log(err)
+  //   })
      this.axios.post("/search/findAllSearch")
     .then(res=>{
       this.lists= res.data.data
-      console.log(this.lists)
+      // console.log(this.lists)
     })
    },
   methods: {
@@ -84,13 +96,14 @@ export default {
     this.allList = newlists
   }, */
   removeHistory: function (index) {
-    console.log(this.lists[index].id)
+         
         this.lists.splice(index, 1);
         this.change();
         this.axios.post('/search/delSearch',{
           id: this.lists[index].id
         })
         .then(res=>{
+          // console.log(this.lists[index].id)
           console.log(res.data)
         })
         .catch(err=>{
@@ -134,16 +147,7 @@ export default {
        .catch(err=>{
          console.log(err)
        })
-        this.axios.post("/search/someSearch",{
-         searchText:this.Xtext
-       })
-       .then(res=>{
-        this.allList = res.data.data
-         console.log(res.data.data)
-       })
-       .catch(err=>{
-         console.log(err)
-       })
+       
       this.lists.unshift({
        searchRecords:this.Xtext
       })
