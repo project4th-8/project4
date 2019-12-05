@@ -65,23 +65,7 @@
   </div>
 </template>
 <script>
-var pinlun=[
-  // {
-  //   userid:1,
-  //   pinlunid:5,
-  //   userName:"haha",
-  //   content:"施工时空逗号隔开但很快光电开关",
-  //   userImg:"../assets/logo.png",
-  //   date:"2014"
-  // },{
-  //   userid:2,
-  //   pinglunid:9,
-  //   userName:"haha",
-  //   content:"施工时空逗号隔开但很快光电开关",
-  //   userImg:"../assets/logo.png",
-  //   date:"2014"
-  // },
-]
+var pinlun=[]
 //通过dynamicId parentId=0获取文章评论信息（空数组push引入）
 import {List,Divider,Popup,Icon,Button,Tab, Tabs } from 'vant'
 export default {
@@ -172,6 +156,25 @@ export default {
         .catch(err=>{
           console.log(err);
         })
+        pinlun=[];
+this.axios.post("/dynamic/findOneById",{
+      dynamicId:1
+    })
+    .then(res=>{
+      console.log(res.data);
+      res=res.data.data;
+      for(let i=0;i<res.replies.length;i++){
+        if(res.replies[i].parentId==0){
+          pinlun.push(res.replies[i]);      
+        }
+      }
+      console.log(this.moni.pinlun);
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+
+
     },
     del(a){
       console.log(a);
