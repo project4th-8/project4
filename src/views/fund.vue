@@ -41,18 +41,13 @@
         </li>
       </ul>
     </div>
-    <div class="name-list">
-      <div>基金简称</div>
-      <div>基金购买数量 <span @click="isShow=!isShow"><van-icon name="ascending" v-if="isShow" /><van-icon name="descending" v-else /></span>  </div>
-      <div>基金收益 <span @click="isShowsub=!isShowsub"><van-icon name="ascending" v-if="isShowsub" /><van-icon name="descending" v-else /></span></div>
-      <div>收藏</div>
-    </div>
-    <component :is="com" />
+    <component :is="com" :findfund="inputtxt" />
   </div>
 </template>
 <script>
 import { Icon, NavBar, Search } from "vant";
 import allfund from "./allfund";
+
 import fundone from "../components/fundone.vue";
 import fundtwo from "../components/fundtwo.vue";
 import fundthree from "../components/fundthree.vue";
@@ -68,8 +63,6 @@ export default {
       inputtxt: "",
       shows:false,
       issure:1,
-      isShow:true,
-      isShowsub:true
     };
   },
   components: {
@@ -92,9 +85,11 @@ export default {
       this.shows =!this.shows;
     },
     onSearch: function() {
-
+      this.findfund = this.inputtxt
+      this.com = "allfund"
+      this.issure = 1
     }
-  },
+  }
   
 };
 </script>
@@ -125,7 +120,7 @@ export default {
 }
 .tables {
   display: flex;
-  padding-top: 10px;
+  padding: 10px 0;
   justify-content: space-around;
   height: 30px;
   a {

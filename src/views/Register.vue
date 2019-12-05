@@ -35,6 +35,7 @@
 
     <!-- 提示框 -->
     <div v-show="showtishi" class="tishi">必填信息不能为空!</div>
+    <div v-show="showtishi2" class="tishi">手机号码不符合规范!</div>
   </div>
 </template>
 
@@ -48,7 +49,8 @@ export default {
       isfs: true,
       seconds: 60,
       yzm: "",
-      showtishi: false
+      showtishi: false,
+      showtishi2: false
     };
   },
   components: {
@@ -60,30 +62,32 @@ export default {
   },
   methods: {
     sendCode() {
-      if(this.username != "") {
-        this.isfs = false;
-        var timer = setInterval(() => {
-          if (this.seconds == 1) {
-            this.isfs = true;
-            this.seconds = 60;
-          } else {
-            this.seconds--;
-          }
-        }, 1000);
-
-        if (this.username != "") {
-          this.axios
-            .post("/user/regisSendPhone", {
-              userPhone: this.username
-            })
-            .then(res => {
-              console.log("发送成功：", res.data);
-            });
-        } else {
-          alert("请输入手机号！");
-          this.isfs = true;
-          clearInterval(timer);
-        }
+      if (this.username != "") {
+        this.axios
+          .post("/user/regisSendPhone", {
+            userPhone: this.username
+          })
+          .then(res => {
+            console.log(res.data);
+            if (res.data.code == "2001") {
+              this.username = "";
+              this.showtishi2 = true;
+              setTimeout(() => {
+                this.showtishi2 = false;
+              }, 2500);
+            } else {
+              this.isfs = false;
+              var timer = setInterval(() => {
+                if (this.seconds > 1) {
+                  this.seconds--;
+                } else {
+                  clearInterval(timer);
+                  this.isfs = true;
+                  this.seconds = 60;
+                }
+              }, 1000);
+            }
+          });
       } else {
         this.showtishi = true;
         setTimeout(() => {
@@ -92,9 +96,10 @@ export default {
       }
     },
     ok: function() {
-        if (this.username && this.yzm != 0) {
-          this.axios
+      if (this.username && this.yzm != 0) {
+        this.axios
           .post("user/checkCode", {
+            userPhone: this.username,
             verifyCode: this.yzm
           })
           .then(res => {
@@ -107,12 +112,12 @@ export default {
               this.yzm = "";
             }
           });
-        } else {
-          this.showtishi = true;
-          setTimeout(() => {
-            this.showtishi = false;
-          }, 2500);
-        }
+      } else {
+        this.showtishi = true;
+        setTimeout(() => {
+          this.showtishi = false;
+        }, 2500);
+      }
     }
   }
 };
@@ -129,6 +134,7 @@ export default {
   font-size: 14px;
   padding: 10px;
   border-radius: 7px;
+  transition: all 0.5s;
 }
 .yzm2 {
   background: #ddd;

@@ -23,18 +23,22 @@
                   <span><span>评论发表于</span> {{item.replyTime}}</span>
                 </div>
               </div>
-              <div class="nav-right"><span><van-icon name="good-job-o" />点赞{{item.replyLikecount}}</span></div>
+              <div class="nav-right" style="color:black"><span><van-icon name="good-job-o" />{{item.replyId}}</span></div>
             </div>
             <div class="van-hairline--top-bottom">{{item.replyContent}}</div>
             <router-link :to="'/scpinlunxiang?pinlunid='+item.replyId">
               <div class="dengren">
-                <p id="p">共{{item.isReport}}条回复<van-icon name="arrow" /></p>
+                <p id="p">查看回复<van-icon name="arrow" /></p>
               </div>
             </router-link>
             <van-divider :style="{ color: 'grey', borderColor: 'grey', padding: '10px 5px' }"></van-divider>
             <div class="dianzan">
               <span>
-                <a href="javascript:;" :idn="index" @click="showText(item.userName)" >
+                <a href="javascript:;" :idn="index" @click="showText({
+                  pinlunid:item.replyId,
+                  userName:item.userInfo.userName,
+                  userId:item.userInfo.userId
+                })" >
                   <span class="iconfont icon-liuyan"></span>
                 </a>
               </span>
@@ -43,11 +47,10 @@
                 position="bottom"
                 :style="{ height: '40vh' }">
                 <div class="van-popup">
-                  <textarea  v-text="'你 回复 '+linshi+' : '" >
+                  <textarea  v-model="moni.zishu"  >
                   </textarea>
                 </div>
                 <div class="van2">
-                  <span @click="show=false">表情</span>
                   <span @click="huifu">发送</span>
                   <span @click="show=false">取消</span>
                 </div>
@@ -55,6 +58,7 @@
               <span class="dd">
                 <span class="iconfont icon-fenxiang"></span>
               </span>
+              <span @click="del(item.replyId)">删除</span>
             </div>
           </div>
         </van-list>
@@ -86,10 +90,11 @@ export default {
     return{
       //模拟数据
       moni:{
-        userid:1,
+        userid:3,
         dynamicId:1,
         yonghuid:1,
-        pinlun:[]
+        pinlun:[],
+        zishu:""
       },
       loading:false,
       finished:false,
@@ -97,7 +102,7 @@ export default {
       users:[],
       show:false,
       dianzan:false,
-      linshi:'',//临时存储回复人,
+      linshi:{},//临时存储回复人,
       lisnhizishu:'',//临时存储回复
       active:2,
       //评论用户
@@ -117,37 +122,6 @@ export default {
         }
       }
       console.log(this.moni.pinlun);
-
-      // for(let j=0;j<this.users.length;j++){
-      //   this.axios.post("/user/findOneById",{
-      //     userId:this.users[j].userId
-      //     })
-      //     .then(res=>{
-      //       console.log(res.data.data);
-      //       this.users[j].userId=res.data.data;
-      //       console.log(this.users);
-      //     })
-      //     .catch(err=>{
-      //       console.log(err);
-      //     })
-      // }
-      // for(let j=0;j=this.users.length;j++){
-      //   this.axios.post("/dynamic/findOneById",{
-      //     dynamicId:1
-      //   })
-      //   .then(res=>{
-      //     console.log(res.data.data)
-      //     for(var i=0;i<users.length;i++){
-      //       if(this.users[j].parentId==this.users[i].replyId){
-              
-      //       }
-      //     }
-          
-      //   })
-      //   .catch(err=>{
-      //     console.log(err)
-      //   })
-      // }
     })
     .catch(err=>{
       console.log(err)
@@ -182,8 +156,35 @@ export default {
       this.dianzan=true;
     },
     huifu(){
-      this.lisnhizishu='';
+      // this.lisnhizishu='';
+      console.log("文章："+this.moni.dynamicId,this.linshi.pinlunid,this.moni.userid,this.moni.zishu)
       this.show=false;
+      this.axios.post("/reply/addReply",{
+        dynamicId:this.moni.dynamicId,
+        replyId:this.linshi.pinlunid,
+        userId:this.moni.userid,
+        replyContent:this.moni.zishu,
+        })
+        .then(res=>{
+          console.log(res);
+          
+        })
+        .catch(err=>{
+          console.log(err);
+        })
+    },
+    del(a){
+      console.log(a);
+      this.axios.post("/dynamic/deleteReplyById",{
+        replyId:a
+      })
+      .then(res=>{
+        console.log(res)
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+
     }
   },
 

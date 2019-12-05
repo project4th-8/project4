@@ -153,7 +153,7 @@
     </div>
     <div class="bottom van-hairline--surround">
       <div class="bottom-bar">
-        <van-icon name="share" />
+        <van-icon name="share" @click="share"/>
         <span>{{wenzhang.zhuanfashu}}</span>
       </div>
       <div class="bottom-bar" @click="showPopup">
@@ -219,37 +219,7 @@
   </div>
 </template>
 <script>
-//获取该文章详情
-var circle={
-  userid:5854454,
-  name:"宋消乐",
-  userimg:"https://img18.3lian.com/d/file/201704/10/482278153193e9d86afe971f1aac66af.jpg",
-  title:"复制的一个标题",
-  redian:"这是个当前热点",
-  yonghu:"我是被召唤的幸运用户哈哈",
-  content:"今夜死去，明日复活,星光灿烂，我的旅行将从这里正式开始，我不知道未来有什么，但是经过我深思熟虑的计划，是不会轻易更改的。我不会畏惧前路的黑暗，愿星光照亮前路，不要让我迷失在这人迹罕至的小径之中。",
-  childrenUrl:[
-    {
-      url:"https://img.yzcdn.cn/vant/apple-1.jpg"
-    },
-    {
-      url:"https://img.yzcdn.cn/vant/apple-2.jpg"
-    },
-    {
-      url:"https://img.yzcdn.cn/vant/apple-3.jpg"
-    }
-  ],
-  date:"2016.1.12 3:11",
-  laizi:"推荐关注的人"
-}
-//获取该用户对这篇文章以及文章作者的状态（是否点赞）
-// var user={
-//   good:true,
-//   pinlun:false,//查询自己的评论，并且可以删除
-//   isgood:true,//是否关注用户
-//   iszan:true,//是否已经赞了用户
-//   isshoucang:true,//是否已经收藏
-// }
+
 
 import { ImagePreview,Button,List,Cell,Tabbar, TabbarItem, Tabs,Tab,Icon,Grid, GridItem,Image,Popup,Field,Toast} from 'vant'
 export default {
@@ -273,22 +243,15 @@ export default {
   },
   data(){
     return{
-      circle:{},
       //存储@的值
-      aiteyonghu:'',
-      loading:false,
-      finished:false,
-      lists:[],
+      loading:false,finished:false,
       active:2,
-      dianzan:[],
-      show:false,
-      showbiao:false,
-      showAite:false,
-      zishu:"",//文章评论
-      zonggong:0,
+      show:false,showbiao:false,showAite:false,
+      zonggong:0,zishu:"",//文章评论
+      
       //存储登录用户信息
       loginUser:{
-        userid:1
+        userid:7
       },
       //文章用户信息
       yonghu:{
@@ -310,13 +273,10 @@ export default {
       },
       //存储文章(需要获取的数据)
       wenzhang:{
-        wenzhangId:1,//默认为1
-        title:"一个的默认标题",
-        circle:"其实法老没有死去，而是在夜深人静的时候打开棺材盖，出来找朋友玩顺便吃点宵夜。有一天夜晚，法老正在享受宵夜，突然考古学家到来了。法老拿着没有吃完的烤串东躲西藏，不希望被发现。法老趁着考古学家没注意一个闪身回到棺材中，合上了盖子，并吃完了烤串。惬意之时，打了个嗝，于是金字塔塌了。",
+        wenzhangId:1,
+        title:"默认标题",
+        circle:"默认文章",
         url:[
-          "https://img18.3lian.com/d/file/201704/10/482278153193e9d86afe971f1aac66af.jpg",
-          "https://img18.3lian.com/d/file/201704/10/482278153193e9d86afe971f1aac66af.jpg",
-          "https://img18.3lian.com/d/file/201704/10/482278153193e9d86afe971f1aac66af.jpg",
         ],
         date:"默认日期",
         laizi:"推荐关注",
@@ -333,18 +293,18 @@ export default {
         redu:588,
         zan:898,
         iszan:true,
-        circle:"手动添加的一条热点平乱的快感辉我我我我,煌过，的辉光IE华哈哈哈哈哈。"
+        circle:"默认热点。"
       }
     }
   },
   created(){
-    this.circle=circle;
-    // this.user=user;
+    this.wenzhang.wenzhangId=sessionStorage.getItem('dynamicId');
+    console.log(this.wenzhang.wenzhangId)
       this.axios.post("/dynamic/findOneById",{
-      dynamicId:this.wenzhang.wenzhangId,
+      dynamicId:this.wenzhang.wenzhangId
     })
     .then(res => {
-      console.log(res.data.data);
+      console.log(res.data);
       //文章用户信息：
       res=res.data.data;
       this.yonghu.username=res.userName;
@@ -367,7 +327,7 @@ export default {
       this.wenzhang.date=res.dynamicLastTime;
       this.wenzhang.wenzhangId=res.dynamicId;
       //热门信息：
-      this.repin.zan=res.replies[0].replyLikecount;
+      this.repin.zan=res.replies[0].replyLikecount+10;
       this.repin.circle=res.replies[0].replyContent;
       
     });
@@ -434,33 +394,25 @@ export default {
       this.showAite=false;
     },
     fasong(){
+      console.log("发送信息"+this.wenzhang.wenzhangId,this.loginUser.userid)
       this.show=false;
       this.axios.post("/reply/addReply",{
-        dynamicId:1,
-        replyId:0,
-        userId:7,
-        replyContent:"erji"
-      })
-      .then(res=>{
-        console.log(res);
-        this.wen.content='';
-      })
-      .catch(err=>{
-        console.log(err);
-      })
-      this.axios.post("/reply/addReply",{
-        dynamicId:1,
+        dynamicId:this.wenzhang.wenzhangId,
         userId:this.loginUser.userid,
-        replyContent:this.zishu
+        replyContent:this.zishu,
       })
       .then(res=>{
         console.log(res);
         this.zishu='';
-        this.zonggong=0;
       })
       .catch(err=>{
         console.log(err);
       })
+    },
+    share(){
+      sessionStorage.setItem("forworddynamicId",this.wenzhang.wenzhangId);
+      sessionStorage.setItem("userId",this.loginUser.userid);
+      this.$router.push('/forword')
     }
   }
 }

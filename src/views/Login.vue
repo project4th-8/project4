@@ -5,11 +5,10 @@
     <h4>标记我的生活</h4>
 
     <div class="rob">
-       <component :is="com" />
+      <component :is="com" />
       <div class="iphone">
-
-          <span class="yz" v-if="shows" @click="com='telyz',text='密码登录',shows=!shows">{{text}} |</span>
-          <span class="yz" v-else  @click="com='telpass',text='验证码登录',shows=!shows">{{text}} |</span>
+        <span class="yz" v-if="shows" @click="com='telyz',text='密码登录',shows=!shows">{{text}} |</span>
+        <span class="yz" v-else @click="com='telpass',text='验证码登录',shows=!shows">{{text}} |</span>
 
         <router-link to="/Forgetpassword">
           <span>忘记密码 |</span>
@@ -24,8 +23,8 @@
 </template>
 <script>
 import { Field, Button } from "vant";
-import telpass from '../components/telpass'
-import telyz from '../components/telyz'
+import telpass from "../components/telpass";
+import telyz from "../components/telyz";
 export default {
   name: "Login",
   data: function() {
@@ -33,9 +32,9 @@ export default {
       message: "",
       username: "",
       password: "",
-      com:'telpass',
-      text:'验证码登录',
-      shows:true
+      com: "telpass",
+      text: "验证码登录",
+      shows: true
     };
   },
   components: {
@@ -53,6 +52,15 @@ export default {
       bgY -= 3.5;
       game.style.backgroundPositionY = bgY + "px";
     }, 50);
+  },
+  created() {
+    document.body.addEventListener(
+      "touchmove",
+      function(e) {
+        e.preventDefault();
+      },
+      { passive: false }
+    );
   }
 };
 </script>

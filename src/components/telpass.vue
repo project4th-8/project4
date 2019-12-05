@@ -11,6 +11,9 @@
     <div v-show="showtishi" class="tishi">
       请输入正确的手机号和密码
     </div>
+    <div v-show="showtishi2" class="tishi">
+      密码错误，请重新输入！
+    </div>
   </div>
 </template>
 <script>
@@ -22,7 +25,8 @@ export default {
     return {
       tel:'',
       password:'',
-      showtishi: false
+      showtishi: false,
+      showtishi2: false,
     }
   },
   components: {
@@ -55,6 +59,13 @@ export default {
               console.log("拿到数据：",res.data);
               sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
             });
+          } else {
+            console.log("密码错误！");
+            this.showtishi2 = true;
+            this.password = "";
+            setTimeout(() => {
+              this.showtishi2 = false;
+            },2500)
           }
         });
       } else {
@@ -96,7 +107,7 @@ h6 {
 .van-button {
   margin-top: 20px;
   text-align: center;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 .pass {
   border-bottom-right-radius: 4px;

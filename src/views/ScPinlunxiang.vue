@@ -8,8 +8,8 @@
     <div class="content">
       <div class="main">
         <div class="contentUser">
-          <div class="DauserImg" style="width:40px;height:40px;">
-            
+          <div class="DauserImg" style="width:40px;height:40px;background-color:#fff">
+            <img :src="moni.pinlun.img.imgUrl" alt="" style="width:100%;height:100%">
           </div>
           <div class="pinlun-name">
             <div>
@@ -25,15 +25,16 @@
       </div>
       <div class="line-1"></div>
       <p class="right"  @click="tankuang({
-        id:moni.pinlun.userInfo.userId,
+        id:moni.pinlun.replyId,
         title:moni.pinlun.replyContent,
-        name:moni.pinlun.userInfo.userName})">{{moni.pinlun.replyContent}}</p>
-      <a href="" class="right"><span>查看原文</span></a>
+        name:moni.pinlun.userInfo.userName
+        })">{{moni.pinlun.replyContent}}</p>
+      <a :href="'/sccomment?id='+moni.pinlun.replyId" class="right"><span>查看原文</span></a>
       <div class="van-hairline--bottom backcolor" v-for="(item,index) in moni.pinlunSon" :key="index" >
         <div class="main">
           <div class="contentUser">
-            <div class="DauserImg">
-              
+            <div class="DauserImg" style="background-color:#fff">
+              <img :src="item.img.imgUrl" alt="" style="width:100%;height:100%">
             </div>
             <div class="pinlun-name">
               <div class="pinlun-p">
@@ -48,10 +49,13 @@
           </div>
       </div>
       <div class="line-1"></div>
-        <p class="right" @click="tankuang({
-          id:item.userInfo.userId,
-          title:item.replyContent,
-          name:item.userInfo.userName})">
+        <p class="right" @click="tankuang(
+          {
+            id:item.replyId,
+        title:item.replyContent,
+        name:item.userInfo.userName
+          }
+        )">
           {{item.replyContent}}
         </p>
         <div class="line-2"></div>
@@ -60,18 +64,16 @@
     </div>
     
     <van-popup v-model="show" class="tankuang-1">
-      <p style="font-size:20px;">{{huifuid.name}}:{{huifuid.title}}</p>
+      <p style="font-size:20px;">{{moni.linshi.name}}:{{moni.linshi.title}}</p>
       <div class="line-1"></div>
       <div @click="tankuangSon" class="fullwidth">回复</div><div class="line-1"></div>
-      <div @click="toast('转发成功')" class="fullwidth">转发</div><div class="line-1"></div>
       <div @click="toast('复制成功')" class="fullwidth">复制</div><div class="line-1"></div>
       <div @click="toast('举报成功')" class="fullwidth">举报</div>
     </van-popup>
     <van-popup class="tankuang-2" v-model="showSon" position="bottom">
-      <textarea :placeholder="'回复 '+huifuid.id+huifuid.name+':'" v-model="wen.content"></textarea>
+      <textarea v-model="moni.zishu"></textarea>
       <div class="huifu">
         <p @click="showSon=false">@</p>
-        <p @click="showSon=false">表情</p>
         <p @click="fasong">发送</p>
         <p @click="showSon=false">取消</p>
       </div>
@@ -81,11 +83,7 @@
         <van-icon name="share" />
       </div>
       <div class="bottom-bar">
-        <van-icon @click="tankuangSon({
-          id:moni.pinlun.userInfo.userId,
-          title:moni.pinlun.replyContent,
-          name:moni.pinlun.userInfo.userName
-        })" name="chat-o" />
+        <van-icon @click="tankuangSon()" name="chat-o" />
       </div>
       <div class="bottom-bar" @click="user.good=!user.good">
         <van-icon name="good-job-o" :class="{on:user.good}" />
@@ -94,23 +92,6 @@
   </div>
 </template>
 <script>
-//评论页传入一个父级id值，拿到父级评论id值筛选出其下的评论，push
-// var pinlun={}
-
-  //   userid:1,
-  //   userName:"haha",
-  //   content:"施工时空逗号隔开但很快光电开关",
-  //   userImg:"../assets/logo.png",
-  //   date:"2014"
-  // },{
-  //   userid:2,
-  //   userName:"haha",
-  //   content:"施工时空逗号隔开但很快光电开关",
-  //   userImg:"../assets/logo.png",
-  //   date:"2014"
-  // },
-
-// var pinlunSon=[]
 import {Popup,Toast,Uploader,Icon} from 'vant'
 export default {
   name:"pinlunxiang",
@@ -124,68 +105,25 @@ export default {
     return{
       //模拟数据
       moni:{
-
-        userid:1,
+        wenzhang:1,
+        userid:3,
         pinlun:{
-          userName:'',
         },
-        pinlunSon:[]
-      },
-      pinlun:{
-        username:"默认名字",
-        userid:"默认id",
-        title:"查看一个威严的毫安",
-        children:[
-          {
-            date:"2018",
-            userid:3,
-            userimg:"../assets/logo.png",
-            username:"不少宫",
-            title:"查看为一个，威严，给个，贾湖骨笛，阿hi好怀念个联合国。"
-          },{
-            date:"2018",
-            userid:3,
-            userimg:"../assets/logo.png",
-            username:"年宫",
-            title:"查看为一个，威严，给个，贾湖骨笛，阿hi好怀念个联合国。"
-          },{
-            date:"2018",
-            userid:3,
-            userimg:"../assets/logo.png",
-            username:"不宫",
-            title:"查看为一个，威严，给个，贾湖骨笛，阿hi好怀念个联合国。"
-          },{
-            date:"2018",
-            userid:3,
-            userimg:"../assets/logo.png",
-            username:"宫",
-            title:"查看为一个，威严，给个，贾湖骨笛，阿hi好怀念个联合国。"
-          },{
-            date:"2018",
-            userid:3,
-            userimg:"../assets/logo.png",
-            username:"不少年宫",
-            title:"查看为一个，威严，给个，贾湖骨笛，阿hi好怀念个联合国。"
-          },
-          
-        ]
+        pinlunSon:[],
+        zishu:'',
+        linshi:{}
       },
       show:false,
       showSon:false,
       //记录回复谁
-      huifuid:{},
+      // huifuid:{},
       //记录数据
       huifuzongshu:15,
       user:{
         good:true
       },
       //临时存储文章相关
-      wen:{
-        wenid:1,//文章id
-        userid:1,//自己的id
-        yonghuid:2,//评论人的id
-        content:''
-      }
+
     }
   },
   created(){
@@ -211,7 +149,7 @@ export default {
       console.log(this.moni.pinlunSon);
       console.log(this.moni.pinlun);
       console.log(this.moni.pinlun.userInfo.userName);
-      console.log(this.moni.pinlunSon[0].userInfo.userId)
+
     })
   },
   methods:{
@@ -221,32 +159,33 @@ export default {
     },
     //把回复的目标回给huiid
     tankuang(a){
+      this.moni.linshi=a;
       this.show=true;
-      this.huifuid=a;
-      console.log(this.huifuid)
     },
-    tankuangSon(a){
+    tankuangSon(){
       this.showSon=true;
       this.show=false;
-      this.huifuid=a;
+
     },
     fasong(){
       this.showSon=false;
-      console.log(this.huifuid.id)
+      console.log(this.moni.linshi)
       this.axios.post("/reply/addReply",{
-        dynamicId:1,
-        replyId:37,
-        userId:3,
-        replyContent:"erji"
+        dynamicId:this.moni.wenzhang,
+        replyId:this.moni.pinlun.replyId,
+        userId:this.moni.userid,
+        replyContent:this.moni.zishu
       })
       .then(res=>{
         console.log(res);
-        this.wen.content='';
+        console.log("成功");
+        this.moni.zishu='';
+
       })
       .catch(err=>{
         console.log(err);
       })
-    }
+    },
   },
 }
 </script>

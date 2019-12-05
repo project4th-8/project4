@@ -23,9 +23,9 @@ const routes = [
         }]
       },
       {
-        path: 'text',
-        name: 'text',
-        component: () => import('../views/text.vue')
+        path: 'mtext',
+        name: 'mtext',
+        component: () => import('../views/Mtext.vue')
       }
     ]
 
@@ -61,6 +61,11 @@ const routes = [
     path: '/informations',
     name: 'informations',
     component: () => import('../views/Informations.vue')
+  },
+  {
+    path: '/mycollect',
+    name: 'mycollect',
+    component: () => import('../views/MyCollect.vue')
   },
   {
     path: '/myfans',
@@ -164,7 +169,6 @@ const routes = [
 },
  {
   path: '/message',
-  name:"message",
   component: () => import('../views/message.vue'),
   children: [
     {
@@ -173,8 +177,7 @@ const routes = [
       component:messageA,
     }, 
     {
-      path: '/messageB',
-      name: 'messageB',
+      path: 'messageB',
       component: () => import('../views/messageB.vue'),
       children: [
         {
@@ -183,17 +186,16 @@ const routes = [
           component:systemNotifications
         },
         {
-          path:'/forwardNotification',
+          path:'forwardNotification',
           name:"forwardNotification",
           component:() =>import('../views/forwardNotification.vue')
         },
         {
-          path:'/followNotification',
+          path:'followNotification',
           name:"followNotification",
           component:() =>import('../views/followNotification.vue')
         }
       ]
-
     }
   ] 
 }, 
@@ -240,8 +242,21 @@ const routes = [
   path:"/scpinlunxiang",
   name:"pinlunxiang",
   component:()=>import('../views/ScPinlunxiang.vue')
-
-}
+},  {
+  path:'/funddetails',
+  name:'funddetails',
+  component:()=>import('../views/Funddetails.vue')
+},
+{
+  path:'/chart',
+  name:'chart',
+  component:()=>import('../views/chart.vue')
+},
+{
+  path: '/isselectdynamic',
+  name: 'isselectdynamic',
+  component: () => import('../views/Isselectdynamic.vue')
+},
   
 ]
 
@@ -250,5 +265,25 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+// 注册全局守卫
+// 在访问路由之前进行拦截
+// router.beforeEach((to, from, next) => {
+//   // 获取 token，登陆的标识
+//   var token = sessionStorage.getItem("token");
+
+//   if(to.meta.auth) { // 判断是否需要权限
+//     if(token) { // 判断是否已有权限
+//       next();
+//     } else {
+//       next({ // 没有权限就导向登录页，并记录原本想访问的路由
+//         path: "/Login",
+//         query: {redirect: to.fullPath}
+//       })
+//     }
+//   } else {
+//     next(); // 想去哪就去哪
+//   }
+// })
 
 export default router

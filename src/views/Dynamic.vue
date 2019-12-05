@@ -16,8 +16,8 @@
         <span class="iconfont icon-v" :class="{on: userInfo.inMaster==1}"></span>
       </div>
       <span class="ll">
-        浏览：
-        <span>20</span>
+        今日浏览：
+        <span>{{account}}</span>
       </span>
     </div>
 
@@ -50,7 +50,7 @@
       <div class="bottom">
         <span>
           <div>
-            <i class="iconfont icon-fenxiang"></i> 10
+            <i class="iconfont icon-fenxiang"></i> 22
           </div>
         </span>
         <span>
@@ -66,12 +66,16 @@
         </span>
       </div>
     </div>
+
+    <div v-show="nobody" class="nobody">
+      <span>我没有发表过动态</span>
+    </div>
   </div>
 </template>
 
 <script>
 import { Icon, Uploader } from "vant";
-import { mapState } from "vuex"
+import { mapState,mapMutations } from "vuex"
 
 export default {
   name: "dynamic",
@@ -80,12 +84,18 @@ export default {
       isshow: false,
       isdz: true,
       mydynamic: [],
+      nobody: true
     };
   },
   computed: {
     ...mapState([
-      "userInfo"
+      "userInfo",
+      "account"
+    ]),
+    ...mapMutations([
+      "changeAccount"
     ])
+    
   },
   components: {
     [Icon.name]: Icon,
@@ -98,7 +108,14 @@ export default {
     }
   },
   created() {
+    this.changeAccount;
+    sessionStorage.setItem("oldroute",this.$route.fullPath);
     this.mydynamic = this.$store.state.userInfo.dynamics;
+    if(this.mydynamic.length == 0) {
+      this.nobody = true;
+    } else {
+      this.nobody = false;
+    }
     console.log("我的动态：",this.mydynamic);
   }
 };
@@ -120,7 +137,15 @@ export default {
   width: 100%;
   height: 100%;
   background: rgb(247, 247, 247);
-
+  .nobody {
+      position: absolute;
+      left: 128px;
+      top: 190px;
+      width: 200px;
+      height: 20px;
+      font-size: 15px;
+      color: rgb(158, 158, 158);
+    }
   .title {
     position: fixed;
     top: 0;

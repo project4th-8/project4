@@ -1,16 +1,10 @@
 <template>
   <div class="text">
     <div class="fix-top"></div>
-    <div
-      class="content"
-      v-for="(item,index) in cons"
-      :key="index"
-      :info="item"
-      v-show="item.mismaster"
-    >
+    <div class="content" v-for="(item,index) in cons" :key="index" :info="item">
       <div class="top">
         <div>
-          <div @click="isselectuser(item.userId)" class="links">
+          <div class="links" @click="isselectuser(item.userId)">
             <div class="Img">
               <img :src="item.userImg" alt />
             </div>
@@ -25,18 +19,17 @@
         </div>
         <div class="down-list">
           <van-icon name="arrow-down" class="down" @click="isshow=!isshow,state=index " />
-
           <div
             class="Report"
             v-show="index===state && isshow"
-            @click="showPopup(index),popsub.userId=item.isuserId,popsub.dynamicId=item.dynamicId"
+            @click="showPopup(index),popsub.isuserId=item.userId,popsub.dynamicId=item.dynamicId"
           >举报</div>
         </div>
       </div>
       <div class="center" @click="sccomment(index)">
         <h5>{{item.dynamicTitle}}</h5>
         <div class="main-content">
-          <p>{{item.dynamicContent}}</p>
+          <p class="dynamiccontent">{{item.dynamicContent}}</p>
           <div class="textimg">
             <p v-for="(item,index) in item.imgUrl" :key="index">
               <img :src="item" alt />
@@ -53,12 +46,12 @@
           <i class="iconfont icon-duanxin"></i>
           {{item.pingl}}
         </div>
-        <div @click="iszan(item.dynamicId,$event,index),mzan[index]=!mzan[index]" >
-          <i class="iconfont icon-zang  "  ></i>
-           {{item.dynamicLikeCount}}
+        <div @click="iszan(item.dynamicId,$event,index),mzan[index]=!mzan[index]">
+          <i class="iconfont icon-zang"></i>
+          {{item.dynamicLikeCount}}
         </div>
       </div>
-      <div class="moduls" v-show="showclient">
+      <div class="textmoduls" v-show="showclient">
         <component :is="com" @clickbox="boxshow" :showpopsub="popsub"></component>
       </div>
     </div>
@@ -66,9 +59,9 @@
 </template>
 <script>
 import { Icon } from "vant";
-import popupsub from "./popupsub.vue";
+import popupsub from "../components/popupsub";
 export default {
-  name: "Recommendtext",
+  name: "mtext",
   data: function() {
     return {
       isshow: false,
@@ -76,15 +69,13 @@ export default {
       showclient: false,
       cons: [],
       state: "",
-      myzan:true,
-      states:'',
-      mzan:[],
-      userid: "",
+      myzan: true,
+      states: "",
+      mzan: [],
       popsub: {
         isuserId: "",
         dynamicId: ""
-      },
-      alldynamicId: ""
+      }
     };
   },
   components: {
@@ -92,37 +83,23 @@ export default {
     popupsub
   },
   created() {
-    this.userid = sessionStorage.getItem("userid");
     this.axios.get("/dynamic/findAllDUR", {}).then(res => {
-   
-  
-
-      this.cons = res.data.data.data.map((item,index) => {
+      this.cons = res.data.data.data;
+      this.cons = this.cons.map((item, index) => {
         item.mzn = false;
-        this.mzan[index] = item.mzn
+        this.mzan[index] = item.mzn;
         if (item.isMaster == 0) {
           item.mismaster = true;
+        } else {
+          item.mismaster = false;
         }
-        var there = item.dynamicId;
-        var items = item;
-        this.axios
-          .post("/dynamic/isLike", {
-            dynamicId: there,
-            userId: 1
-          })
-          .then(res => {
-            if (res.data.data) {
-              items.miszan = true;
-            } else {
-              items.miszan = !items.miszan;
-            }
-          });
 
         return item;
       });
+      console.log("txt", this.cons);
+      console.log("xx", this.mzan);
+
     });
-
-
   },
   methods: {
     showPopup(/* index */) {
@@ -134,6 +111,7 @@ export default {
     },
     boxshow: function(res) {
       this.showclient = res;
+      console.log(this.showclient);
     },
     forword: function(isuserId, dynamicId) {
       sessionStorage.setItem("forworduserId", isuserId);
@@ -141,31 +119,23 @@ export default {
 
       this.$router.push("/forword");
     },
-    sccomment: function(index) {
-      sessionStorage.setItem("dynamicId", index);
-      this.$router.push("/sccomment");
-    },
     isselectuser: function(isselectuser) {
       sessionStorage.setItem("isselectuserid", isselectuser);
       this.$router.push("/isselectdynamic");
     },
-    iszan: function(dynamicId,e,index) {
-    console.log(e.currentTarget.innerText)
-    
-    if(!this.mzan[index]) {
-        e.currentTarget.innerText = Number(e.currentTarget.innerText) + 1
-      e.currentTarget.innerHTML = `<i class="iconfont icon-zang" style="color:orange"></i> ${ e.currentTarget.innerText}`
-  
-    } else {
-       e.currentTarget.innerText = Number(e.currentTarget.innerText) - 1
-      e.currentTarget.innerHTML = `<i class="iconfont icon-zang" ></i> ${ e.currentTarget.innerText}`
-
-    }
-
-      this.axios.post("/dynamic/addLike", {
-        dynamicId: dynamicId,
-        userId: this.userid
-      });
+    sccomment: function(index) {
+      sessionStorage.setItem("dynamicId", index);
+      this.$router.push("/sccomment");
+    },
+    iszan: function(dynamicId, e, index) {
+      if (!this.mzan[index]) {
+        e.currentTarget.innerText = Number(e.currentTarget.innerText) + 1;
+        e.currentTarget.innerHTML = `<i class="iconfont icon-zang" style="color:orange"></i> ${e.currentTarget.innerText}`;
+      } else {
+        e.currentTarget.innerText = Number(e.currentTarget.innerText) - 1;
+        e.currentTarget.innerHTML = `<i class="iconfont icon-zang" ></i> ${e.currentTarget.innerText}`;
+      }
+   
     }
   }
 };
@@ -174,15 +144,10 @@ export default {
 .content {
   font-size: 16px;
 }
-.iconfont {
-    font-size: 16px;
-    color: rgb(173, 173, 173);
-  }
 .icon-v {
   font-size: 20px;
   color: #ddd;
 }
-  
 .master {
   color: orange;
 }
@@ -194,15 +159,14 @@ export default {
   word-wrap: break-word;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+  .dynamiccontent {
+    overflow: hidden;
+  }
 }
-.textimg {
-  display: flex;
-  justify-content: start;
-}
-.moduls {
+.textmoduls {
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.07);
+  background: rgba(0, 0, 0, 0.01);
   position: fixed;
   z-index: 1000;
   top: 0;
@@ -213,10 +177,15 @@ export default {
 }
 .text {
   overflow: auto;
+  margin-top: 90px;
 }
 .time {
   font-size: 12px;
   color: #ddd;
+}
+.textimg {
+  display: flex;
+  justify-content: start;
 }
 .top {
   display: flex;
@@ -261,15 +230,11 @@ export default {
     width: auto;
     height: 60px;
   }
-
-
 }
-
 .bottom {
   display: flex;
   justify-content: space-around;
   border-bottom: 6px solid #ddd;
-  
   div {
     width: 70px;
     height: 40px;
@@ -278,10 +243,9 @@ export default {
     padding: 0 20px;
     font-size: 12px;
   }
-  .mzans {
-    color: orange;
+  .iconfont {
+    font-size: 16px;
+    color: rgb(173, 173, 173);
   }
-
 }
-  
 </style>
