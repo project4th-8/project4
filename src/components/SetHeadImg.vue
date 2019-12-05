@@ -27,13 +27,11 @@ export default {
       this.$emit('changeCom','');
     },
     afterRead(file) {
-
       const form = new FormData();
       form.append("header",file.file);
-      console.log("文件header：",form.get("header"))
 
       this.axios.post("/user/uploadImg",form,{
-        header: {
+        headers: {
           "Content-Type": "multipart/form-data"
         }
       })
@@ -44,7 +42,7 @@ export default {
           this.axios.post("/user/findAllUserInfo")
           .then(res => {
             if(res.data.data.user.userSex == 1) {
-              res.data.data.userSex = "男";
+              res.data.data.user.userSex = "男";
             } else {
               res.data.data.user.userSex = "女";
             }

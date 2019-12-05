@@ -67,19 +67,22 @@ export default new Vuex.Store({
   state: {
     cons : [],
     fundlists: [],
-    isLogin: true,
-    userInfo:{}
+    userInfo:{},
+    account: 0
   },
   getters:{
 
   },
   mutations: {
+    changeAccount(state) {
+      state.account++;
+    },
     getCons(state,n) {
       state.cons = n
     },
     getfundlists(state,n) {
       state.fundlists = n
-    }
+    },
   },
   actions: {
     getConsSync({commit}) {
@@ -91,7 +94,7 @@ export default new Vuex.Store({
       setTimeout(function() {
         commit('getfundlists',fundlists,1000)
       });
-    }
+    },
   },
   modules: {
   }

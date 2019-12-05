@@ -31,8 +31,12 @@ export default {
       if(con.length < 17) {
         this.num = this.myname.length;
       }
-      if(!pat.test(con)) {
-        document.getElementsByClassName("pat")[0].style.display = "inline";
+      if(con != "") {
+        if(!pat.test(con)) {
+          document.getElementsByClassName("pat")[0].style.display = "inline";
+        } else {
+          document.getElementsByClassName("pat")[0].style.display = "none";
+        }
       } else {
         document.getElementsByClassName("pat")[0].style.display = "none";
       }
@@ -47,7 +51,7 @@ export default {
           this.axios.post("/user/findAllUserInfo")
           .then(res => {
             if(res.data.data.user.userSex == 1) {
-              res.data.data.userSex = "男";
+              res.data.data.user.userSex = "男";
             } else {
               res.data.data.user.userSex = "女";
             }

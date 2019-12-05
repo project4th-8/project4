@@ -64,6 +64,11 @@ const routes = [
     component: () => import('../views/Informations.vue')
   },
   {
+    path: '/mycollect',
+    name: 'mycollect',
+    component: () => import('../views/MyCollect.vue')
+  },
+  {
     path: '/myfans',
     name: 'myfans',
     component: () => import('../views/Myfans.vue')
@@ -157,11 +162,6 @@ const routes = [
     path: '/Yanzhengpassword',
     name: 'Yanzhengpassword',
     component: () => import('../views/Yanzhengpassword.vue')
-  },
-  {
-    path: '/Others',
-    name: 'Others',
-    component: () => import('../views/Others.vue')
   },
   {
     path: '/forword',
@@ -289,5 +289,25 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+// 注册全局守卫
+// 在访问路由之前进行拦截
+// router.beforeEach((to, from, next) => {
+//   // 获取 token，登陆的标识
+//   var token = sessionStorage.getItem("token");
+
+//   if(to.meta.auth) { // 判断是否需要权限
+//     if(token) { // 判断是否已有权限
+//       next();
+//     } else {
+//       next({ // 没有权限就导向登录页，并记录原本想访问的路由
+//         path: "/Login",
+//         query: {redirect: to.fullPath}
+//       })
+//     }
+//   } else {
+//     next(); // 想去哪就去哪
+//   }
+// })
 
 export default router
