@@ -54,7 +54,7 @@
     <van-button type="default" color="#07c160" @click="next">完成</van-button>
 
     <!-- 提示框 -->
-    <div v-show="showtishi" class="tishi">必填信息不能为空!</div>
+    <div v-show="showtishi" class="tishi" id="tishi">必填信息不能为空!</div>
   </div>
 </template>
 <script>
@@ -153,9 +153,11 @@ export default {
         .then(res => {
    
           if (res.data.code == "200") {
+            document.getElementById("tishi").innerHTML = "注册成功，请返回登陆！"
             this.showtishi = true
             setTimeout(() => {
               this.showtishi = false;
+              document.getElementById("tishi").innerHTML = "必填信息不能为空!！"
               this.$router.replace("/Login");
               sessionStorage.removeItem("tel");
             },1500)
