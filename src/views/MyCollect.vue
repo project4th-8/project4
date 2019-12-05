@@ -25,6 +25,10 @@
 
     <!-- 提示 -->
     <p v-show="showtishi==1" class="tishi">删除成功！</p>
+
+    <div v-show="!nobody" class="nobody">
+      <span>我没有发表过收藏</span>
+    </div>
   </div>
 </template>
 
@@ -34,7 +38,8 @@ export default {
   data: function() {
     return {
       mycollect: [],
-      showtishi: 0
+      showtishi: 0,
+      nobody: false
     };
   },
   created() {
@@ -43,8 +48,14 @@ export default {
         userId: sessionStorage.getItem("userId")
       })
       .then(res => {
-        this.mycollect = res.data.data;
-        console.log("我的收藏：", this.mycollect);
+        if(res.data.code == "200") {
+          if(res.data.data.length != 0) {
+            this.mycollect = res.data.data;
+            this.nobody = true;
+          } else {
+            this.nobody = false;
+          }
+        }
       });
   },
   methods: {
@@ -97,6 +108,15 @@ export default {
       background: rgba(0, 0, 0, 0.1);
       color: rgb(0, 0, 0);
       padding: 2px 10px;
+    }
+    .nobody {
+      position: absolute;
+      left: 128px;
+      top: 70px;
+      width: 200px;
+      height: 20px;
+      font-size: 15px;
+      color: rgb(158, 158, 158);
     }
   .title {
     position: fixed;

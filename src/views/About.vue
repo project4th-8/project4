@@ -35,7 +35,7 @@
     <div class="functionlist">
       <div>
         <span class="iconfont icon-sixin"></span>
-        <span><router-link to="/">私信</router-link></span>
+        <span><router-link to="/message">私信</router-link></span>
       </div>
       <div>
         <span class="iconfont icon-shoucang"></span>
@@ -43,13 +43,13 @@
       </div>
       <div>
         <span class="iconfont icon-caogaoxiang"></span>
-        <span><router-link to="/">草稿箱</router-link></span>
+        <span><router-link to="/informations">个人主页</router-link></span>
       </div>
     </div>
     <div class="functionlist">
       <div>
         <span class="iconfont icon-xiaoxi"></span>
-        <span><router-link to="/">消息通知</router-link></span>
+        <span><router-link to="/message/messageB">消息通知</router-link></span>
       </div>
       <div>
         <span class="iconfont icon-dongtaitixing"></span>
@@ -63,7 +63,7 @@
     <div class="functionlist">
       <div>
         <span class="iconfont icon-jijin"></span>
-        <span><router-link to="/">自选基金</router-link></span>
+        <span><router-link to="/fund">基金</router-link></span>
       </div>
       <div>
         <span class="iconfont icon-zhanghao"></span>
