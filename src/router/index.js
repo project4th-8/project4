@@ -5,7 +5,8 @@ import recommend from '../views/recommend.vue'
 import messageA from '../views/messageA.vue'
 import systemNotifications from '../views/systemNotifications.vue'
 import ScComment from '../views/ScComment.vue'
- 
+// import searchHis from '../views/searchHis.vue'
+// import searchAll from '../views/searchAll.vue' 
 Vue.use(VueRouter)
 
 const routes = [
@@ -23,9 +24,9 @@ const routes = [
         }]
       },
       {
-        path: 'text',
-        name: 'text',
-        component: () => import('../views/text.vue')
+        path: 'mtext',
+        name: 'mtext',
+        component: () => import('../views/Mtext.vue')
       }
     ]
 
@@ -88,6 +89,31 @@ const routes = [
     component: () => import('../views/Dynamic.vue')
   },
   {
+    path: '/chat',
+    name: 'chat',
+    component: () => import('../views/chat.vue')
+  },
+  {
+    path: '/msgsearch',
+    name: 'msgsearch',
+    component: () => import('../views/msgsearch.vue')
+  },
+  {
+    path: '/replay',
+    name: 'replay',
+    component: () => import('../views/replay.vue')
+  },
+  {
+    path: '/replayt',
+    name: 'replayt',
+    component: () => import('../views/replayt.vue')
+  },
+  {
+    path: '/fabulous',
+    name: 'fabulous',
+    component: () => import('../views/fabulous.vue')
+  },
+  {
     path: '/comment',
     name: 'comment',
     component: () => import('../views/Comment.vue')
@@ -97,11 +123,11 @@ const routes = [
     name: 'account',
     component: () => import('../views/Account.vue')
   },
-  {
-    path: '/safety',
-    name: 'safety',
-    component: () => import('../views/Safety.vue')
-  },
+  // {
+  //   path: '/safety',
+  //   name: 'safety',
+  //   component: () => import('../views/Safety.vue')
+  // },
   {
     path: '/Forgetnext',
     name: 'Forgetnext',
@@ -153,7 +179,7 @@ const routes = [
   component: () => import('../views/msgsearch.vue')
 },
 {
-  path: '/replay',
+  path: '/replay:id',
   name: 'replay',
   component: () => import('../views/replay.vue')
 },
@@ -169,7 +195,6 @@ const routes = [
 },
  {
   path: '/message',
-  name:"message",
   component: () => import('../views/message.vue'),
   children: [
     {
@@ -178,8 +203,7 @@ const routes = [
       component:messageA,
     }, 
     {
-      path: '/messageB',
-      name: 'messageB',
+      path: 'messageB',
       component: () => import('../views/messageB.vue'),
       children: [
         {
@@ -188,17 +212,16 @@ const routes = [
           component:systemNotifications
         },
         {
-          path:'/forwardNotification',
+          path:'forwardNotification',
           name:"forwardNotification",
           component:() =>import('../views/forwardNotification.vue')
         },
         {
-          path:'/followNotification',
+          path:'followNotification',
           name:"followNotification",
           component:() =>import('../views/followNotification.vue')
         }
       ]
-
     }
   ] 
 }, 
@@ -241,7 +264,25 @@ const routes = [
   path:"/scgeren",
   name:"geren",
   component:()=>import('../views/Scgeren.vue')
-}
+},{
+  path:"/scpinlunxiang",
+  name:"pinlunxiang",
+  component:()=>import('../views/ScPinlunxiang.vue')
+},  {
+  path:'/funddetails',
+  name:'funddetails',
+  component:()=>import('../views/Funddetails.vue')
+},
+{
+  path:'/chart',
+  name:'chart',
+  component:()=>import('../views/chart.vue')
+},
+{
+  path: '/isselectdynamic',
+  name: 'isselectdynamic',
+  component: () => import('../views/Isselectdynamic.vue')
+},
   
 ]
 

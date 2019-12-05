@@ -15,28 +15,28 @@ export default {
   name:"replay",
   methods:{
     esct(){
-      this.$router.replace("/commentstwo")
+      this.$router.push("/commentstwo")
     },
      esc(){
-      this.$router.replace("/comments")
+      this.$router.push("/comments")
     }
   }
 }
 </script>
 <style lang="less" scoped>
 .replay{
-  font-size: 8px;
+  font-size: 16px;
     text-align: center;
   .top{
     width: 90%;
     margin: 0 auto;
-    height: 30px;
+    height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     button{
-      width: 40px;
-      height: 20px;
+      width: 60px;
+      height: 30px;
       border-radius: 40%;
       border: none;
     }
@@ -47,7 +47,7 @@ export default {
       padding: 10px 0;
           border: none;
       outline: none;
-      font-size: 8px;
+      font-size: 16px;
     }
 }
 </style>

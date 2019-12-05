@@ -1,9 +1,9 @@
 <template>
   <div class="messageB">    
     <div class="cai">
-      <div><router-link to="/messageB">系统通知</router-link></div>
-     <div><router-link to="/forwardNotification">转发通知</router-link></div>
-     <div><router-link to="/followNotification">关注提醒</router-link></div>
+      <div><router-link to="/message/messageB">系统通知</router-link></div>
+     <div><router-link to="/message/messageB/forwardNotification">转发通知</router-link></div>
+     <div><router-link to="/message/messageB/followNotification">关注提醒</router-link></div>
     </div>
      <div>
       <router-view/>
@@ -14,18 +14,25 @@
 
 export default {
    name:"messageB",
+   data(){
+     return{
+
+     }
+   },
+   created(){
+   }
 }
 </script>
 <style lang="less" scoped>
 .messageB{
   .cai{
     width: 100vw;
-    height: 30px;
+    height: 40px;
     display: flex;
-    font-size: 8px;
+    font-size: 14px;
     justify-content: space-between;
     div{
-      height: 30px;
+      height: 40px;
       width: 33vw;
       display: flex;
       justify-content: center;
@@ -40,6 +47,7 @@ export default {
         &.router-link-exact-active {
           color: black;
           font-weight: 500;
+          font-size: 16px;
           box-shadow: 0 5px 3px rgb(226, 215, 215);
         }
       

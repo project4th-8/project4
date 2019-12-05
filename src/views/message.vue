@@ -2,7 +2,7 @@
   <div class="message">
     <div class="top">
       <router-link class="tt" to="/message">消息</router-link>  |
-      <router-link class="tt" to="/messageB">公告</router-link>
+      <router-link class="tt" to="/message/messageB">公告</router-link>
       
       
     </div>
@@ -16,7 +16,29 @@
 
 export default {
 name:"message",
+  data(){
+    return{
 
+    }
+  },
+  created(){
+    //   this.axios
+    //  .post('/findAllAdvice')
+    //  .then(res=>{
+    //    console.log(res.data.data)
+    //  })
+    //  .catch(err=>{
+    //    console.log(err)
+    //  })
+    //   this.axios
+    //  .post('/user/UserAll')
+    //  .then(res=>{
+    //    console.log(res.data.data)
+    //  })
+    //  .catch(err=>{
+    //    console.log(err)
+    //  })
+  }
 }
 </script>
 
@@ -24,9 +46,9 @@ name:"message",
 .message{
   
   .top{
-    height: 30px;
-    font-size: 14px;
-    line-height: 30px;
+    height: 40px;
+    font-size: 18px;
+    line-height: 40px;
     text-align: center;
     border-bottom:1px solid rgb(150, 148, 148);
     .tt{
