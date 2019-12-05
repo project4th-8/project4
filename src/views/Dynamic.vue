@@ -109,6 +109,7 @@ export default {
   },
   created() {
     this.changeAccount;
+    sessionStorage.setItem("quitpath",this.$route.fullPath);
     sessionStorage.setItem("oldroute",this.$route.fullPath);
     this.mydynamic = this.$store.state.userInfo.dynamics;
     if(this.mydynamic.length == 0) {

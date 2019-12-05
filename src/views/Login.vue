@@ -52,16 +52,8 @@ export default {
       bgY -= 3.5;
       game.style.backgroundPositionY = bgY + "px";
     }, 50);
-  },
-  created() {
-    document.body.addEventListener(
-      "touchmove",
-      function(e) {
-        e.preventDefault();
-      },
-      { passive: false }
-    );
   }
+ 
 };
 </script>
 <style lang="less" scoped>

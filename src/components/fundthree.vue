@@ -24,7 +24,7 @@
           <p class="title" @click="funddetails(index)">{{item.fundName}}</p>
         </div>
         <div @click="funddetails(index)">{{item.fundCount}}</div>
-        <div @click="funddetails(index)">{{item.fundEarnings}}</div>
+        <div @click="funddetails(index)" class="earn">{{item.fundEarnings}}0%</div>
         <div
           class="starall"
           :class="{star:state===index&&isshow}"
@@ -136,5 +136,8 @@ export default {
     font-size: 16px;
     vertical-align: middle;
   }
+}
+.earn {
+  color: red;
 }
 </style>

@@ -41,6 +41,7 @@ export default {
     }
   },
   created() {
+    sessionStorage.setItem("quitpath",this.$route.fullPath);
     sessionStorage.setItem("oldroute",this.$route.fullPath);
     this.axios.post("/user/findAllReplyById",{
       userId: sessionStorage.getItem("userId")

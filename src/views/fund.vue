@@ -10,7 +10,7 @@
           placeholder="请输入搜索关键词"
           show-action
           shape="round"
-          @search="onSearch" 
+          @search="onSearch"
           v-if="shows"
           class="shows"
         >
@@ -34,14 +34,20 @@
           <a href="javascript:;" @click="com='fundfour',issure=5" :class="{showsub:issure===5}">FOF型</a>
         </li>
         <li>
-          <a href="javascript:;" @click="com='fundfive',issure=6" :class="{showsub:issure===6}">QDII型</a>
+          <a
+            href="javascript:;"
+            @click="com='fundfive',issure=6"
+            :class="{showsub:issure===6}"
+          >QDII型</a>
         </li>
         <li>
           <a href="javascript:;" @click="com='fundsix',issure=7" :class="{showsub:issure===7}">股票型</a>
         </li>
       </ul>
     </div>
-    <component :is="com" :findfund="inputtxt" />
+    <keep-alive>
+      <component :is="com" :findfund="inputtxt" />
+    </keep-alive>
   </div>
 </template>
 <script>
@@ -61,8 +67,8 @@ export default {
     return {
       com: "allfund",
       inputtxt: "",
-      shows:false,
-      issure:1,
+      shows: false,
+      issure: 1
     };
   },
   components: {
@@ -82,15 +88,15 @@ export default {
       this.$router.replace("/");
     },
     searchbtn: function() {
-      this.shows =!this.shows;
+      this.shows = !this.shows;
     },
     onSearch: function() {
-      this.findfund = this.inputtxt
-      this.com = "allfund"
-      this.issure = 1
+      this.findfund = this.inputtxt;
+      this.com = "allfund";
+      this.issure = 1;
+
     }
   }
-  
 };
 </script>
 <style lang="less" scoped>
@@ -106,13 +112,13 @@ export default {
   margin-bottom: 4px;
 }
 .name-list {
-  border-top:6px solid rgb(204, 204, 204);
+  border-top: 6px solid rgb(204, 204, 204);
   display: flex;
   justify-content: space-around;
   font-size: 12px;
   padding-top: 5px;
-  padding-bottom:8px;
-  border-bottom: 2px solid #ddd; 
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ddd;
   .van-icon {
     font-size: 16px;
     vertical-align: middle;
@@ -128,32 +134,23 @@ export default {
   }
 }
 .shows {
-  transition: all .5s;
+  transition: all 0.5s;
 }
 .van-nav-bar {
-padding-bottom: 10px;
-line-height: 25px;
+  padding-bottom: 10px;
+  line-height: 25px;
 }
-.van-nav-bar__left,.van-icon-arrow-left,.van-icon-search {
+.van-nav-bar__left,
+.van-icon-arrow-left,
+.van-icon-search {
   font-size: 22px;
 }
 .van-nav-bar__left {
   font-size: 16px;
-
 }
-.van-nav-bar__title{
+.van-nav-bar__title {
   font-size: 20px;
   line-height: 60px;
-
-} 
-/* .top {
-  display: flex;
-  justify-content: space-around;
 }
-.searchtxt {
-  height: 30px;
-  width: 60%;
-  border-radius: 10px;
-  font-size: 14px;
-} */
+
 </style>

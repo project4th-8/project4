@@ -43,6 +43,8 @@ export default {
     };
   },
   created() {
+    sessionStorage.setItem("quitpath",this.$route.fullPath);
+
     this.axios
       .post("/user/dynamicList", {
         userId: sessionStorage.getItem("userId")

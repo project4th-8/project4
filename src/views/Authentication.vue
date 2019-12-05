@@ -120,13 +120,7 @@ export default {
   created() {
     sessionStorage.setItem("oldroute",this.$route.fullPath);
 
-    document.body.addEventListener(
-      "touchmove",
-      function(e) {
-        e.preventDefault();
-      },
-      { passive: false }
-    );
+    
   }
 };
 </script>

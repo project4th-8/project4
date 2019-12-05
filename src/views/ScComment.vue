@@ -1,7 +1,7 @@
 <template>
   <div id="ScComment">
     <div class="toubu">
-      <a href="javascript:history.go(-1)">
+      <a href="javascript:;" @click="quit">
         <van-icon name="arrow-left" />
       </a>
       <span>{{yonghu.username}}的文章</span>
@@ -342,7 +342,11 @@ export default {
     //获取是否关注该用户
   },
   methods:{
-
+    quit() {
+      var route = sessionStorage.getItem("quitpathTwo") ? sessionStorage.getItem("quitpathTwo") : sessionStorage.getItem("quitpath")
+      this.$router.replace(route);
+      sessionStorage.removeItem("quitpathTwo");
+    },
     showPopup(){
       this.show=true;
     },

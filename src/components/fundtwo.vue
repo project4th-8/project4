@@ -24,7 +24,7 @@
           <p class="title" @click="funddetails(index)">{{item.fundName}}</p>
         </div>
         <div @click="funddetails(index)">{{item.fundCount}}</div>
-        <div @click="funddetails(index)">{{item.fundEarnings}}</div>
+        <div @click="funddetails(index)" class="earn">{{item.fundEarnings}}0%</div>
         <div
           class="starall"
           :class="{star:state===index&&isshow}"
@@ -123,6 +123,9 @@ export default {
   .star {
     color: #333;
   }
+}
+.earn {
+  color: red;
 }
 .name-list {
   border-top: 6px solid rgb(204, 204, 204);

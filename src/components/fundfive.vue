@@ -24,7 +24,7 @@
           <p class="title" >{{item.fundName}}</p>
         </div>
         <div @click="funddetails(index)">{{item.fundCount}}</div>
-        <div @click="funddetails(index)">{{item.fundEarnings}}</div>
+        <div @click="funddetails(index)" class="earn">{{item.fundEarnings}}0%</div>
         <div
           class="starall"
           :class="{star:state===index&&isshow}"
@@ -83,6 +83,9 @@ export default {
 }
 .con-top {
   padding-top: 10px;
+}
+.earn {
+  color: red;
 }
 .bottom-content {
    border-bottom: 1px solid #ddd;

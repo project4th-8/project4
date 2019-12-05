@@ -27,7 +27,7 @@
     <div class="dt" v-for="(item,index) in lists" :key="index">
       <div class="top">
         <div>
-          <a href class="links">
+          <span class="links">
           <div class="Img"><img :src="item.user.imgs[0].imgUrl" alt=""></div>
             <div class="yhm">
               <p>
@@ -36,7 +36,7 @@
               </p>
               <p class="time">17:20</p>
             </div>
-          </a>
+          </span>
         </div>
         <div class="down-list">
           <van-icon name="arrow-down" class="down" @click="isshow=!isshow,state=index " />
@@ -47,11 +47,11 @@
           >举报</div>
         </div>
       </div>
-      <div class="center">
+      <div class="center" @click="textdetails(index)">
         <h5>{{item.dynamicTitle}}</h5>
         <div class="main-content">{{item.dynamicContent}}</div>
       </div>
-      <div class="bottom">
+      <div class="bottom" @click="textdetails(index)">
         <a href="javascript:;">
           <div>
             <i class="iconfont icon-fenxiang"></i>
@@ -104,6 +104,8 @@ export default {
   },
   created() {
     this.changeAccount;
+      sessionStorage.setItem("quitpathTwo", this.$route.fullPath);
+
     this.userID = sessionStorage.getItem("isselectuserid");
     this.axios
       .post("/user/findOneById", {
@@ -133,7 +135,7 @@ export default {
     ])
   },
   methods: {
-    showPopup(/* index */) {
+    showPopup() {
       this.showclient = !this.showclient;
          let that = this
       setTimeout(function() {
@@ -144,12 +146,15 @@ export default {
       this.showclient = res;
     },
     mreturn:function() {
-      this.$router.push('/')
       sessionStorage.removeItem('isselectuserid')
+      this.$router.push(sessionStorage.getItem('quitpath'));
+      sessionStorage.removeItem("quitpath");
+    },
+    textdetails:function(index) {
+      sessionStorage.setItem("dynamicId", this.lists[index].dynamicId);
+      this.$router.push("/sccomment");
     },
     attention:function() {
-  
-     
       if(document.getElementById('attention').innerText == "取关") {
         this.axios.post("/egnolSomePeople",{
           userId: sessionStorage.getItem("isselectuserid")
