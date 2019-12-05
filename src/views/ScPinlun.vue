@@ -2,9 +2,11 @@
 <!--  -->
   <div id="scpinlun">
     <div class="toubu">
-      <van-icon name="arrow-left"/>
+      <a href="javascript:history.go(-1)"><van-icon name="arrow-left"/></a>
       <span>评论页</span>
-      <van-icon name="wap-home-o" />
+            <router-link to="/">
+        <van-icon name="wap-home-o" />
+      </router-link>
     </div>
         <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
           <div v-for="(item,index) in moni.pinlun" :key="index" :title="item.title">
@@ -65,23 +67,7 @@
   </div>
 </template>
 <script>
-var pinlun=[
-  // {
-  //   userid:1,
-  //   pinlunid:5,
-  //   userName:"haha",
-  //   content:"施工时空逗号隔开但很快光电开关",
-  //   userImg:"../assets/logo.png",
-  //   date:"2014"
-  // },{
-  //   userid:2,
-  //   pinglunid:9,
-  //   userName:"haha",
-  //   content:"施工时空逗号隔开但很快光电开关",
-  //   userImg:"../assets/logo.png",
-  //   date:"2014"
-  // },
-]
+var pinlun=[]
 //通过dynamicId parentId=0获取文章评论信息（空数组push引入）
 import {List,Divider,Popup,Icon,Button,Tab, Tabs } from 'vant'
 export default {
@@ -167,11 +153,47 @@ export default {
         })
         .then(res=>{
           console.log(res);
-          
+          pinlun=[];
+              this.axios.post("/dynamic/findOneById",{
+      dynamicId:1
+    })
+    .then(res=>{
+      console.log(res.data);
+      res=res.data.data;
+      for(let i=0;i<res.replies.length;i++){
+        if(res.replies[i].parentId==0){
+          pinlun.push(res.replies[i]);      
+        }
+      }
+      console.log(this.moni.pinlun);
+    })
+    .catch(err=>{
+      console.log(err)
+    })
         })
         .catch(err=>{
           console.log(err);
         })
+        
+this.axios.post("/dynamic/findOneById",{
+      dynamicId:1
+    })
+    .then(res=>{
+      pinlun=[];
+      console.log(res.data);
+      res=res.data.data;
+      for(let i=0;i<res.replies.length;i++){
+        if(res.replies[i].parentId==0){
+          pinlun.push(res.replies[i]);      
+        }
+      }
+      console.log(this.moni.pinlun);
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+
+
     },
     del(a){
       console.log(a);
