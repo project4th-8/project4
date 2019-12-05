@@ -14,7 +14,7 @@ const http = axios.create({
 
 // 请求拦截，统一在请求时带上 token
 http.interceptors.request.use(function (config) {
-  if (config.method === "post" && config.url != '/user/uploadImg') { // 这一步主要取决于后端是否可以接受 json
+  if (config.method === "post" && config.url != '/user/uploadImg' && config.url != '/user/userRegisSetInfo') { // 这一步主要取决于后端是否可以接受 json
     config.headers = {
       'Content-Type':'application/x-www-form-urlencoded'
     }

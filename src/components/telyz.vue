@@ -42,22 +42,30 @@ export default {
   },
   methods: {
     fsyzm() {
-      this.isfs = false;
-      setInterval(() => {
-        if (this.seconds == 0) {
-          this.isfs = true;
-          this.seconds = 60;
-        } else {
-          this.seconds--;
-        }
-      }, 1000);
-      this.axios
-        .post("/user/sendCode", {
-          userPhone: this.tel
-        })
-        .then(res => {
-          console.log(res.data);
-        });
+      if(this.tel != "") {
+        this.isfs = false;
+        var timer = setInterval(() => {
+          if (this.seconds > 1) {
+            this.seconds--;
+          } else {
+            clearInterval(timer);
+            this.isfs = true;
+            this.seconds = 60;
+          }
+        }, 1000);
+        this.axios
+          .post("/user/sendCode", {
+            userPhone: this.tel
+          })
+          .then(res => {
+            console.log(res.data);
+          });
+      } else {
+        this.showtishi = true;
+        setTimeout(() => {
+          this.showtishi = false;
+        }, 2500);
+      }
     },
     login() {
       if (this.yzm != "" && this.tel != "") {
@@ -117,6 +125,7 @@ export default {
   font-size: 14px;
   padding: 10px;
   border-radius: 7px;
+  transition: all .5s;
 }
 .yzm2 {
   background: #ddd;
@@ -144,6 +153,6 @@ h6 {
 .login {
   margin-top: 20px;
   text-align: center;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 </style>

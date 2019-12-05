@@ -11,7 +11,7 @@
       <div class="mycomment" v-for="(item,index) in mycommit" :key="index">
         <p class="comCon">{{item.replyContent}}</p>
         <!-- 评论文章 -->
-        <div>
+        <div @click="todynamic(item.dynamic.dynamicId)">
           <p class="contitle">{{item.dynamic.dynamicTitle}}</p>
           <p class="conjj">{{item.dynamic.dynamicContent.substr(0,21) + "...."}}</p>
         </div>
@@ -23,6 +23,10 @@
 
     <!-- 提示 -->
     <p v-show="showtishi==1" class="tishi">删除成功！</p>
+
+    <div v-show="!nobody" class="nobody">
+      <span>我没有发表过评论</span>
+    </div>
   </div>
 </template>
 
@@ -32,17 +36,26 @@ export default {
   data: function() {
     return {
       mycommit: [],
-      showtishi: 0
+      showtishi: 0,
+      nobody: true
     }
   },
   created() {
+    sessionStorage.setItem("oldroute",this.$route.fullPath);
     this.axios.post("/user/findAllReplyById",{
       userId: sessionStorage.getItem("userId")
     })
     .then(res => {
-      this.mycommit = res.data.data;
-      console.log("我的评论：",this.mycommit);
+      if(res.data.code == "200") {
+        if(res.data.data.length != 0) {
+          this.mycommit = res.data.data;
+          this.nobody = true;
+        } else {
+          this.nobody = false;
+        }
+      }
     })
+
   },
   methods: {
     delcomment(id) {
@@ -57,13 +70,24 @@ export default {
           userId: sessionStorage.getItem("userId")
         })
         .then(res => {
-          this.mycommit = res.data.data;
-          console.log("我的评论：",this.mycommit);
+          if(res.data.code == "200") {
+            if(res.data.data.length != 0) {
+              this.mycommit = res.data.data;
+              this.nobody = true;
+            } else {
+              this.nobody = false;
+            }
+          }
         })
         setTimeout(() => {
           this.showtishi = 0;
         },1000)
       })
+    },
+    todynamic(id) {
+      console.log("动态id为：",id);
+      sessionStorage.setItem("dynamicId",id);
+      this.$router.replace("/ScComment");
     }
   }
 }
@@ -81,8 +105,20 @@ export default {
     .tishi {
       position: fixed;
       bottom: 25px;
-      left: 155px;
+      left: 150px;
       font-size: 16px;
+      background: rgba(0, 0, 0, 0.1);
+      color: rgb(0, 0, 0);
+      padding: 2px 10px;
+    }
+    .nobody {
+      position: absolute;
+      left: 128px;
+      top: 70px;
+      width: 200px;
+      height: 20px;
+      font-size: 15px;
+      color: rgb(158, 158, 158);
     }
     .title {
       position: fixed;
@@ -117,25 +153,11 @@ export default {
       margin-top: 55px;
 
       .mycomment {
-        height: 115px;
         background: white;
-        padding: 10px;
+        padding: 15px;
         margin-bottom: 10px;
         .comCon {
-          font-size: 16px;
-          font-weight: bold;
-        }
-        .time {
-          font-size: 12px;
-          color: rgb(131, 131, 131);
-          margin-left: 20px;
-          margin-top: 2px;
-        }
-
-        .delcomment {
-          font-size: 12px;
-          color: rgb(131, 131, 131);
-          margin-left: 10px;
+          font-size: 15px;
         }
         div {
           height: 50px;
@@ -154,13 +176,19 @@ export default {
           }
         }
         .commentInfo {
-          margin-top: 10px;
+          margin-top: 20px;
+          transform: translateY(-10px);
           .time {
             float: left;
             margin-left: 5px;
+            font-size: 14px;
+            color: rgb(131, 131, 131);
           }
           .delcomment {
             float: right;
+            font-size: 12px;
+            color: rgb(131, 131, 131);
+            margin-left: 10px;
           }
         }
       }

@@ -12,16 +12,12 @@
         v-model="username"
         required
         clearable
-        label="用户名"
-        right-icon="question-o"
-        placeholder="请输入用户名"
-        @click-right-icon="$toast('question')"
+        label="昵称"
+        placeholder="请输入昵称"
       />
       <van-cell-group>
-        <van-field label="头像"  disabled >  
-        </van-field>
-        <van-uploader v-model="fileList" multiple  :max-count="1" />
-
+        <van-field label="头像" disabled></van-field>
+        <van-uploader v-model="fileList" multiple :max-count="1" />
       </van-cell-group>
       <van-field v-model="email" label="邮箱" placeholder="请输入邮箱" required />
       <div class="sex">
@@ -40,7 +36,7 @@
           autosize
           label="个性签名"
           type="textarea"
-          placeholder="输入你的操作"
+          placeholder="输入你的签名"
         />
       </van-cell-group>
       <div v-show="showdate" class="datebox">
@@ -56,6 +52,9 @@
     </van-cell-group>
 
     <van-button type="default" color="#07c160" @click="next">完成</van-button>
+
+    <!-- 提示框 -->
+    <div v-show="showtishi" class="tishi">必填信息不能为空!</div>
   </div>
 </template>
 <script>
@@ -74,20 +73,20 @@ export default {
   name: "createusercon",
   data() {
     return {
+      showtishi: false,
       checkedw: true,
       checkedm: false,
+      mySex: 0,
       username: "",
       email: "",
-      minDate: new Date(1998, 1, 1),
+      minDate: new Date(1990, 1, 1),
       currentDate: new Date(),
       showdate: false,
       datecontent: "",
       messagebox: "",
-        fileList: [
-       
+      fileList: [
         // Uploader 根据文件后缀来判断是否为图片文件
         // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
-  
       ]
     };
   },
@@ -103,6 +102,9 @@ export default {
     [Button.name]: Button
   },
   methods: {
+    showfile() {
+      console.log(this.fileList);
+    },
     dates: function() {
       this.showdate = !this.showdate;
     },
@@ -116,14 +118,66 @@ export default {
         .join("-");
       this.showdate = !this.showdate;
     },
-    next:function() {
-       this.$router.replace("/");
+    next: function() {
+      if (this.checkedw) {
+        this.mySex = 0;
+      } else {
+        this.mySex = 1;
+      }
+      console.log("我的性别：", this.mySex);
+      console.log("文件信息：", this.fileList[0].file);
+      console.log(
+        "我的信息：",
+        sessionStorage.getItem("tel"),
+        this.username,
+        this.email,
+        this.mySex,
+        this.datecontent,
+        this.messagebox
+      );
+      const form = new FormData();
+      form.append("userPhone",sessionStorage.getItem("tel"));
+      form.append("file", this.fileList[0].file);
+      form.append("userName", this.username);
+      form.append("userEmail", this.email);
+      form.append("userSex", this.mySex);
+      form.append("userBirth", this.datecontent);
+      form.append("userSign", this.messagebox);
+
+      this.axios
+        .post("/user/userRegisSetInfo", form, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(res => {
+          console.log(res.data);
+          if (res.data.code == "200") {
+            this.showtishi = true
+            setTimeout(() => {
+              this.showtishi = false;
+              this.$router.replace("/Login");
+              sessionStorage.removeItem("tel");
+            },1500)
+          }
+        });
     }
-  
   }
 };
 </script>
 <style lang="less" scoped>
+
+.tishi {
+  position: fixed;
+  bottom: 30px;
+  left: 125px;
+  background: black;
+  color: white;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 7px;
+  transition: all 0.5s;
+}
 .user {
   position: fixed;
   width: 100%;
@@ -157,6 +211,7 @@ export default {
   font-size: 20px;
   .van-checkbox {
     padding: 0 20px;
+    transform: translateX(-150px);
   }
 }
 h6 {
