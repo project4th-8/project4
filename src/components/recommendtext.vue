@@ -142,7 +142,7 @@ export default {
       this.$router.push("/forword");
     },
     sccomment: function(index) {
-      sessionStorage.setItem("textId", index);
+      sessionStorage.setItem("dynamicId", index);
       this.$router.push("/sccomment");
     },
     isselectuser: function(isselectuser) {

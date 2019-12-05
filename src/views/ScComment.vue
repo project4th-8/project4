@@ -1,44 +1,52 @@
 <template>
   <div id="ScComment">
+    <div class="toubu">
+      <a href="javascript:history.go(-1)">
+        <van-icon name="arrow-left" />
+      </a>
+      <span>{{yonghu.username}}的文章</span>
+      <router-link to="/">
+        <van-icon name="wap-home-o" />
+      </router-link>
+    </div>
+    <div class="line"></div>
     <div class="comment-nav">
       <div class="nav-left">
         <div class="nav-img">
-          <img src="../assets/logo.png" alt="">
+          <img :src="yonghu.userimg" alt="" @click="yulanimg(yonghu.userimg)">
         </div>
         <div class="nav-text">
           <p class="username">
-            小松饼
-            <img src="../assets/logo.png" alt="标识">
+            <router-link class="username" :to="'/about?username='+yonghu.username+'&userid='+yonghu.userid">
+              {{yonghu.username}}
+            </router-link>
+            <img v-if="yonghu.isdaka==2" class="user-biaoshi-da" src="../assets/logo.png" alt="标识">
           </p>
-          <span>2016.12.2</span>
+          <span>{{wenzhang.date}}</span>
           <span>来自</span>
-          <span>推荐关注</span>
+          <span>{{wenzhang.laizi}}</span>
         </div>
       </div>
-      <div class="nav-right"><span>关注</span></div>
+      <!-- 点击取消关注 -->
+      <div class="nav-right" @click="guanzhufangfa">
+        <span v-if="user.isguanzhu">已关注</span>
+        <span v-else>关注</span>
+      </div>
     </div>
     <div class="comment-content">
       <div class="content-article">
-        <div class="van-hairline--top-bottom">详解sticky</div>
+        <div class="van-hairline--top-bottom">
+          <h6 class="circle-title">{{wenzhang.title}}</h6>
+        </div>
         <p>
-          <a href="javascript:;"><span>#</span>传得数据库<span>#</span></a>
           &nbsp;&nbsp;
-          <a href="javascript:;"><span>@</span>我是选出来的粉丝用户</a>
-          sticky 英文字面意思是粘，粘贴，所以可以把它称之为粘性定位。position: sticky; 基于用户的滚动位置来定位。
-粘性定位的元素是依赖于用户的滚动，在 position:relative 与 position:fixed 定位之间切换。
-它的行为就像 position:relative; 而当页面滚动超出目标区域时，它的表现就像 position:fixed;，它会固定在目标位置。
-元素定位表现为在跨越特定阈值前为相对定位，之后为固定定位。
+          <a href="javascript:;"><span>@</span>{{wenzhang.aite}}</a>
+          {{wenzhang.circle}}
         </p>
         <div>
           <van-grid :border="false" :column-num="3">
-            <van-grid-item>
-              <van-image src="https://img.yzcdn.cn/vant/apple-1.jpg" />
-            </van-grid-item>
-            <van-grid-item>
-              <van-image src="https://img.yzcdn.cn/vant/apple-2.jpg" />
-            </van-grid-item>
-            <van-grid-item>
-              <van-image src="https://img.yzcdn.cn/vant/apple-3.jpg" />
+            <van-grid-item v-for="(item,index) in wenzhang.url" :key="index">
+              <van-image :src=item @click="yulanimg(item)" />
             </van-grid-item>
           </van-grid>
         </div>
@@ -50,195 +58,170 @@
     </div>
     <div class="comment-share">
       <div class="share-content">
-        <span>分享</span>
-        <van-icon name="star" />
-        <van-icon name="chat" />
-        <van-icon name="alipay" />
-        <van-icon name="live" />
+        <span class="span">分享</span>
+        <div class="van-icon-share">
+          <span class="iconfont icon-weixin1" @click="fenxiang('微信')">
+          </span>
+          <span class="iconfont icon-QQ" @click="fenxiang('qq')"></span>
+          <span class="iconfont icon-pengyou" @click="fenxiang('好友')"></span>
+        </div>
       </div>
       <div class="comment-border" style=""></div>
     </div>
     <div class="comment-bottom">
-      <van-tabs v-model="active" color="orange"> 
+      <div class="shenpin">
+        <div class="shenpin-son">
+          <div class="repin">热评</div>
+          <!-- 发送点赞评论请求 -->
+          <van-icon :class="{on:repin.iszan}" @click="repin.iszan=!repin.iszan;repin.zan=repin.iszan?repin.zan+1:repin.zan-1" name="good-job-o">{{repin.zan}}</van-icon>
+        </div>
+        <div class="shenpin-son">
+          <p>
+            <router-link :to="'/scpinlun?id='+wenzhang.wenzhangId">{{repin.circle}}</router-link>
+          </p>
+        </div>
+      </div>
+      <!-- <van-tabs v-model="active" color="orange"> 
         <van-tab :title="'评论'+lists.length">
             <div class="comment-bottom-pinglun">
               <div class="user-name">
-                  <span style="color:orange">{{lists[0].name}}</span>
-                  <img src="../assets/logo.png" alt="标识">
+                <div class="userImg-big">
+                  <span>头像</span>
+                </div>
+                  <router-link :to="'/scgeren?username='+lists[0].name+'&userid='+lists[0].userid">
+                    <span style="color:orange">{{lists[0].name}}</span>
+                  </router-link>
+                  
+                  <img class="user-biaoshi-da" src="../assets/logo.png" alt="标识">
                   <span style="margin-right:10px;">:</span>
                   <span class="van-ellipsis">{{lists[0].title}}</span>
               </div>
               <div class="haha">
                     <div v-for="(items,index) in lists[0].children" :key="index" class="pinlun-son">
-                      <span style="color:orange">{{items.name}}</span>
-                      <img src="../assets/logo.png" alt="标识">
+                      <div class="userImg">
+                        <span>tou</span>
+                      </div>
+                      <router-link :to="'/scgeren?username='+items.name+'&userid='+items.userid">
+                        <span style="color:orange">{{items.name}}</span>
+                      </router-link>
+                      <img class="user-biaoshi-xiao" src="../assets/logo.png" alt="标识">
                       <span>回复</span>
+                      <div class="userImg">
+                        <span>tou</span>
+                      </div>
                       <span style="color:orange">{{lists[0].name}}</span>
-                      <img src="../assets/logo.png" alt="标识">
+                      <img class="user-biaoshi-xiao" src="../assets/logo.png" alt="标识">
                       <span>:</span>
                       <span class="van-ellipsis">{{items.title}}</span>
                     </div>
               </div>
+              <div >
+                <strong>……</strong>
+              </div>
               <router-link to="/scpinlun">
-                <div class="chakangengduo" v-html="'共有 '+lists[0].name+' 等人发送共 '+lists.length+' 条评论，点击查看'"><van-icon name="arrow" /></div>
+              <p class="chakangengduo">{{lists[0].name}} 等发表共{{lists.length}}条评论<van-icon name="arrow" /></p>
               </router-link>
             </div>
         </van-tab>
         <van-tab :title="'转发'+lists.length" >
           <div v-for="(item,index) in lists" :key="index">
             <div class="user-name" style="padding:0 10px;">
-              <img src="../assets/logo.png" alt="" style="width:20px">
+              <div class="userImg">
+                <span>头</span>
+              </div>
               <span style="color:orange">{{item.name}}</span>
               <img src="../assets/logo.png" alt="标识" style="width:16px;">
               <span class="van-ellipsis">转发了这片文章</span>
             </div>
           </div>
         </van-tab>
-        <van-tab :title="'赞'+dianzan.length">
+        <van-tab class="zanFontSize" :title="'赞'+dianzan.length">
             <div v-for="(item,index) in dianzan" :key="index">
               <div class="user-name" style="padding:0 10px;">
-                <img src="../assets/logo.png" alt="" style="width:20px">
-                <span style="color:orange">{{item.name}}</span>
+                <div class="userImg">
+                  <span>头</span>
+                </div>
+                <router-link :to="'/scgeren?username='+item.name+'&userid='+item.userid">
+                  <span style="color:orange">{{item.name}}</span>
+                </router-link>
                 <img src="../assets/logo.png" alt="标识" style="width:16px;">
                 <span class="van-ellipsis">觉得这篇文章很赞！</span>
               </div>
             </div>        
-          <!-- <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-          </van-list> -->
         </van-tab>
-      </van-tabs>
+      </van-tabs> -->
     </div>
     <div class="bottom van-hairline--surround">
       <div class="bottom-bar">
-        转发
+        <van-icon name="share" @click="share"/>
+        <span>{{wenzhang.zhuanfashu}}</span>
       </div>
       <div class="bottom-bar" @click="showPopup">
-        评论
+        <van-icon name="chat-o" />
+        <span>{{wenzhang.liuyanshu}}</span>
       </div>
-      <van-popup :overlay="false" round v-model="show" closeable close-icon='close' position='bottom' :style="{height:'60vh'}" close-icon-position="bottom-left">
-        
+      <van-popup :overlay="false" round v-model="show" position='bottom' >
         <div class="textarea-box">
-          <textarea v-model="zishu" maxlength="80" readonly>
-          </textarea>
-          <div class="zishu"><span v-text="zonggong"></span><span>/80</span></div>
-          <div class="btn">
-            <input type="text" v-model="shuru" @keyup="jisuan" @keydown="EnterKey">
-            <div class="shuru">
-              <router-link to="/scpinlun">
-                <span @click="fasong">发送</span>
-              </router-link>
+          <div class="shurukuang">
+            <textarea v-model="zishu" maxlength="80" placeholder="写评论……" @keyup="jisuan" @keydown="jisuan">
+            </textarea>
+            <div class="xianzhi"><span v-text="zonggong"></span><span>/80</span></div>
+          </div>
+          <div class="zishu">
+            <div class="clickFasong">
+              <span @click="aite" >@</span>
+              <!-- <van-popup :overlay="false" round v-model="showbiao" position='bottom'>
+                <table>
+                  <tr>
+                    <td vue="">小脸</td>
+                    <td vue="">哭啦</td>
+                  </tr>
+                </table>
+              </van-popup> -->
+              <span @click="show=false;zishu='';zonggong=0" >取消</span>
+              <span @click="fasong">发送</span>
             </div>
           </div>
         </div>
       </van-popup>
-      <div class="bottom-bar" >
-        点赞
+      <van-popup
+        v-model="showAite"
+        position="top"
+        :style="{ height: '100%' }">
+        <div class="toubu"><van-icon @click="showAite=false" name="arrow-left" /></div>
+        
+        <div class="guanzhuAite">
+          <hr>
+          <div @click="showAite=false">{{yonghu.userid}}下的关注用户</div>
+          <div class="guanzhuUser" v-for="(item,index) in aiteData" :key="index">
+            <div class="userimg">
+              <img :src="item.userImg[0]" alt="">
+            </div>
+            <div class="user">
+              <p @click="aaa(item.userName)">{{item.userName}}</p>
+              <img src="https://img.yzcdn.cn/vant/logo.png" alt="">
+            </div>
+          </div>
+          <div class="line"></div>
+          
+        </div>
+      </van-popup>
+      <div class="bottom-bar" @click="user.isshoucang=!user.isshoucang;wenzhang.shoucangshu=user.isshoucang?wenzhang.shoucangshu+1:wenzhang.shoucangshu-1 ">
+        <van-icon name="like-o" :class="{on:user.isshoucang}" />
+        <span>{{wenzhang.shoucangshu}}</span>
+      </div>
+      <div class="bottom-bar" @click="dianzanfangfa">
+        <!-- 需要触发毁掉函数，点击时触发focus -->
+        <van-icon name="good-job-o" :class="{on:user.iswenzan}" @click="user.iswenzan=!user.iswenzan;wenzhang.dianzanshu=user.iswenzan?wenzhang.dianzanshu+1:wenzhang.dianzanshu-1" />
+        <span>{{wenzhang.dianzanshu}}</span>
       </div>
     </div>
   </div>
 </template>
 <script>
-var lists=[
-  {
-    name:"长歌wang日和勤事",
-    title:"暴击啊这首歌,我的天呐。。",
-    children:[
-      {
-        name:"aao",
-        title:"月如身上挂着的铃，叫做莫失；逍遥身上挂着的铃，叫做莫忘。"
-      },
-      {
-        name:"hahah",
-        title:"胡歌说,他演不出那时候李逍遥的眼神了。"
-      }
-    ]
-  },
-  {
-    name:"song",
-    title:"坑就即使，添加的第一条数据。",
-    children:[
-      {
-        name:"aao",
-        title:"你真棒2！"
-      },
-      {
-        name:"hahah",
-        title:"我真是2"
-      }
-    ]
-  },
-  {
-    name:"陈思狗",
-    title:"坑就即使，第二天数据。",
-        children:[
-      {
-        name:"aao",
-        title:"你真棒3！"
-      },
-      {
-        name:"hahah",
-        title:"我真是3"
-      }
-    ]
-  },
-  {
-    name:"你的像",
-    title:"坑就即使，第三个数据。",
-        children:[
-      {
-        name:"aao",
-        title:"你真棒！"
-      },
-      {
-        name:"hahah",
-        title:"我真是"
-      }
-    ]
-  }
-]
-var dianzan=[
-  {
-    name:"jack"
-  },
-  {
-    name:"dfsdf"
-  },
-  {
-    name:"dfs"
-  },
-  {
-    name:"fgs"
-  },  
-  {
-    name:"jacwek"
-  },
-  {
-    name:"jacgdk"
-  },
-  {
-    name:"hfdg"
-  },
-  {
-    name:"geg"
-  },  {
-    name:"jacfefek"
-  },
-  {
-    name:"ege"
-  },  {
-    name:"jacgek"
-  },
-  {
-    name:"hgdg"
-  },  {
-    name:"gdg"
-  },
-  {
-    name:"ge"
-  },
 
-]
-import {Button,List,Cell,Tabbar, TabbarItem, Tabs,Tab,Icon,Grid, GridItem,Image,Popup,Field,Toast} from 'vant'
+
+import { ImagePreview,Button,List,Cell,Tabbar, TabbarItem, Tabs,Tab,Icon,Grid, GridItem,Image,Popup,Field,Toast} from 'vant'
 export default {
   name:"Sccomment",
   components:{
@@ -255,38 +238,111 @@ export default {
     [Image.name]:Image,
     [Popup.name]:Popup,
     [Field.name]:Field,
-    [Toast.name]:Toast
+    [Toast.name]:Toast,
+    [ImagePreview.name]:ImagePreview
   },
   data(){
     return{
-      loading:false,
-      finished:false,
-      lists:[],
+      //存储@的值
+      loading:false,finished:false,
       active:2,
-      dianzan:[],
-      show:false,
-      zishu:"",
-      zonggong:0,
-      shuru:""
+      show:false,showbiao:false,showAite:false,
+      zonggong:0,zishu:"",//文章评论
+      
+      //存储登录用户信息
+      loginUser:{
+        userid:7
+      },
+      //文章用户信息
+      yonghu:{
+        userid:'1111',
+        username:'默认名字',
+        userimg:
+        "",
+        //是否大咖,默认大咖
+        isdaka:true
+      },
+      //登录用户和文章用户的关系
+      user:{
+        //是否关注该文章用户
+        isguanzhu:true,
+        //是否点赞该文章，
+        iswenzan:true,
+        //是否收藏该文章
+        isshoucang:true
+      },
+      //存储文章(需要获取的数据)
+      wenzhang:{
+        wenzhangId:1,
+        title:"默认标题",
+        circle:"默认文章",
+        url:[
+        ],
+        date:"默认日期",
+        laizi:"推荐关注",
+        //被@的对象
+        aite:"被招呼的幸运用户",
+        zhuanfashu:58,//转发数
+        liuyanshu:0,//留言数
+        shoucangshu:5,//收藏数
+        dianzanshu:44,//文章点赞数
+      },
+      aiteData:{},
+      //存储返回文章的热评
+      repin:{
+        redu:588,
+        zan:898,
+        iszan:true,
+        circle:"默认热点。"
+      }
     }
   },
   created(){
-    this.lists=lists;
-    this.dianzan=dianzan;
-
+    this.wenzhang.wenzhangId=sessionStorage.getItem('dynamicId');
+    console.log(this.wenzhang.wenzhangId)
+      this.axios.post("/dynamic/findOneById",{
+      dynamicId:this.wenzhang.wenzhangId
+    })
+    .then(res => {
+      console.log(res.data);
+      //文章用户信息：
+      res=res.data.data;
+      this.yonghu.username=res.userName;
+      this.yonghu.userid=res.userId;
+      this.yonghu.userimg=res.userImg[0];
+      console.log(res.userImg[0]);
+      this.yonghu.isdaka=res.isMaster;
+      //文章信息：
+      this.wenzhang.zhuanfashu=res.dynamicTransmit;
+      for(let i=0;i<res.replies.length;i++){
+        if(res.replies[i].parentId==0){
+          this.wenzhang.liuyanshu++;
+        }
+      }
+      this.wenzhang.shoucangshu=res.dynamicHeat;
+      this.wenzhang.dianzanshu=res.dynamicLikeCount;
+      this.wenzhang.circle=res.dynamicContent;
+      this.wenzhang.title=res.dynamicTitle;
+      this.wenzhang.url=res.imgUrl;
+      this.wenzhang.date=res.dynamicLastTime;
+      this.wenzhang.wenzhangId=res.dynamicId;
+      //热门信息：
+      this.repin.zan=res.replies[0].replyLikecount+10;
+      this.repin.circle=res.replies[0].replyContent;
+      
+    });
+  //获取可以@的对象
+    this.axios.post("/user/fans",{
+      userId:1
+    })
+    .then(res=>{
+      this.aiteData=res.data.data;
+      console.log(this.aiteData);
+    })
+    //获取是否关注该用户
   },
   methods:{
-    onLoad(){
-      setTimeout(() => {
-        for(let i=0;i<lists.length;i++){
-          this.lists.push(lists[i]);
-        }
-          this.loading=false;
-          if(this.lists.length==lists.length){
-          this.finished=true;
-        }
-      }, 2000);
-    },
+
     showPopup(){
       this.show=true;
     },
@@ -294,30 +350,101 @@ export default {
       console.log(this.zishu.split("").length)
       this.zonggong=this.zishu.split('').length;
     },
+
+    //检测回车事件
     EnterKey(e){
       if(e.keyCode==13){
         console.log("huiche")
-        if(this.zishu.split('').length<80){
-          this.zishu+=this.shuru;
-          this.shuru='';
-        }
       }
     },
+    //点赞
+    dianzanfangfa(){
+      this.user.good=!this.user.good;
+    },
+    //关注
+    guanzhufangfa(){
+      console.log(this.user.isguanzhu)
+      this.user.isguanzhu=!this.user.isguanzhu;
+    },
+    yulanimg(a){
+      ImagePreview([
+        a
+      ]);
+    },
+    fenxiang(a){
+      if(a=="好友"){
+        Toast({
+          message: '分享给好友',      
+        })
+        window.location="comment";
+      }else{
+        Toast({
+          message: '扫描'+a+'二维码即可分享',
+          icon: 'https://img.yzcdn.cn/vant/logo.png'
+        });
+      }
+    },
+    aite(){
+      this.showAite=true;
+    },
+    aaa(a){
+      console.log('输出姓名'+a);
+      this.aiteyonghu=a;
+      this.zishu+="@"+a+'';
+      this.showAite=false;
+    },
     fasong(){
-      this.zishu='';
-      console.log(this.zishu);
+      console.log("发送信息"+this.wenzhang.wenzhangId,this.loginUser.userid)
+      this.show=false;
+      this.axios.post("/reply/addReply",{
+        dynamicId:this.wenzhang.wenzhangId,
+        userId:this.loginUser.userid,
+        replyContent:this.zishu,
+      })
+      .then(res=>{
+        console.log(res);
+        this.zishu='';
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+    },
+    share(){
+      sessionStorage.setItem("forworddynamicId",this.wenzhang.wenzhangId);
+      sessionStorage.setItem("userId",this.loginUser.userid);
+      this.$router.push('/forword')
     }
-  
   }
 }
 </script>
 <style lang="less" scoped>
 @import '../assets/style/resize.css';
 @import '../assets/style/sc.less';
+@import '../assets/font/sc_font/iconfont.css';
+.line{
+  width: 95vw;
+  border-bottom: 1px solid rgba(255, 166, 0, 0.465);
+  margin: 5px auto;
+}
 #ScComment{
   background-color:white;
   position: relative;
   z-index: 999;
+  margin-bottom: 7vh;
+  .toubu{
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    a{
+      font-size: 16px;
+    }
+    span{
+      font-size: 14px;
+      color: rgb(58, 53, 53);
+    }
+  }
   .comment-nav{
     background-color: white;
     border-radius: 5px;
@@ -335,6 +462,7 @@ export default {
         justify-content: center;
         align-items: center;
         width: 50px;
+        height: 50px;
         line-height: 60px;
         background-size: 60px;
         border: 1px solid #ddd;
@@ -358,10 +486,7 @@ export default {
           display: flex;
           align-items: center;
           color:@mainColor;
-          img{
-            margin-left: 2px;
-            height: 16px;
-          }
+          text-shadow: 0 0 0 black;
         }
       }
 
@@ -384,13 +509,13 @@ export default {
     display: flex;
     justify-content: center;
     margin-bottom: 5px;
-    h3{
-      font-size: 23px;
+    h6{
+      font-size: 18px;
     }
     p{
       letter-spacing: 1px;
       margin-top: 10px;
-      font-size: 15px;
+      font-size: 12px;
       text-align: justify;
       color: @fontColor;
       a{
@@ -398,10 +523,10 @@ export default {
       }
     }
     .tuijian{
-      font-size: 14px;
+      font-size: 12px;
       color: @zhutiColor;
-      background-color: rgba(199, 194, 194, 0.589);
-      width: 150px;
+      background-color: rgba(199, 194, 194, 0.363);
+      width: 110px;
       border-radius: 5px;
       display: flex;
       align-items: center;
@@ -421,71 +546,125 @@ export default {
     display: flex;
     justify-content: space-around;
     width: 100vw;
-    height: 5vh;
+    height: 7vh;
     background-color: white;
     position: fixed;
     bottom: 0;
     left: 0;
     z-index: 9999;
     .bottom-bar{
+      width: 60px;
       color:black;
       display: flex;
       align-items: center;
       justify-content: space-around;
-    }
-    .textarea-box{
-      height: 60vh;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      textarea{
-        width: 90vw;
-        height: 40vh;
-        resize: none;
-        position: absolute;
-        top: 7vh;
-        border-radius: 5px;
-      }
-      .btn{
-        position: absolute;
-        bottom:10px ;
-      }
-      .shuru{
-        background-color:white;
-        border: 1px solid gray;
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        display: flex;
-        justify-content: space-around;
-        
+      span{
+        font-size: 14px;
+        white-space: nowrap;
       }
     }
   }
+  .textarea-box{
+  height: 40vh;
+  width: 100vw;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  .zishu{
+    height: 100%;
+  }
+  textarea{
+    font-size: 15px;
+    border-radius: 10px;
+    border: none;
+    background-color: #eee;
+    width: 90vw;
+    height: 20vh;
+    resize: none;
+    position: absolute;
+    top: 7vh;
+    padding: 10px;
+  }
+  .clickFasong{
+    box-sizing: border-box;
+    width: 100vw;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding-bottom: 20px;
+    font-size: 16px;
+  }
+}
   .comment-share{
     .comment-border{
-      width:100vw;
+      width:95vw;
       height:10px;
       background-color:@mainColor;
+      margin: 0 auto;
     }
     .share-content{
       margin: 30px 0;
       display: flex;
       justify-content: space-evenly;
       align-items: center;
-      span{
+      .van-icon-share{
+        width: 150px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: nowrap;
+        &::before{
+          display: none;
+        }
+        span{
+          font-size: 20px;
+        }
+      }
+      .span{
         font-size: 15px;
         color: @mainColor;
       }
     }
   }
 }
+//处理头像(xiao)
+.userImg{
+  border-radius: 50%; 
+  height: 20px;
+  width: 20px;
+  background-color: gold; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+//处理头像大
+.userImg-big{
+  border-radius: 50%; 
+  height: 30px;
+  width: 30px;
+  background-color: gold; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+//处理标识小
+.user-biaoshi-xiao{
+  height: 12px;
+  margin-left: 2px;
+}
+.user-biaoshi-da{
+  height: 15px;
+  margin-left: 3px;
+}
       .user-name{
-        
-        font-size: 18px;
+        font-size: 14px;
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
+
         & *{
           margin: 5px 0;
         }
@@ -495,9 +674,6 @@ export default {
           justify-content: flex-start;
           align-items: center;
           flex-wrap: nowrap;
-        }
-        img{
-          height: 20px;
         }
         p{
           font-size: 18px;
@@ -520,9 +696,84 @@ export default {
         & *{
           margin: 5px 0;
         }
-        img{
-          height: 15px;
-        }
       }
+.on{
+  color: orange;
+}
 
+.shenpin{
+  margin: auto;
+  box-sizing: border-box;
+  width: 95vw;
+  background-color: #eee;
+  font-size: 16px;
+  border-radius: 0 0 10px 10px;
+  .shenpin-son{
+    box-sizing: border-box;
+    padding: 10px 30px;
+    display: flex;
+    font-size: 14px;
+    justify-content: space-between;
+    p{
+      color:rgb(42, 40, 40);
+      letter-spacing: 2px;
+      text-align: justify;
+    }
+    .repin{
+      padding: 2px;
+      width: 40px;
+      background-color: orange;
+      text-align: center;
+      border-radius: 10px;
+      color: rgb(255, 255, 255);
+    }
+  }
+}
+.shurukuang{
+  width: 100vw;
+  height: 30vh;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  .xianzhi{
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+    span{
+      font-size: 14px;
+    }
+  }
+}
+.guanzhuAite{
+  font-size: 16px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  .guanzhuUser{
+    box-sizing: border-box;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    img{
+      height: 16px;
+    }
+    .userimg{
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      background-color: orange;
+      overflow: hidden;
+      margin-right: 5px;
+      img{
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .user{
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  }
+}
 </style>

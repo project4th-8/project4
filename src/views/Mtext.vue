@@ -124,7 +124,7 @@ export default {
       this.$router.push("/isselectdynamic");
     },
     sccomment: function(index) {
-      sessionStorage.setItem("textId", index);
+      sessionStorage.setItem("dynamicId", index);
       this.$router.push("/sccomment");
     },
     iszan: function(dynamicId, e, index) {
