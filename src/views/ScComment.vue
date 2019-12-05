@@ -251,7 +251,7 @@ export default {
       
       //存储登录用户信息
       loginUser:{
-        userid:7
+        userid:sessionStorage.getItem("userId")
       },
       //文章用户信息
       yonghu:{
@@ -333,7 +333,7 @@ export default {
     });
   //获取可以@的对象
     this.axios.post("/user/fans",{
-      userId:1
+      userId:sessionStorage.getItem("userId")
     })
     .then(res=>{
       this.aiteData=res.data.data;

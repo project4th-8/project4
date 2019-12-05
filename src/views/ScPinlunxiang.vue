@@ -106,7 +106,7 @@ export default {
       //模拟数据
       moni:{
         wenzhang:1,
-        userid:3,
+        userid:sessionStorage.getItem("userId"),
         pinlun:{
         },
         pinlunSon:[],

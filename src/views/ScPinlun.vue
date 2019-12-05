@@ -76,7 +76,7 @@ export default {
     return{
       //模拟数据
       moni:{
-        userid:3,
+        userid:sessionStorage.getItem("userId"),
         dynamicId:1,
         yonghuid:1,
         pinlun:[],
