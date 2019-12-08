@@ -144,7 +144,7 @@ export default {
           oldPhoneCode: this.teloldyzm
         })
         .then(res => {
-          console.log(res.data);
+       
           if (res.data.code == "200") {
             document.getElementsByClassName("inputtel")[0].style.left = "0";
           }
@@ -184,7 +184,7 @@ export default {
           newPassword: this.newpassword
         })
         .then(res => {
-          console.log(res.data);
+       
           if ((this.password && this.newpassword && this.newpassword2) != "") {
             if (this.newpassword != this.newpassword2) {
               this.showPopup();
@@ -221,7 +221,7 @@ export default {
     },
     submitset() {
       if ((this.newquestion && this.oldanswer && this.newanswer) != "") {
-        console.log("旧问题：", this.userInfo.encrypteds[0].encryptedQuestion);
+     
         this.axios
           .post("/user/updateUserEncrypted", {
             oldQuestion: this.userInfo.encrypteds[0].encryptedQuestion,
@@ -230,7 +230,7 @@ export default {
             encryptedAnswer: this.newanswer
           })
           .then(res => {
-            console.log(res.data);
+        
             if (res.data.code == "200") {
               this.showPopup();
               this.showCon = "密保修改成功！";
@@ -249,7 +249,7 @@ export default {
                   res.data.data.user.userSex = "女";
                 }
                 this.$store.state.userInfo = res.data.data.user;
-                console.log("拿到数据：", res.data.data.user);
+               
                 sessionStorage.setItem(
                   "userId",
                   this.$store.state.userInfo.userId
@@ -261,7 +261,7 @@ export default {
             }
           });
       } else {
-        console.log(this.newquestion, this.newanswer, this.oldanswer);
+   
         this.showPopup();
         this.showCon = "必填内容为空！";
       }
@@ -305,7 +305,7 @@ export default {
           oldPhone: this.tel
         })
         .then(res => {
-          console.log(res.data);
+          res.data
         });
       } else {
         this.showPopup();
@@ -327,7 +327,7 @@ export default {
           newPhone: this.newtel
         })
         .then(res => {
-          console.log(res.data);
+       res.data
         });
     },
     updatatel() {

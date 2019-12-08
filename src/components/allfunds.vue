@@ -1,6 +1,5 @@
 <template>
   <div class="main">
-        
     <div class="name-list">
       <div>基金简称</div>
       <div>
@@ -26,12 +25,8 @@
             <p class="title">{{item.fundName}}</p>
           </div>
           <div @click="funddetails(index)">{{item.fundCount}}</div>
-          <div @click="funddetails(index)">{{item.fundEarnings}}</div>
-          <div
-            class="starall "
-          
-            @click="iszan(item.fundId,$event,index),mzan[index]=!mzan[index]"
-          >
+          <div @click="funddetails(index)" class="earn">{{item.fundEarnings}}0%</div>
+          <div class="starall" @click="iszan(item.fundId,$event,index),mzan[index]=!mzan[index]">
             <van-icon name="star" />
           </div>
         </div>
@@ -44,10 +39,7 @@
           </div>
           <div></div>
           <div></div>
-          <span class="findfund">
-            {{findfunds = fundtitle}}
-          </span>
-         
+          <span class="findfund">{{findfunds = fundtitle}}</span>
         </div>
       </div>
     </div>
@@ -64,39 +56,48 @@ export default {
       isShowt: true,
       isShowsub: true,
       cons: [],
-      mzan:[],
+      mzan: [],
       sortid: false,
       findfunds: "",
-      state:''
-    
+      state: ""
     };
   },
 
   created() {
     this.axios.post("/fund/findAllFund", {}).then(res => {
       this.cons = res.data.data.data;
-      this.cons = this.cons.map((item,index)=> {
+      this.cons = this.cons.map((item, index) => {
         item.mzn = false;
-        this.mzan[index] = item.mzn
+        this.mzan[index] = item.mzn;
 
-        return item
-      })
-   
+        return item;
+      });
     });
   },
   watch: {
-
     findfunds(val) {
-      console.log(val)
-      this.axios.post("/fund/findFundByFundName", {
-        fundName:val
-      }).then(res => {
-        console.log(res.data)
-        this.cons = res.data.data;
-      });
+      if (val) {
+        this.axios
+          .post("/fund/findFundByFundName", {
+            fundName: val
+          })
+          .then(res => {
+            this.cons = res.data.data;
+          });
+      } else {
+        this.axios.post("/fund/findAllFund", {}).then(res => {
+          this.cons = res.data.data.data;
+          this.cons = this.cons.map((item, index) => {
+            item.mzn = false;
+            this.mzan[index] = item.mzn;
+
+            return item;
+          });
+        });
+      }
     },
     test() {
-      this.test = !this.test
+      this.test = !this.test;
     }
   },
   components: {
@@ -107,14 +108,12 @@ export default {
       sessionStorage.setItem("fundId", this.cons[index].fundId);
       this.$router.push("/funddetails");
     },
-    iszan:function(fundId,e,index) {
-      
-        if(!this.mzan[index]) {
-      e.currentTarget.innerHTML = ` <i  class="van-icon van-icon-star" style="color:orange"></i> `
-    } else {
-      e.currentTarget.innerHTML = ` <i  class="van-icon van-icon-star"></i> `
-    }
- 
+    iszan: function(fundId, e, index) {
+      if (!this.mzan[index]) {
+        e.currentTarget.innerHTML = ` <i  class="van-icon van-icon-star" style="color:orange"></i> `;
+      } else {
+        e.currentTarget.innerHTML = ` <i  class="van-icon van-icon-star"></i> `;
+      }
     },
     sort: function(sortid) {
       this.cons = "";
@@ -124,7 +123,6 @@ export default {
             number: 1
           })
           .then(res => {
-            console.log(res.data.data.data);
             this.cons = res.data.data.data;
           });
       } else {
@@ -145,7 +143,6 @@ export default {
             number: 1
           })
           .then(res => {
-            console.log(res.data.data.data);
             this.cons = res.data.data.data;
           });
       } else {
@@ -172,6 +169,9 @@ export default {
 .bottom-content {
   border-bottom: 1px solid #ddd;
 }
+.earn {
+  color: red;
+}
 .content {
   display: flex;
   justify-content: space-around;
@@ -182,9 +182,9 @@ export default {
     width: 100px;
   }
 
-.findfund {
-  display: none;
-}
+  .findfund {
+    display: none;
+  }
   .time {
     width: 110px;
     margin-left: 20px;

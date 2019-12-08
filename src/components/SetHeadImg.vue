@@ -36,7 +36,7 @@ export default {
         }
       })
       .then(res => {
-        console.log(res.data);
+     
         if(res.data.code == "200") {
           this.$emit('changeCom','');
           this.axios.post("/user/findAllUserInfo")
@@ -47,7 +47,7 @@ export default {
               res.data.data.user.userSex = "女";
             }
             this.$store.state.userInfo = res.data.data.user;
-            console.log("拿到数据：",res.data.data.user);
+ 
             sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
           });
         }

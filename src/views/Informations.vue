@@ -78,7 +78,7 @@ export default {
     ...mapState(["userInfo"]),
     toOldRoute() {
       var oldroute = sessionStorage.getItem("oldroute") ? sessionStorage.getItem("oldroute") : "/About";
-       console.log("旧页面：",oldroute);
+   
       sessionStorage.removeItem("oldroute");
       return oldroute;
     }
@@ -120,14 +120,8 @@ export default {
     }
   },
   created() {
-    console.log("我的信息：", this.userInfo);
-    document.body.addEventListener(
-      "touchmove",
-      function(e) {
-        e.preventDefault();
-      },
-      { passive: false }
-    );
+ 
+   
   }
 };
 </script>

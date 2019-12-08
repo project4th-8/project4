@@ -36,7 +36,7 @@
       <div class="center" @click="sccomment(index)">
         <h5>{{item.dynamicTitle}}</h5>
         <div class="main-content">
-          <p>{{item.dynamicContent}}</p>
+          <p style="overflow:hidden;">{{item.dynamicContent}}</p>
           <div class="textimg">
             <p v-for="(item,index) in item.imgUrl" :key="index">
               <img :src="item" alt />
@@ -44,17 +44,17 @@
           </div>
         </div>
       </div>
-      <div class="bottom">
+      <div class="bottom" >
         <div @click="forword(item.userId,item.dynamicId)">
           <i class="iconfont icon-tubiao-"></i>
           {{item.dynamicTransmit }}
         </div>
-        <div>
+        <div @click="scpinlun(index)">
           <i class="iconfont icon-duanxin"></i>
           {{item.pingl}}
         </div>
         <div @click="iszan(item.dynamicId,$event,index),mzan[index]=!mzan[index]" >
-          <i class="iconfont icon-zang  "  ></i>
+          <i class="iconfont icon-dianzan"></i>
            {{item.dynamicLikeCount}}
         </div>
       </div>
@@ -92,11 +92,9 @@ export default {
     popupsub
   },
   created() {
-    this.userid = sessionStorage.getItem("userid");
+    sessionStorage.removeItem("quitpathTwo");
+    sessionStorage.setItem("quitpath",this.$route.fullPath);
     this.axios.get("/dynamic/findAllDUR", {}).then(res => {
-   
-  
-
       this.cons = res.data.data.data.map((item,index) => {
         item.mzn = false;
         this.mzan[index] = item.mzn
@@ -108,7 +106,7 @@ export default {
         this.axios
           .post("/dynamic/isLike", {
             dynamicId: there,
-            userId: 1
+            userId:sessionStorage.getItem('userId')
           })
           .then(res => {
             if (res.data.data) {
@@ -135,42 +133,46 @@ export default {
     boxshow: function(res) {
       this.showclient = res;
     },
+    scpinlun:function(index) {
+      this.$router.push({path:'/scpinlun', query: {id: this.cons[index].dynamicId}})
+    },
     forword: function(isuserId, dynamicId) {
       sessionStorage.setItem("forworduserId", isuserId);
       sessionStorage.setItem("forworddynamicId", dynamicId);
-
       this.$router.push("/forword");
     },
     sccomment: function(index) {
-      sessionStorage.setItem("dynamicId", index);
-      this.$router.push("/sccomment");
+      sessionStorage.setItem("dynamicId", this.cons[index].dynamicId);
+      this.$router.push({path:"/sccomment"});
     },
     isselectuser: function(isselectuser) {
       sessionStorage.setItem("isselectuserid", isselectuser);
       this.$router.push("/isselectdynamic");
     },
     iszan: function(dynamicId,e,index) {
-    console.log(e.currentTarget.innerText)
     
     if(!this.mzan[index]) {
         e.currentTarget.innerText = Number(e.currentTarget.innerText) + 1
-      e.currentTarget.innerHTML = `<i class="iconfont icon-zang" style="color:orange"></i> ${ e.currentTarget.innerText}`
+      e.currentTarget.innerHTML = `  <i class="iconfont icon-dianzan" style="color:orange;"></i> ${ e.currentTarget.innerText}`
   
     } else {
        e.currentTarget.innerText = Number(e.currentTarget.innerText) - 1
-      e.currentTarget.innerHTML = `<i class="iconfont icon-zang" ></i> ${ e.currentTarget.innerText}`
+      e.currentTarget.innerHTML = `  <i class="iconfont icon-dianzan"></i> ${ e.currentTarget.innerText}`
 
     }
-
+ 
       this.axios.post("/dynamic/addLike", {
         dynamicId: dynamicId,
-        userId: this.userid
+        userId: sessionStorage.getItem("userId")
       });
     }
   }
 };
 </script>
 <style  lang="less" scoped>
+@import "../assets/font/personfont/iconfont.css";
+
+
 .content {
   font-size: 16px;
 }

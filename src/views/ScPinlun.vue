@@ -108,7 +108,7 @@ export default {
     return{
       //模拟数据
       moni:{
-        userid:3,
+        userid:sessionStorage.getItem("userId"),
         dynamicId:1,
         yonghuid:1,
         pinlun:[],
@@ -305,6 +305,7 @@ export default {
   padding: 0 5px;
   align-items: center;
   justify-content: space-between;
+  
 }
   #scpinlun{
     span{font-size: 14px}

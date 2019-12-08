@@ -54,13 +54,13 @@ export default {
     },
     click() {
       if(this.nei ==""){
-        console.log('泵')
+        console.log()
       }else{
 
          var rong = this.nei;
       var data = new Date();
       var sendTime = moment(data).format("YYYY-MM-DD hh:mm:ss");
-      console.log(sendTime);
+ 
       var username = "haha";
       this.lists.push({
         sendTime,

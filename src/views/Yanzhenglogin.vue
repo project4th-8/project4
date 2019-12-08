@@ -41,12 +41,12 @@ export default {
       var yzbtn=this.$el.childNodes[1].childNodes[2].childNodes[1];
       if (!dianhua.test(this.username)) {
         yzbtn.style.display='none';
-        console.log(false)
+    
         return false;
         
       } else {
         yzbtn.style.display='block';
-        console.log(true)
+     
         return true;
 
       }

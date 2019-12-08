@@ -42,12 +42,12 @@
           <i class="iconfont icon-tubiao-"></i>
           {{item.dynamicTransmit }}
         </div>
-        <div>
+        <div @click="scpinlun(index)">
           <i class="iconfont icon-duanxin"></i>
           {{item.pingl}}
         </div>
         <div @click="iszan(item.dynamicId,$event,index),mzan[index]=!mzan[index]">
-          <i class="iconfont icon-zang"></i>
+         <i class="iconfont icon-dianzan" ></i>
           {{item.dynamicLikeCount}}
         </div>
       </div>
@@ -83,8 +83,9 @@ export default {
     popupsub
   },
   created() {
+    sessionStorage.setItem("quitpath", this.$route.fullPath);
     this.axios.get("/dynamic/findAllDUR", {}).then(res => {
-      this.cons = res.data.data.data;
+      this.cons = res.data.data.data.reverse();
       this.cons = this.cons.map((item, index) => {
         item.mzn = false;
         this.mzan[index] = item.mzn;
@@ -96,8 +97,6 @@ export default {
 
         return item;
       });
-      console.log("txt", this.cons);
-      console.log("xx", this.mzan);
 
     });
   },
@@ -109,14 +108,16 @@ export default {
         that.isshow = false;
       }, 1000);
     },
+    scpinlun:function(index) {
+      this.$router.push({path:'/scpinlun', query: {id: this.cons[index].dynamicId}})
+    },
     boxshow: function(res) {
       this.showclient = res;
-      console.log(this.showclient);
+
     },
     forword: function(isuserId, dynamicId) {
       sessionStorage.setItem("forworduserId", isuserId);
       sessionStorage.setItem("forworddynamicId", dynamicId);
-
       this.$router.push("/forword");
     },
     isselectuser: function(isselectuser) {
@@ -124,16 +125,16 @@ export default {
       this.$router.push("/isselectdynamic");
     },
     sccomment: function(index) {
-      sessionStorage.setItem("dynamicId", index);
+      sessionStorage.setItem("dynamicId", this.cons[index].dynamicId);
       this.$router.push("/sccomment");
     },
     iszan: function(dynamicId, e, index) {
       if (!this.mzan[index]) {
         e.currentTarget.innerText = Number(e.currentTarget.innerText) + 1;
-        e.currentTarget.innerHTML = `<i class="iconfont icon-zang" style="color:orange"></i> ${e.currentTarget.innerText}`;
+        e.currentTarget.innerHTML = `<i class="iconfont icon-dianzan" style="color:orange;"></i> ${e.currentTarget.innerText}`;
       } else {
         e.currentTarget.innerText = Number(e.currentTarget.innerText) - 1;
-        e.currentTarget.innerHTML = `<i class="iconfont icon-zang" ></i> ${e.currentTarget.innerText}`;
+        e.currentTarget.innerHTML = `<i class="iconfont icon-dianzan" ></i> ${e.currentTarget.innerText}`;
       }
    
     }
@@ -177,7 +178,7 @@ export default {
 }
 .text {
   overflow: auto;
-  margin-top: 90px;
+  margin: 90px 0;
 }
 .time {
   font-size: 12px;

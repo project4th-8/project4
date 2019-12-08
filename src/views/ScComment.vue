@@ -1,7 +1,7 @@
 <template>
   <div id="ScComment">
     <div class="toubu">
-      <a href="javascript:history.go(-1)">
+      <a href="javascript:;" @click="quit">
         <van-icon name="arrow-left" />
       </a>
       <span>{{yonghu.username}}的文章</span>
@@ -251,7 +251,7 @@ export default {
       
       //存储登录用户信息
       loginUser:{
-        userid:7
+        userid:sessionStorage.getItem("userId")
       },
       //文章用户信息
       yonghu:{
@@ -312,13 +312,13 @@ export default {
       dynamicId:this.wenzhang.wenzhangId
     })
     .then(res => {
-      console.log(res.data);
+   
       //文章用户信息：
       res=res.data.data;
       this.yonghu.username=res.userName;
       this.yonghu.userid=res.userId;
       this.yonghu.userimg=res.userImg[0];
-      console.log(res.userImg[0]);
+   
       this.yonghu.isdaka=res.isMaster;
       //文章信息：
       this.wenzhang.zhuanfashu=res.dynamicTransmit;
@@ -335,35 +335,43 @@ export default {
       this.wenzhang.date=res.dynamicLastTime;
       this.wenzhang.wenzhangId=res.dynamicId;
       //热门信息：
-      this.repin.zan=res.replies[0].replyLikecount+10;
-      this.repin.circle=res.replies[0].replyContent;
+      // this.repin.zan=Number(res.replies[0].replyLikecount)+10;
+      // this.repin.circle=res.replies[0].replyContent;
       
     });
   //获取可以@的对象
     this.axios.post("/user/fans",{
-      userId:1
+      userId:sessionStorage.getItem("userId")
     })
     .then(res=>{
       this.aiteData=res.data.data;
-      console.log(this.aiteData);
+ 
     })
     //获取是否关注该用户
   },
   methods:{
-
+    collect() {
+      this.user.isshoucang=!this.user.isshoucang;
+      this.wenzhang.shoucangshu = this.user.isshoucang?this.wenzhang.shoucangshu-1 : this.wenzhang.shoucangshu+1 
+      this.axios.post("/dynamic/changeCollect",{
+        userId: sessionStorage.getItem("userId"),
+        dynamicId: sessionStorage.getItem("dynamicId")
+      })
+      .then(res => {
+        res.data.code;
+      })
+    },
+    quit() {
+      var route = sessionStorage.getItem("quitpathTwo") ? sessionStorage.getItem("quitpathTwo") : sessionStorage.getItem("quitpath")
+      this.$router.replace(route);
+      sessionStorage.removeItem("quitpathTwo");
+    },
     showPopup(){
       this.show=true;
     },
     jisuan(){
-      console.log(this.zishu.split("").length)
+    
       this.zonggong=this.zishu.split('').length;
-    },
-
-    //检测回车事件
-    EnterKey(e){
-      if(e.keyCode==13){
-        console.log("huiche")
-      }
     },
     //点赞
     dianzanfangfa(){
@@ -371,7 +379,7 @@ export default {
     },
     //关注
     guanzhufangfa(){
-      console.log(this.user.isguanzhu)
+
       this.user.isguanzhu=!this.user.isguanzhu;
     },
     yulanimg(a){
@@ -396,13 +404,13 @@ export default {
       this.showAite=true;
     },
     aaa(a){
-      console.log('输出姓名'+a);
+    
       this.aiteyonghu=a;
       this.zishu+="@"+a+'';
       this.showAite=false;
     },
     fasong(){
-      console.log("发送信息"+this.wenzhang.wenzhangId,this.loginUser.userid)
+      
       this.show=false;
       this.axios.post("/reply/addReply",{
         dynamicId:this.wenzhang.wenzhangId,
@@ -410,12 +418,12 @@ export default {
         replyContent:this.zishu,
       })
       .then(res=>{
-        console.log(res);
+        res.data
 this.axios.post("/dynamic/findOneById",{
       dynamicId:this.wenzhang.wenzhangId
     })
     .then(res => {
-      console.log(res.data);
+     res.data
       this.yonghu={}
       this.wenzhang={
         liuyanshu:0
@@ -426,7 +434,7 @@ this.axios.post("/dynamic/findOneById",{
       this.yonghu.username=res.userName;
       this.yonghu.userid=res.userId;
       this.yonghu.userimg=res.userImg[0];
-      console.log(res.userImg[0]);
+ 
       this.yonghu.isdaka=res.isMaster;
       //文章信息：
       this.wenzhang.zhuanfashu=res.dynamicTransmit;
@@ -443,14 +451,11 @@ this.axios.post("/dynamic/findOneById",{
       this.wenzhang.date=res.dynamicLastTime;
       this.wenzhang.wenzhangId=res.dynamicId;
       //热门信息：
-      this.repin.zan=res.replies[0].replyLikecount+10;
+      this.repin.zan=Number(res.replies[0].replyLikecount)+10;
       this.repin.circle=res.replies[0].replyContent;
       
     });
 
-      })
-      .catch(err=>{
-        console.log(err);
       })
     },
     share(){

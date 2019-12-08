@@ -58,7 +58,7 @@ export default {
             userPhone: this.tel
           })
           .then(res => {
-            console.log(res.data);
+            res.data
           });
       } else {
         this.showtishi = true;
@@ -75,7 +75,7 @@ export default {
             verifyCode: this.yzm
           })
           .then(res => {
-            console.log(res.data);
+       
             if (res.data.code == "200") {
               this.axios
                 .post("/user/userLogin", {
@@ -84,7 +84,7 @@ export default {
                   userPassword: ""
                 })
                 .then(res => {
-                  console.log(res.data);
+               
                   if (res.data.code == "200") {
                     this.$router.replace("/home");
                     sessionStorage.setItem("token", res.data.data);
@@ -96,7 +96,7 @@ export default {
                         res.data.data.user.userSex = "女";
                       }
                       this.$store.state.userInfo = res.data.data.user;
-                      console.log("拿到数据：", res.data.data.user);
+           
                       sessionStorage.setItem(
                         "userId",
                         this.$store.state.userInfo.userId

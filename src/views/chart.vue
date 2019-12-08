@@ -22,10 +22,10 @@ export default {
         fundId: this.fundid
       })
       .then(res => {
-        console.log("c", res.data.data);
+  
         this.cons = res.data.data;
        var s1 = this.cons[0].fundEarnings;
-        console.log('s',s1)
+   
 
         var option = {
           //创建图表配置数据

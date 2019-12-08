@@ -62,7 +62,7 @@ export default {
             userPhone: this.username
           })
           .then(res => {
-            console.log(res.data);
+      
             if(res.data.code == "2002") {
               this.showtishi2 = true;
               setTimeout(() => {
@@ -97,7 +97,7 @@ export default {
           })
           .then(res => {
             this.sms = "";
-            console.log(res.data);
+       
             if (res.data.code == "200") {
               sessionStorage.setItem("tel", this.username);
               this.$router.replace("/Forgetnext");

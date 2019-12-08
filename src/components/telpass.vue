@@ -42,7 +42,7 @@ export default {
           verifyCode: ""
         })
         .then(res => {
-          console.log(res.data);
+     
           if(res.data.code == "200") {
             sessionStorage.setItem("token",res.data.data);
             this.$router.replace("/");
@@ -56,7 +56,7 @@ export default {
               }
               this.$store.state.userInfo = res.data.data.user;
               this.$store.state.accountAge = res.data.data.accountAge;
-              console.log("拿到数据：",res.data);
+       
               sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
             });
           } else if(res.data.code == "2022") {
@@ -67,7 +67,7 @@ export default {
               document.getElementsById("tishi").innerHTML = "请输入正确的手机号和密码";
             },2500)
           } else {
-            console.log("密码错误！");
+        
             this.showtishi2 = true;
             this.password = "";
             setTimeout(() => {

@@ -11,7 +11,7 @@ const http = axios.create({
 })
 
 http.interceptors.request.use(function (config) {
-  // console.log(config.url != '/api/user/uploadImg', config.url)
+
   if (config.method === "post" && config.url != "/dynamic/uploadImg" && config.url != '/user/uploadImg'&& config.url != '/user/userRegisSetInfo') { // 这一步主要取决于后端是否可以接受 json
     config.headers = {
       'Content-Type':'application/x-www-form-urlencoded'
@@ -28,7 +28,6 @@ http.interceptors.request.use(function (config) {
   }
   return config;
 }, function (error) {
-  console.log('请求拦截错误：', error)
   return Promise.reject(error)
 });
 
@@ -63,7 +62,6 @@ http.interceptors.response.use(function (response) {
 
   return response;
 }, function (error) {
-  console.log('服务器响应错误：', error)
   const _response = error.response
 
   switch(_response.status) {
