@@ -92,30 +92,7 @@
   </div>
 </template>
 <script>
-var pinlun=[
-  {
-    userId:1,
-    replyId:1,
-    name:"说课稿",
-    title:"看着落得个IE",
-    isDaka:true,
-    imgUrl:"https://img.yzcdn.cn/vant/logo.png",
-    date:2018,
-    dianzan:554,
-    isDianzan:false,
-    children:[{
-      replyId:1,
-      userId:2,
-      name:"无敌",
-      title:"二级评论哈哈哈哈哈哈哈",
-      isDaka:true,
-      imgUrl:"https://img.yzcdn.cn/vant/logo.png",
-      date:2018,
-      dianzan:54,
-      isDianzan:true
-    }]
-  }
-]
+var pinlun=JSON.parse(sessionStorage.getItem("pinlun"));
 import {Popup,Toast,Uploader,Icon} from 'vant'
 export default {
   name:"pinlunxiang",
@@ -146,13 +123,15 @@ export default {
         good:true
       },
       //临时存储文章相关
-
     }
   },
   created(){
+    pinlun=JSON.parse(sessionStorage.getItem("pinlun"));
+    console.log(pinlun);
     for(var i=0;i<pinlun.length;i++){
         if(pinlun[i].replyId==this.$route.query.pinlunid){
-          this.moni.pinlun=pinlun[i]
+          this.moni.pinlun=pinlun[i];
+          this.moni.pinlun.children.reverse();
         }
       }
       console.log(this.moni.pinlun);
@@ -204,15 +183,16 @@ export default {
       pinlun[0].children.unshift({
         replyId:1,
         userId:2,
-        name:"自定义名字",
+        name:"好啊",
         title:this.moni.zishu,
         isDaka:true,
-        imgUrl:"https://img.yzcdn.cn/vant/logo.png",
+        imgUrl:"https://hbimg.huabanimg.com/9134ebad727a9223f3495d384e482da1142eac022e20d-MUJCbz_fw658",
         date:2018,
         dianzan:0,
         isDianzan:false
       });
       this.moni.linshi='';
+      this.moni.zishu='';
       console.log(pinlun);
     //   this.axios.post("/reply/addReply",{
     //     dynamicId:this.moni.wenzhang,
@@ -294,12 +274,14 @@ export default {
     height: 20px;
     border-radius: 50%;
     background-color: orange;
+    overflow: hidden;
   }
   .DauserImg{
     width: 30px;
     height: 30px;
     border-radius: 50%;
     background-color: orange;
+    overflow: hidden;
   }
 .contentUser{
   display: flex;

@@ -307,7 +307,6 @@ export default {
       console.log(res.data.data);
       this.isshoucang=res.data.data;
     })
-    console.log(this.wenzhang.wenzhangId)
       this.axios.post("/dynamic/findOneById",{
       dynamicId:this.wenzhang.wenzhangId
     })
@@ -477,7 +476,7 @@ this.axios.post("/dynamic/findOneById",{
         }else{this.isshoucang=false}
         console.log(this.isshoucang);
       })
-    }
+    },
   }
 }
 </script>

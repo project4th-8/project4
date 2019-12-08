@@ -3,7 +3,7 @@
   <div id="scpinlun">
     <div class="toubu">
       <a href="javascript:history.go(-1)"><van-icon name="arrow-left"/></a>
-      <span>评论页</span>
+      <span @click="test">评论页</span>
             <router-link to="/">
         <van-icon name="wap-home-o" />
       </router-link>
@@ -31,14 +31,14 @@
             </div>
             <div class="van-hairline--top-bottom">{{item.title}}</div>
             <div class="huifu">
-              <div>
+              <div class="huifu-son">
                 {{item.children[0].name}}:{{item.children[0].title}}
               </div>
               <div>
                 <van-icon name="good-job-o" :class="{on:item.children[0].isDianzan}" @click="item.children[0].isDianzan=!item.children[0].isDianzan;item.children[0].dianzan=item.children[0].isDianzan?item.children[0].dianzan+1:item.children[0].dianzan-1"   />{{item.children[0].dianzan}}
               </div>
             </div>
-            <router-link :to="'/scpinlunxiang?pinlunid='+item.replyId">
+            <router-link @click="test" :to="'/scpinlunxiang?pinlunid='+item.replyId" >
               <div class="dengren">
                 <p id="p">{{item.children[0].name}}等用户{{item.children.length}}条回复</p>
               </div>
@@ -85,8 +85,28 @@ var pinlun=[
     title:"看着落得个IE",
     isDaka:true,
     imgUrl:"https://img.yzcdn.cn/vant/logo.png",
-    date:2018,
-    dianzan:554,
+    date:"2018.2.5",
+    dianzan:54,
+    isDianzan:true,
+    children:[{
+      userId:2,
+      name:"无敌",
+      title:"二级评论哈哈哈哈哈哈哈",
+      isDaka:true,
+      imgUrl:"https://img.yzcdn.cn/vant/logo.png",
+      date:"2018.2.5",
+      dianzan:4,
+      isDianzan:true
+    }]
+  },{
+    userId:2,
+    replyId:2,
+    name:"说课稿",
+    title:"看着落得个IE",
+    isDaka:true,
+    imgUrl:"https://img.yzcdn.cn/vant/logo.png",
+    date:"2018.2.5",
+    dianzan:1154,
     isDianzan:false,
     children:[{
       userId:2,
@@ -94,8 +114,28 @@ var pinlun=[
       title:"二级评论哈哈哈哈哈哈哈",
       isDaka:true,
       imgUrl:"https://img.yzcdn.cn/vant/logo.png",
-      date:2018,
-      dianzan:54,
+      date:"2018.2.5",
+      dianzan:5,
+      isDianzan:true
+    }]
+  },{
+    userId:3,
+    replyId:3,
+    name:"说课稿",
+    title:"看着落得个IE",
+    isDaka:true,
+    imgUrl:"https://img.yzcdn.cn/vant/logo.png",
+    date:"2018.2.5",
+    dianzan:54,
+    isDianzan:false,
+    children:[{
+      userId:2,
+      name:"无敌",
+      title:"二级评论哈哈哈哈哈哈哈",
+      isDaka:true,
+      imgUrl:"https://img.yzcdn.cn/vant/logo.png",
+      date:"2018.2.5",
+      dianzan:541,
       isDianzan:true
     }]
   }
@@ -126,6 +166,7 @@ export default {
     }
   },
   created (){
+    sessionStorage.setItem("pinlun",JSON.stringify(pinlun));
     // this.moni.pinlun=pinlun;
 
     //没有服务器，使用静态页面
@@ -179,7 +220,8 @@ export default {
     huifu(a){
       console.log(this.moni.zishu)
       this.show=false;
-      this.moni.zishu='';
+
+      
       for(var i=0;i<pinlun.length;i++){
         if(pinlun[i].replyId==a){
           pinlun[i].children.push({
@@ -188,11 +230,12 @@ export default {
             title:this.moni.zishu,
             dianzan:0,
             date:new Date(),
-            imgUrl:"../assets/logo.png"
+            imgUrl:"https://hbimg.huabanimg.com/9134ebad727a9223f3495d384e482da1142eac022e20d-MUJCbz_fw658"
           })
         }
       }
-
+    sessionStorage.setItem("pinlun",JSON.stringify(this.moni.pinlun));
+this.moni.zishu='';
 
 
       this.moni.pinlun=[];
@@ -255,7 +298,7 @@ export default {
 //       console.log(err)
 //     })
     },
-        toast(a){
+      toast(a){
       Toast(a);
       this.show=false;
     },
@@ -287,6 +330,10 @@ export default {
       // .catch(err=>{
       //   console.log(err);
       // })
+    },
+    test(){
+      console.log(this.moni.pinlun)
+      sessionStorage.setItem("pinlun",JSON.stringify(this.moni.pinlun));
     }
   },
 
@@ -369,7 +416,6 @@ export default {
 .van-hairline--top-bottom{
   font-size: 18px;
   color: black;
-  background-color: #eee;
   border-radius: 10px;
 }
 .on{
@@ -394,10 +440,14 @@ export default {
   }
 }
 .huifu{
-  font-size: 16px;
+  background-color: #eee;
+  border-radius: 20px;
+  font-size: 12px;
   display: flex;
   justify-content: space-between;
   margin: 10px 0;
+  box-sizing: border-box;
+  padding: 10px 10px;
 
 }
 // 人物布局
