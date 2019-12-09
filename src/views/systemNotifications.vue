@@ -24,12 +24,10 @@ export default {
   created(){
     this.axios.post("/findAllAdvice")
     .then(res=>{
-      console.log(res.data.data)
-      // for(var i =0;i<res.data.data.length;i++){
+ 
         this.slists = res.data.data.filter(function(item){
         return item.datestate == 0 
         });
-        console.log(this.slists)
       
     })
   }

@@ -8,6 +8,7 @@
         shape="round"
         @search="onSearch"
         class="top"
+        @focus="mfocus"	
       >
         <div slot="action" @click="onSearch">搜索</div>
       </van-search>
@@ -43,7 +44,12 @@ export default {
     [Search.name]: Search
   },
   methods: {
-    onSearch: function() {},
+    onSearch: function() {
+
+    },
+    mfocus:function() {
+      this.$router.push('/search')
+    }
   },
 };
 </script>

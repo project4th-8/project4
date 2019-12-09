@@ -61,35 +61,22 @@ export default {
      this.axios.post("/search/findAllSearch")
     .then(res=>{
       this.lists= res.data.data
-      console.log(this.lists)
+    
     })
    },
   methods: {
-   /*  tosousuo(){
-    let _Xtext = this.Xtext;
-    let newlists = [];
-    if(_Xtext){
-      this.allList.filter(item =>{
-        if(item.code.toLowerCase().indexOf(_search) !== -1){
-          newlists.push(item)
-        }
-      })
-    }
-    this.allList = newlists
-  }, */
+
   removeHistory: function (index) {
-    console.log(this.lists[index].id)
+ 
         this.lists.splice(index, 1);
         this.change();
         this.axios.post('/search/delSearch',{
           id: this.lists[index].id
         })
         .then(res=>{
-          console.log(res.data)
+          res.data
         })
-        .catch(err=>{
-          console.log(err)
-        })
+      
        },
   change:function(){
     if(this.lists.length == 0){
@@ -103,11 +90,11 @@ export default {
           this.change();
           this.axios.post('/search/delAllSearch')
           .then(res=>{
-            console.log(res.data)
+            res.data
           })
   },
     removeX:function(){
-      // console.log(this.Xtext)
+  
     this.Xtext = "";
   },
  
@@ -122,12 +109,10 @@ export default {
          searchText:this.Xtext
        })
        .then(res=>{
-        //  this.lists = res.data.data
-         console.log(res.data)
+        
+       res.data
        })
-       .catch(err=>{
-         console.log(err)
-       })
+     
         this.axios.post("/search/someSearch",{
          searchText:this.Xtext
        })
@@ -148,6 +133,7 @@ export default {
        .catch(err=>{
          console.log(err)
        })
+     
       this.lists.unshift({
        searchRecords:this.Xtext
       })

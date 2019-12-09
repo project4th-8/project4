@@ -43,7 +43,6 @@ export default {
     this.axios
     .post('/search/hotFund')
     .then(res=>{
-      console.log(res.data.data)
       this.lists = res.data.data
     })
     .catch(err=>{
@@ -57,7 +56,7 @@ export default {
     },
     toji(index){
       sessionStorage.setItem('fundId',this.lists[index].fundId)
-      console.log(this.lists[index].fundId)
+
     }
   }
 

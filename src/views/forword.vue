@@ -1,9 +1,16 @@
 <template>
   <div class="create">
     <div>
-      <van-nav-bar title="转发正文" left-text="返回" left-arrow right-text="发布" @click-left="re"   @click-right="submittxt"></van-nav-bar>
+      <van-nav-bar
+        title="转发正文"
+        left-text="返回"
+        left-arrow
+        right-text="发布"
+        @click-left="re"
+        @click-right="submittxt"
+      ></van-nav-bar>
     </div>
-    
+
     <div>
       <van-cell-group class="autocontent">
         <van-field
@@ -14,8 +21,6 @@
           type="textarea"
           placeholder="分享精彩"
         ></van-field>
-
-       
       </van-cell-group>
     </div>
     <div class="recommend">
@@ -50,10 +55,20 @@
         <van-icon name="gold-coin-o" @click="fund" />
       </span>
     </div>
+    <div>
+      <van-action-sheet
+        v-model="show"
+        :close-on-click-action="true"
+        :actions="actions"
+        cancel-text="取消"
+        @cancel="onCancel"
+        @select="onSelect"
+      />
+    </div>
   </div>
 </template>
 <script>
-import { NavBar, Cell, CellGroup, Field, Uploader, Icon } from "vant";
+import { NavBar, Cell, CellGroup, Field, Uploader, Icon, Toast,  ActionSheet } from "vant";
 export default {
   name: "createtext",
   data: function() {
@@ -63,20 +78,26 @@ export default {
       date: [],
       dynamicId: "",
       userId: "",
-      dynamicTitle:'',
-      token:''
+      dynamicTitle: "",
+      token: "",
+      show: false,
+      actions: [],
+      funds: [
+        { name: "$立德基金" },
+        { name: "$钱攀攀股票" },
+        { name: "$华宇基金" }
+      ]
     };
   },
   created() {
     this.dynamicId = sessionStorage.getItem("forworddynamicId");
     this.userId = sessionStorage.getItem("forworduserId");
-    this.token = sessionStorage.getItem("token")
+    this.token = sessionStorage.getItem("token");
     this.axios
       .post("/dynamic/findOneById", {
         dynamicId: this.dynamicId
       })
       .then(res => {
-        console.log(res.data);
         this.date = res.data.data;
       });
   },
@@ -86,7 +107,11 @@ export default {
     [CellGroup.name]: CellGroup,
     [Field.name]: Field,
     [Uploader.name]: Uploader,
-    [Icon.name]: Icon
+    [Toast.name]: Toast,
+    [Icon.name]: Icon,
+    [ActionSheet.name]: ActionSheet
+
+    // ActionSheet
   },
   methods: {
     re: function() {
@@ -94,23 +119,47 @@ export default {
       sessionStorage.removeItem("forworddynamicId");
       this.$router.push("/");
     },
-
+    onCancel() {
+      this.show = false;
+    },
+    onSelect: function(item) {
+      this.dynamicTitle += item.name;
+    },
     at: function() {
-      this.message += "@";
+      this.show = true;
+      this.axios
+        .post("/findAllAttention", {
+          userId: sessionStorage.getItem("userId")
+        })
+        .then(res => {
+          this.actions = res.data.data;
+          this.actions.map(item => {
+            item.name = "@" + item.userName;
+            return item;
+          });
+        });
     },
     fund: function() {
-      this.message += "$";
+      this.show = true;
+      this.actions = this.funds;
     },
-    submittxt:function () {
-      this.axios.post("/dynamic/returnBy",{
-        ids: null ,
-        dynamicId: this.dynamicId,
-        dynamicTitle:this.dynamicTitle,
-        token:this.token
-      })
-      .then(res=> {
-        console.log(res.data)
-      })
+    submittxt: function() {
+      this.axios
+        .post("/dynamic/returnBy", {
+          ids: null,
+          dynamicId: this.dynamicId,
+          dynamicTitle: this.dynamicTitle,
+          token: this.token
+        })
+        .then(res => {
+          if (res.data.code == "200") {
+            res.data;
+            Toast("发布成功");
+            setTimeout(() => {
+              this.$router.replace("/Mtext");
+            }, 1500);
+          }
+        });
     }
   }
 };
@@ -133,7 +182,6 @@ export default {
 }
 
 .bottoms {
-  
   display: flex;
   justify-content: flex-end;
   height: 80px;

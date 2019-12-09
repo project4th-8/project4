@@ -35,7 +35,7 @@ export default {
         userSign: this.userSign
       })
       .then(res => {
-        console.log(res.data);
+          res.data
         this.$emit('changeCom','');
           this.axios.post("/user/findAllUserInfo")
           .then(res => {
@@ -45,7 +45,7 @@ export default {
               res.data.data.user.userSex = "女";
             }
             this.$store.state.userInfo = res.data.data.user;
-            console.log("拿到数据：",res.data.data.user);
+      
             sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
           });
       })

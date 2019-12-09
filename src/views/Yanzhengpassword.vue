@@ -41,11 +41,11 @@ export default {
       var youxiang=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
       var dianhua = /^[1][3,4,5,7,8][0-9]{9}$/;
       if (!dianhua.test(this.username) && !youxiang.test(this.username)) {
-        console.log(false)
+    
         return false;
         
       } else {
-        console.log(true)
+      
         return true;
 
       }
@@ -53,10 +53,10 @@ export default {
     foo2() {
       var pw = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/;
       if (!pw.test(this.password)) {
-        console.log(false)
+      
         return false;
       } else {
-        console.log(true)
+      
         return true;
       }
     },

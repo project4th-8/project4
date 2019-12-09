@@ -22,22 +22,7 @@ name:"message",
     }
   },
   created(){
-    //   this.axios
-    //  .post('/findAllAdvice')
-    //  .then(res=>{
-    //    console.log(res.data.data)
-    //  })
-    //  .catch(err=>{
-    //    console.log(err)
-    //  })
-    //   this.axios
-    //  .post('/user/UserAll')
-    //  .then(res=>{
-    //    console.log(res.data.data)
-    //  })
-    //  .catch(err=>{
-    //    console.log(err)
-    //  })
+
   }
 }
 </script>

@@ -24,10 +24,8 @@
           label="内容"
           type="textarea"
           placeholder="分享精彩"
-        >
-        
-        </van-field>
-   
+        ></van-field>
+
         <div>
           <van-uploader v-model="fileList" multiple :max-count="3" />
         </div>
@@ -39,10 +37,23 @@
         <van-icon name="gold-coin-o" @click="fund" />
       </span>
     </div>
+    <div>
+      <van-action-sheet v-model="show" :close-on-click-action="true" :actions="actions" cancel-text="取消" @cancel="onCancel" @select="onSelect" />
+    </div>
   </div>
 </template>
 <script>
-import { NavBar, Cell, CellGroup, Field, Uploader, Icon } from "vant";
+
+import {
+  NavBar,
+  Cell,
+  CellGroup,
+  Field,
+  Uploader,
+  Icon,
+  ActionSheet,
+  Toast 
+} from "vant";
 
 export default {
   name: "createtext",
@@ -52,8 +63,17 @@ export default {
       fileList: [],
       message: "",
       count: 0,
-      files:'',
-      imgs:''
+      files: "",
+
+      imgs: "",
+      show: false,
+      actions: [],
+      funds:[
+        {name:"$立德基金"},
+        {name:"$钱攀攀股票"},
+        {name:"$华宇基金"}
+      ]
+      
     };
   },
   components: {
@@ -62,8 +82,15 @@ export default {
     [CellGroup.name]: CellGroup,
     [Field.name]: Field,
     [Uploader.name]: Uploader,
-    [Icon.name]: Icon
+    [Icon.name]: Icon,
+    [Toast.name]: Toast,
+    [ActionSheet.name]: ActionSheet,
+   
   },
+  watch:{
+   
+  },
+ 
   methods: {
     re: function() {
       this.$router.replace("/");
@@ -72,10 +99,29 @@ export default {
       this.refundImages = images;
     },
     at: function() {
-      this.message += "@";
+      this.show = true;
+      this.axios
+        .post("/findAllAttention", {
+          userId: sessionStorage.getItem("userId")
+        })
+        .then(res => {
+         this.actions = res.data.data
+         this.actions.map((item)=> {
+           item.name = "@" +item.userName;
+           return item
+         })
+        });
+    },
+    onSelect: function(item) {
+       this.message += item.name
     },
     fund: function() {
-      this.message += "$";
+    
+      this.show = true;
+      this.actions = this.funds
+    },
+    onCancel() {
+      this.show = false;
     },
     submittxt: function() {
       this.axios
@@ -84,17 +130,23 @@ export default {
           dynamicContent: this.message,
           peopleId: null,
           fundId: null,
-          userId: 1
+          userId: sessionStorage.getItem('userId')
         })
         .then(res => {
-          console.log(res.data);
-          res.data.caode;
+
+          if(res.data.code == "200") {
+           res.data
+           Toast('发布成功');
+           setTimeout( ()=>{
+           this.$router.replace('/Mtext')
+           },1500)
+          }
         });
 
-        this.fileList.forEach((item) => {
-          var form = new FormData();
-          this.files = item.file;
-          form.append("header",this.files);
+      this.fileList.forEach(item => {
+        var form = new FormData();
+        this.files = item.file;
+        form.append("header", this.files);
 
         this.axios
           .post("/dynamic/uploadImg", form, {
@@ -103,13 +155,12 @@ export default {
             }
           })
           .then(res => {
-            console.log(res.data);
-           
-          }); 
+            res.data
+          });
       });
     },
     filenext() {
-      console.log();
+
     }
   }
 };

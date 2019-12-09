@@ -31,14 +31,14 @@ export default {
           this.$emit('changeCom','');
           this.axios.post("/user/findAllUserInfo")
           .then(res => {
-            console.log("我的性别：",res.data.data.user.userSex);
+      
             if(res.data.data.user.userSex == 1) {
               res.data.data.user.userSex = "男";
             } else {
               res.data.data.user.userSex = "女";
             }
             this.$store.state.userInfo = res.data.data.user;
-            console.log("拿到数据：",res.data.data.user);
+     
             sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
           });
         }

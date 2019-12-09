@@ -68,7 +68,7 @@ export default {
             userPhone: this.username
           })
           .then(res => {
-            console.log(res.data);
+       
             if (res.data.code == "2001") {
               this.username = "";
               this.showtishi2 = true;
@@ -103,7 +103,7 @@ export default {
             verifyCode: this.yzm
           })
           .then(res => {
-            console.log(res.data);
+     
             if (res.data.code == "200") {
               sessionStorage.setItem("tel", this.username);
               this.$router.replace("/Registernext");

@@ -17,7 +17,6 @@
            </div>
           <div class="wei">
             <p><span>{{item.time}}</span></p>
-            <div class="mes_count" >{{item.count}}</div>
           </div>
       </li>
     </ul>
@@ -58,16 +57,16 @@ export default {
     this.msgList = msgList;
 
     this.axios.post("/findAllAdvice").then(res => {
-      console.log(res.data.data);
+    
       // for(var i =0;i<res.data.data.length;i++){
       this.comlists = res.data.data.filter(function(item) {
         return item.datestate == 4 && item.isRead == 0;
       });
 
-      console.log(this.comlists);
+ 
     });
     this.axios.post("/findAllAdvice").then(res => {
-      console.log(res.data.data);
+  
       // for(var i =0;i<res.data.data.length;i++){
       this.plists = res.data.data.filter(function(item) {
         return item.datestate == 5 && item.isRead == 0;

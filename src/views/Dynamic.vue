@@ -103,12 +103,13 @@ export default {
   },
   methods: {
     sccommentCon(id) {
-      console.log("文章id：",id);
+    
       sessionStorage.setItem("dynamicId",id);
     }
   },
   created() {
     this.changeAccount;
+    sessionStorage.setItem("quitpath",this.$route.fullPath);
     sessionStorage.setItem("oldroute",this.$route.fullPath);
     this.mydynamic = this.$store.state.userInfo.dynamics;
     if(this.mydynamic.length == 0) {
@@ -116,7 +117,7 @@ export default {
     } else {
       this.nobody = false;
     }
-    console.log("我的动态：",this.mydynamic);
+   
   }
 };
 </script>

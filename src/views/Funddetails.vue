@@ -93,13 +93,13 @@ export default {
     this.twoday = s[0] + "-" + s[1] + "-" + (Number(s[2]) + 1);
 
     this.fundid = sessionStorage.getItem("fundId");
-        console.log(this.fundid);
+
 
     this.axios.post("/fund/findById", {
         fundId: this.fundid
       })
       .then(res => {
-        console.log(res.data.data);
+
         this.cons = res.data.data;
       });
   },
