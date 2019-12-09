@@ -63,7 +63,7 @@
                   </textarea>
                 </div>
                 <div class="van2">
-                  <span @click="huifu(item.replyId)">发送</span>
+                  <span @click="huifu(moni.linshi.replyId)">发送</span>
                   <span @click="show=false">取消</span>
                 </div>
               </van-popup>
@@ -89,7 +89,7 @@ var pinlun=[
     dianzan:54,
     isDianzan:true,
     children:[{
-      userId:2,
+      userId:12,
       name:"无敌",
       title:"二级评论哈哈哈哈哈哈哈",
       isDaka:true,
@@ -109,7 +109,7 @@ var pinlun=[
     dianzan:1154,
     isDianzan:false,
     children:[{
-      userId:2,
+      userId:13,
       name:"无敌",
       title:"二级评论哈哈哈哈哈哈哈",
       isDaka:true,
@@ -129,7 +129,7 @@ var pinlun=[
     dianzan:54,
     isDianzan:false,
     children:[{
-      userId:2,
+      userId:14,
       name:"无敌",
       title:"二级评论哈哈哈哈哈哈哈",
       isDaka:true,
@@ -218,6 +218,7 @@ export default {
       this.dianzan=true;
     },
     huifu(a){
+      console.log(a);
       console.log(this.moni.zishu)
       this.show=false;
 
@@ -301,6 +302,15 @@ this.moni.zishu='';
       toast(a){
       Toast(a);
       this.show=false;
+      this.axios.post("/reply/replyIsReport",{
+        replyId:1
+      })
+      .then(res=>{
+        console.log(res)
+      })
+      .catch(err=>{
+        console.log(err);
+      })
     },
     del(a){
       console.log(a);

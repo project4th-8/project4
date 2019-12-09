@@ -291,9 +291,9 @@ export default {
       //存储返回文章的热评
       repin:{
         redu:588,
-        zan:898,
-        iszan:true,
-        circle:"默认热点。"
+        zan:0,
+        iszan:false,
+        circle:"热门评论。"
       }
     }
   },
@@ -442,8 +442,8 @@ this.axios.post("/dynamic/findOneById",{
           this.wenzhang.liuyanshu++;
         }
       }
-      this.wenzhang.shoucangshu=res.dynamicHeat;
-      this.wenzhang.dianzanshu=res.dynamicLikeCount;
+      this.wenzhang.shoucangshu=res.dynamicHeat+1;
+      this.wenzhang.dianzanshu=res.dynamicLikeCount+1;
       this.wenzhang.circle=res.dynamicContent;
       this.wenzhang.title=res.dynamicTitle;
       this.wenzhang.url=res.imgUrl;

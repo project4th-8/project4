@@ -25,6 +25,7 @@
       </div>
       <div class="line-1"></div>
       <p class="right"  @click="tankuang({
+        
         id:moni.pinlun.replyId,
         title:moni.pinlun.title,
         name:moni.pinlun.name
@@ -178,9 +179,9 @@ export default {
     },
     fasong(){
       this.showSon=false;
-      console.log(pinlun[0].children);
+      console.log(this.moni.pinlun.children);
       console.log(this.moni.linshi);
-      pinlun[0].children.unshift({
+      this.moni.pinlun.children.unshift({
         replyId:1,
         userId:2,
         name:"好啊",
