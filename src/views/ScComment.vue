@@ -273,7 +273,7 @@ export default {
       },
       //存储文章(需要获取的数据)
       wenzhang:{
-        wenzhangId:1,
+        wenzhangId:sessionStorage.getItem('dynamicId'),
         title:"默认标题",
         circle:"默认文章",
         url:[
