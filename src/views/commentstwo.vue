@@ -20,7 +20,7 @@
         </div>
 
         <p class="tomine">
-          <span>@{{huifuname}}{{huifu}}</span>
+          <!-- <span>@{{huifuname}}{{huifu}}</span> -->
           <router-link to="./about">@{{myname}}</router-link>
           评论的内容
         </p>
@@ -36,29 +36,7 @@
   </div>
 </template>
 <script>
-// import { Popup,Cell } from 'vant';
-/* var comlists =[
-  {
-    id:1,
-    hisimgurl:require("../assets/img/1.jpg"),
-    hisname:"消防",
-    time:"10:30",
-    myname:"我的用户名",
-    title:"这是文章标题",
-    content:"文章内容超出部分不显示",
-    comcont:"这是用户评论的内容"
-  },
-   {
-     id:2,
-     hisimgurl:require("../assets/img/1.jpg"),
-    hisname:"公安",
-    time:"刚刚",
-    myname:"我的用户名",
-    title:"这是文章标题",
-    content:"文章内容超出部分不显示",
-    comcont:"这是用户评论的内容"
-  },
-] */
+
 export default {
   name: "commentstwo",
   data() {
@@ -84,7 +62,8 @@ export default {
         userId: this.userId
       })
       .then(res => {
-        this.myname = res.data.data.userNickname;
+        this.myname = res.data.data.userName;
+        console.log(res.data.data)
       });
     this.axios.post("/findAllAdvice").then(res => {
    

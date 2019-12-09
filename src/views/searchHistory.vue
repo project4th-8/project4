@@ -68,7 +68,8 @@ export default {
    },
   methods: {
     tow(index){
-    sessionStorage.setItem("dynamicId",this.wlist[index].dynamicId)
+    sessionStorage.setItem("dynamicId",this.wlist[index].dynamicId);
+    this.$router.push('/sccomment');
     },
 
   removeHistory: function (index) {

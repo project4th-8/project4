@@ -16,7 +16,7 @@
            <p>{{item.text}}</p>
            </div>
           <div class="wei">
-            <p><span>{{item.time}}</span></p>
+            <span>{{item.time}}</span>
           </div>
       </li>
     </ul>
@@ -34,8 +34,32 @@ var msgList = [
 },
  {
     url: require("../assets/img/1.jpg"),
-    hisname:"这是er的姓名",
+    hisname:"小东西",
     time:"12:30",
+    text:"文章内容，显示不完变成省略号",
+    count:"1",
+    Number:"1"
+},
+ {
+    url: require("../assets/img/1.jpg"),
+    hisname:"大东西",
+    time:"13：40",
+    text:"文章内容，显示不完变成省略号",
+    count:"1",
+    Number:"1"
+},
+ {
+    url: require("../assets/img/1.jpg"),
+    hisname:"气死人",
+    time:"22：40",
+    text:"文章内容，显示不完变成省略号",
+    count:"1",
+    Number:"1"
+},
+ {
+    url: require("../assets/img/1.jpg"),
+    hisname:"真的气人",
+    time:"6:30",
     text:"文章内容，显示不完变成省略号",
     count:"1",
     Number:"1"
@@ -176,7 +200,7 @@ export default {
         width: 25px;
         height: 25px;
         border-radius: 50%;
-         background: rgb(231, 230, 164);
+         background: rgb(231, 62, 56);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -244,13 +268,15 @@ export default {
         }
       }
       .wei{
-        width: 10%;
-         display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-wrap: wrap;
-        p{
-          font-size: 14px;
+        width: 15%;
+        text-align: right;
+        //  display: flex;
+        //   justify-content: center;
+        //   align-items: center;
+        //   flex-wrap: wrap;
+        span{
+          font-size: 12px;
+
         }
         .mes_count{
           font-size: 14px;
