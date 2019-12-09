@@ -283,7 +283,7 @@ export default {
         //被@的对象
         aite:"被招呼的幸运用户",
         zhuanfashu:58,//转发数
-        liuyanshu:0,//留言数
+        liuyanshu:12,//留言数
         shoucangshu:5,//收藏数
         dianzanshu:44,//文章点赞数
       },
@@ -293,7 +293,7 @@ export default {
         redu:588,
         zan:0,
         iszan:false,
-        circle:"热门评论。"
+        circle:"当前没有热门评论。"
       }
     }
   },
@@ -326,8 +326,8 @@ export default {
           this.wenzhang.liuyanshu++;
         }
       }
-      this.wenzhang.shoucangshu=res.dynamicHeat;
-      this.wenzhang.dianzanshu=res.dynamicLikeCount;
+      this.wenzhang.shoucangshu=res.dynamicHeat+1;
+      this.wenzhang.dianzanshu=res.dynamicLikeCount+1;
       this.wenzhang.circle=res.dynamicContent;
       this.wenzhang.title=res.dynamicTitle;
       this.wenzhang.url=res.imgUrl;

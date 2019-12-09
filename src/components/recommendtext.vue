@@ -204,7 +204,7 @@ export default {
 .moduls {
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.07);
+  background: rgba(0, 0, 0, 0.01);
   position: fixed;
   z-index: 1000;
   top: 0;

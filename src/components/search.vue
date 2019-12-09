@@ -56,6 +56,7 @@ export default {
     },
     toji(index){
       sessionStorage.setItem('fundId',this.lists[index].fundId)
+      this.$router.push("/funddetails")
 
     }
   }
@@ -127,8 +128,8 @@ export default {
   padding: 0;
   margin: 0;
   margin-left: 5%;
-  text-align: center;
-  // text-indent: 1em;
+  // text-align: center;
+  text-indent: 1em;
   li:nth-of-type(odd){
     float: left;
     height: 15px;

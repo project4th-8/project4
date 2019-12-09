@@ -1,7 +1,7 @@
 <template>
   <div class="Login">
     <div id="game"></div>
-    <h1>利德金融</h1>
+    <h1>易基金</h1>
     <h4>标记我的生活</h4>
 
     <div class="rob">
@@ -64,6 +64,10 @@ export default {
   position: fixed;
   z-index: 1000;
   top: 0;
+
+  h1 {
+    transform: translateX(20px)
+  }
 }
 #game {
   width: 100%;
@@ -83,7 +87,7 @@ export default {
   padding: 0 4px;
 }
 .yz {
-  margin-top: 5px;
+  margin-top: 11px;
 }
 .name {
   border-top-right-radius: 4px;

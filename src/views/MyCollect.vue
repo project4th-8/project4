@@ -4,6 +4,7 @@
     <div class="title">
       <router-link to="/About">取消</router-link>
       <span>我的收藏</span>
+      <span class="total">总数：{{total}}</span>
     </div>
 
     <!-- 内容 -->
@@ -39,14 +40,15 @@ export default {
     return {
       mycollect: [],
       showtishi: 0,
-      nobody: false
+      nobody: false,
+      total: 0
     };
   },
   created() {
     sessionStorage.setItem("quitpath",this.$route.fullPath);
 
     this.axios
-      .post("/user/dynamicList", {
+      .post("/usernamicList", {
         userId: sessionStorage.getItem("userId")
       })
       .then(res => {
@@ -59,27 +61,47 @@ export default {
           }
         }
       });
+
+    this.axios.post("/usernamicSum",{
+      userId: sessionStorage.getItem("userId")
+    })
+    .then(res => {
+      console.log(res.data);
+      if(res.data.code == "200") {
+        this.total = res.data.data;
+      }
+    })
   },
   methods: {
     delCollect(id) {
-      this.axios.post("/dynamic/changeCollect",{
+      this.axios.post("namicangeCollect",{
         dynamicId: id,
         userId: sessionStorage.getItem("userId")
       })
       .then(res => {
-
+        console.log(res.data);
         if(res.data.code == "200") {
           this.axios
-          .post("/user/dynamicList", {
+          .post("/usernamicList", {
             userId: sessionStorage.getItem("userId")
           })
           .then(res => {
             this.mycollect = res.data.data;
+            console.log("我的收藏：",this.mycollect);
           });
+          this.axios.post("/usernamicSum",{
+            userId: sessionStorage.getItem("userId")
+          })
+          .then(res => {
+            console.log(res.data);
+            if(res.data.code == "200") {
+              this.total = res.data.data;
+            }
+          })
           this.showtishi = 1;
           setTimeout(() => {
-          this.showtishi = 0;
-        },1500)
+            this.showtishi = 0;
+           },1500)
         }
       })
     },
@@ -107,8 +129,8 @@ export default {
       bottom: 25px;
       left: 150px;
       font-size: 16px;
-      background: rgba(0, 0, 0, 0.1);
-      color: rgb(0, 0, 0);
+      background: rgb(0, 0, 0);
+      color: rgb(255, 255, 255);
       padding: 2px 10px;
     }
     .nobody {
@@ -131,7 +153,12 @@ export default {
     text-align: center;
     background: white;
     box-shadow: 0 1px 1px rgb(236, 236, 236);
-
+    .total {
+      position: absolute;
+      right: 20px;
+      top: 0;
+      font-size: 14px;
+    }
     a {
       font-size: 14px;
       color: rgb(92, 92, 92);

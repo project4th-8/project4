@@ -4,7 +4,7 @@
       <div><input @focus="toall" type="text" placeholder="请点击搜索"></div>
     </div>
     <ul class="memu">
-      <li ><div class="aite"><img src="../../public/img/jdtIMG/aite.png" alt=""></div><div class="jilu"><span><router-link to="/comments">@我的</router-link></span>未读<div>{{comlists.length}}</div></div> <img src="../../public/img/jdtIMG/left.png" alt=""></li>
+      <li ><div class="aite"><img src="../../public/img/jdtIMG/aite.png" alt=""></div><div class="jilu"><span><router-link to="/comments">@我的</router-link></span><div>{{comlists.length}}</div></div> <img src="../../public/img/jdtIMG/left.png" alt=""></li>
       <li @click="clearA"><div class="liuyan"><img src="../../public/img/jdtIMG/liuyan.png" alt=""></div><div class="jilu"><span><router-link to="/commentstwo">评论</router-link></span><div>{{plists.length}}</div></div><img src="../../public/img/jdtIMG/left.png" alt=""></li>
        <li><div class="zan"><img src="../../public/img/jdtIMG/zan.png" alt=""></div><div class="jilu"><span><router-link to="/fabulous">赞</router-link></span><div >{{zlists.length}}</div></div><img src="../../public/img/jdtIMG/left.png" alt=""></li>
     </ul>
@@ -12,11 +12,11 @@
       <li v-for="(item,index) in msgList" :key="index">
         <div class="tou"><img :src="item.url" alt=""  class="touimg"></div>
         <div class="nei" @click="tochat(index)">
-           <h4>{{item.hisname}}</h4> 
+           <h4 @click="test">{{item.hisname}}</h4> 
            <p>{{item.text}}</p>
            </div>
           <div class="wei">
-            <p><span>{{item.time}}</span></p>
+            <span>{{item.time}}</span>
           </div>
       </li>
     </ul>
@@ -34,8 +34,32 @@ var msgList = [
 },
  {
     url: require("../assets/img/1.jpg"),
-    hisname:"这是er的姓名",
+    hisname:"小东西",
     time:"12:30",
+    text:"文章内容，显示不完变成省略号",
+    count:"1",
+    Number:"1"
+},
+ {
+    url: require("../assets/img/1.jpg"),
+    hisname:"大东西",
+    time:"13：40",
+    text:"文章内容，显示不完变成省略号",
+    count:"1",
+    Number:"1"
+},
+ {
+    url: require("../assets/img/1.jpg"),
+    hisname:"气死人",
+    time:"22：40",
+    text:"文章内容，显示不完变成省略号",
+    count:"1",
+    Number:"1"
+},
+ {
+    url: require("../assets/img/1.jpg"),
+    hisname:"真的气人",
+    time:"6:30",
     text:"文章内容，显示不完变成省略号",
     count:"1",
     Number:"1"
@@ -73,7 +97,7 @@ export default {
       });
     });
     this.axios.post("/findAllAdvice").then(res => {
-      console.log(res.data.data);
+
       // for(var i =0;i<res.data.data.length;i++){
       this.zlists = res.data.data.filter(function(item) {
         return item.datestate == 2 && item.isRead == 0;
@@ -88,13 +112,17 @@ export default {
     },
 
     tochat(index){
-      console.log(this.msgList[0].hisname)
-      sessionStorage.setItem('userName',this.msgList[index].hisname)
+      sessionStorage.setItem("msList",JSON.stringify(msgList[index]));
+      // sessionStorage.setItem('userName',this.msgList[index].hisname)
       this.$router.push("/chat")
     },
     toall(){
        this.$router.push("/msgsearch")
       //  sessionStorage.setItem('shuzu',this.msgList)
+    },
+    test(){
+    
+     
     }
   }
 }
@@ -172,7 +200,7 @@ export default {
         width: 25px;
         height: 25px;
         border-radius: 50%;
-         background: rgb(231, 230, 164);
+         background: rgb(231, 62, 56);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -240,13 +268,15 @@ export default {
         }
       }
       .wei{
-        width: 10%;
-         display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-wrap: wrap;
-        p{
-          font-size: 14px;
+        width: 15%;
+        text-align: right;
+        //  display: flex;
+        //   justify-content: center;
+        //   align-items: center;
+        //   flex-wrap: wrap;
+        span{
+          font-size: 12px;
+
         }
         .mes_count{
           font-size: 14px;
