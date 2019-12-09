@@ -2,7 +2,7 @@
   <div class="chat">
     <div class="top">
       <div class="topImg" @click="tomessage"></div>
-      <h4>{{hisname}}</h4>
+      <h4>{{msList.hisname}}</h4>
       <div class="clear" @click="clears">清除历史</div>
     </div>
     <ul id="content">
@@ -33,6 +33,7 @@ export default {
       nei: "",
       hisname: "",
       lists: [],
+      msList:[],
       head:"",
     };
   },
@@ -42,10 +43,11 @@ export default {
     ])
   },
   created() {
-    this.head = this.userInfo.imgs[0].imgUrl;
+    // this.head = this.userInfo.imgs[0].imgUrl;
     this.lists = lists;
     this.getParams();
-     this.hisname = sessionStorage.getItem("userName");
+     this.msList = JSON.parse(sessionStorage.getItem("msList"));
+     sessionStorage.removeItem("msList")
   },
   
   methods: {

@@ -4,7 +4,7 @@
       <div><input @focus="toall" type="text" placeholder="请点击搜索"></div>
     </div>
     <ul class="memu">
-      <li ><div class="aite"><img src="../../public/img/jdtIMG/aite.png" alt=""></div><div class="jilu"><span><router-link to="/comments">@我的</router-link></span>未读<div>{{comlists.length}}</div></div> <img src="../../public/img/jdtIMG/left.png" alt=""></li>
+      <li ><div class="aite"><img src="../../public/img/jdtIMG/aite.png" alt=""></div><div class="jilu"><span><router-link to="/comments">@我的</router-link></span><div>{{comlists.length}}</div></div> <img src="../../public/img/jdtIMG/left.png" alt=""></li>
       <li @click="clearA"><div class="liuyan"><img src="../../public/img/jdtIMG/liuyan.png" alt=""></div><div class="jilu"><span><router-link to="/commentstwo">评论</router-link></span><div>{{plists.length}}</div></div><img src="../../public/img/jdtIMG/left.png" alt=""></li>
        <li><div class="zan"><img src="../../public/img/jdtIMG/zan.png" alt=""></div><div class="jilu"><span><router-link to="/fabulous">赞</router-link></span><div >{{zlists.length}}</div></div><img src="../../public/img/jdtIMG/left.png" alt=""></li>
     </ul>
@@ -12,7 +12,7 @@
       <li v-for="(item,index) in msgList" :key="index">
         <div class="tou"><img :src="item.url" alt=""  class="touimg"></div>
         <div class="nei" @click="tochat(index)">
-           <h4>{{item.hisname}}</h4> 
+           <h4 @click="test">{{item.hisname}}</h4> 
            <p>{{item.text}}</p>
            </div>
           <div class="wei">
@@ -73,7 +73,7 @@ export default {
       });
     });
     this.axios.post("/findAllAdvice").then(res => {
-      console.log(res.data.data);
+
       // for(var i =0;i<res.data.data.length;i++){
       this.zlists = res.data.data.filter(function(item) {
         return item.datestate == 2 && item.isRead == 0;
@@ -88,13 +88,17 @@ export default {
     },
 
     tochat(index){
-      console.log(this.msgList[0].hisname)
-      sessionStorage.setItem('userName',this.msgList[index].hisname)
+      sessionStorage.setItem("msList",JSON.stringify(msgList[index]));
+      // sessionStorage.setItem('userName',this.msgList[index].hisname)
       this.$router.push("/chat")
     },
     toall(){
        this.$router.push("/msgsearch")
       //  sessionStorage.setItem('shuzu',this.msgList)
+    },
+    test(){
+    
+     
     }
   }
 }

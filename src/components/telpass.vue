@@ -56,16 +56,12 @@ export default {
               }
               this.$store.state.userInfo = res.data.data.user;
               this.$store.state.accountAge = res.data.data.accountAge;
-       
+
               sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
             });
           } else if(res.data.code == "2022") {
-            document.getElementsById("tishi").innerHTML = "该账号已被拉黑，暂时无法登录";
-            this.showtishi1 = true;
-            setTimeout(() => {
-              this.showtishi1 = false;
-              document.getElementsById("tishi").innerHTML = "请输入正确的手机号和密码";
-            },2500)
+            
+            alert("用户已被拉黑，无法登录(仅用于测试，具体时间另作处理！)")
           } else {
         
             this.showtishi2 = true;

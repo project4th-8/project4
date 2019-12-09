@@ -153,14 +153,16 @@ export default {
         .then(res => {
    
           if (res.data.code == "200") {
-            document.getElementById("tishi").innerHTML = "注册成功，请返回登陆！"
-            this.showtishi = true
-            setTimeout(() => {
-              this.showtishi = false;
-              document.getElementById("tishi").innerHTML = "必填信息不能为空!！"
               this.$router.replace("/Login");
               sessionStorage.removeItem("tel");
-            },1500)
+            // document.getElementById("tishi").innerHTML = "注册成功，请返回登陆！"
+            // this.showtishi = true
+            // setTimeout(() => {
+            //   this.showtishi = false;
+            //   document.getElementById("tishi").innerHTML = "必填信息不能为空!！"
+            //   this.$router.replace("/Login");
+            //   sessionStorage.removeItem("tel");
+            // },1500)
           }
         });
     }

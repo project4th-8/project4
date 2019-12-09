@@ -39,6 +39,7 @@
           </span>
         </div>
         <div class="down-list">
+          <span @click="delDynamic(index)">删除</span>
         </div>
       </div>
       <router-link to="/sccomment">
@@ -70,6 +71,9 @@
     <div v-show="nobody" class="nobody">
       <span>我没有发表过动态</span>
     </div>
+
+    <!-- 提示 -->
+    <p v-show="showtishi==1" class="tishi">删除成功！</p>
   </div>
 </template>
 
@@ -84,6 +88,7 @@ export default {
       isshow: false,
       isdz: true,
       mydynamic: [],
+      showtishi: 0,
       nobody: true
     };
   },
@@ -105,6 +110,34 @@ export default {
     sccommentCon(id) {
     
       sessionStorage.setItem("dynamicId",id);
+    },
+    delDynamic(index) {
+      console.log("删除正文的ID为：",index + 1);
+      this.axios.post("/dynamic/deleteSingleDynamic",{
+        dynamicId: index + 1
+      })
+      .then(res => {
+        console.log(res.data);
+        console.log("我的信息：",this.$store.state.userInfo);
+        if(res.data.code == "200") {
+          console.log("删除成功！");
+          this.axios.post("/user/findAllUserInfo")
+          .then(res => {
+            if(res.data.data.user.userSex == 1) {
+              res.data.data.user.userSex = "男";
+            } else {
+              res.data.data.user.userSex = "女";
+            }
+            this.$store.state.userInfo = res.data.data.user;
+            console.log("我的信息：",this.$store.state.userInfo);
+            sessionStorage.setItem("userId",this.$store.state.userInfo.userId);
+          });
+          this.showtishi = 1;
+          setTimeout(() => {
+            this.showtishi = 0;
+           },1500)
+        }
+      })
     }
   },
   created() {
@@ -112,6 +145,7 @@ export default {
     sessionStorage.setItem("quitpath",this.$route.fullPath);
     sessionStorage.setItem("oldroute",this.$route.fullPath);
     this.mydynamic = this.$store.state.userInfo.dynamics;
+    console.log(this.mydynamic);
     if(this.mydynamic.length == 0) {
       this.nobody = true;
     } else {
@@ -146,6 +180,15 @@ export default {
       height: 20px;
       font-size: 15px;
       color: rgb(158, 158, 158);
+    }
+    .tishi {
+      position: fixed;
+      bottom: 25px;
+      left: 150px;
+      font-size: 16px;
+      background: rgb(0, 0, 0);
+      color: rgb(255, 255, 255);
+      padding: 2px 10px;
     }
   .title {
     position: fixed;
@@ -235,6 +278,11 @@ export default {
   padding: 10px 0;
   border-bottom: 1px solid #ddd;
   font-size: 14px;
+
+  .down-list {
+    margin: 2px 10px;
+    font-size: 12px;
+  }
 }
 .Img {
   width: 40px;

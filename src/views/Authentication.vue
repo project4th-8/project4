@@ -94,7 +94,6 @@ export default {
           masterDescrib: null
         })
         .then(res => {
-       
           if (res.data.code == "200") {
             this.showPopup();
             setTimeout(() => {
@@ -107,7 +106,7 @@ export default {
                 res.data.data.user.userSex = "女";
               }
               this.$store.state.userInfo = res.data.data.user;
-         
+
               sessionStorage.setItem(
                 "userId",
                 this.$store.state.userInfo.userId
@@ -118,9 +117,17 @@ export default {
     }
   },
   created() {
-    sessionStorage.setItem("oldroute",this.$route.fullPath);
+    sessionStorage.setItem("oldroute", this.$route.fullPath);
+    this.axios.post("/user/findAllUserInfo").then(res => {
+      if (res.data.data.user.userSex == 1) {
+        res.data.data.user.userSex = "男";
+      } else {
+        res.data.data.user.userSex = "女";
+      }
+      this.$store.state.userInfo = res.data.data.user;
 
-    
+      sessionStorage.setItem("userId", this.$store.state.userInfo.userId);
+    });
   }
 };
 </script>

@@ -17,7 +17,7 @@
       </li>
     </ul>
     <ul v-show="isTrue" class="searchAll">
-      <li v-for="(item,index) in allList " :key="index">{{allList[index]}}</li>
+      <li @click="tow(index)" v-for="(item,index) in allList " :key="index">{{allList[index]}}</li>
     </ul>
  </div>
 </template>
@@ -39,7 +39,9 @@ export default {
      searchRecords:'',
      isShow:true,
      isTrue:false,
-     allList:[]
+     allList:[],
+     wlist:[],
+    //  index:""
     }
   },
   created () {
@@ -65,6 +67,9 @@ export default {
     })
    },
   methods: {
+    tow(index){
+    sessionStorage.setItem("dynamicId",this.wlist[index].dynamicId)
+    },
 
   removeHistory: function (index) {
  
@@ -81,7 +86,7 @@ export default {
   change:function(){
     if(this.lists.length == 0){
         this.Atext = "暂无记录"
-    }else if(this.lists.length >=1){
+    }else if(this.lists.length >1){
       this.Atext = "清除历史信息"
   }},
   
@@ -100,7 +105,7 @@ export default {
  
   addHistory:function(){
    
-    
+  
     if(this.Xtext != ""){
        this.Atext = "清除历史信息";
       this.isShow = false;
@@ -124,9 +129,11 @@ export default {
           this.allList.push(res.data.data.基金[i].fundName)
           }
           for(var j=0;j<res.data.data.正文.length;j++){
-          this.allList.push(res.data.data.正文[j].dynamicTitle)
-          }
+          this.wlist.push(res.data.data.正文[j]).dynamicId
+          this.allList.push(res.data.data.正文[j].dynamicTitle);
          
+          }
+        
         //  console.log(this.allList)
          console.log(res.data.data)
        })
@@ -256,9 +263,12 @@ export default {
     height: 100vh;
     li{
       text-indent: 2em;
+      // margin: 0 auto;
+      // margin-top: 20px;
       height: 60px;
       width: 90%;
-      margin: 0 auto;
+      line-height: 60px;
+     
     };
     // background: #000;
   }

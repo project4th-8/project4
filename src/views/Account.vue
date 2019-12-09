@@ -65,8 +65,8 @@ export default {
   },
   created() {
     sessionStorage.setItem("oldroute",this.$route.fullPath);
-
-  }
+    console.log(this.userInfo);
+  } 
 };
 </script>
 
