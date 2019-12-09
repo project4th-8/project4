@@ -3,45 +3,55 @@
   <div id="scpinlun">
     <div class="toubu">
       <a href="javascript:history.go(-1)"><van-icon name="arrow-left"/></a>
-      <span>评论页</span>
+      <span @click="test">评论页</span>
             <router-link to="/">
         <van-icon name="wap-home-o" />
       </router-link>
     </div>
         <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-          <div v-for="(item,index) in moni.pinlun" :key="index" :title="item.title">
+          <div v-for="(item,index) in moni.pinlun" :key="index">
             <div class="comment-nav">
               <div class="nav-left">
                 <div class="nav-img">
-                  <img :src='item.img.imgUrl' alt="">
+                  <img :src='item.imgUrl' alt="">
                 </div>
                 <div class="nav-text">
                   <p class="username">
-                    <router-link :to="'/about?userid='+item.userInfo.userId">
-                      {{item.userInfo.userName}}
+                    <router-link :to="'/about?userid='+item.userId">
+                      {{item.name}}
                     </router-link>
-                    <img src="../assets/logo.png" alt="标识">
+                    <img v-if="item.isDaka" src="../assets/logo.png" alt="标识">
                   </p>
-                  <span><span>评论发表于</span> {{item.replyTime}}</span>
+                  <span><span>评论发表于</span> {{item.date}}</span>
                 </div>
               </div>
-              <div class="nav-right" style="color:black"><span><van-icon name="good-job-o" />{{item.replyId}}</span></div>
+              <div class="nav-right" style="color:black">
+                <span><van-icon name="good-job-o"  :class="{on:item.isDianzan}" @click="item.isDianzan=!item.isDianzan;item.dianzan=item.isDianzan?item.dianzan+1:item.dianzan-1" />{{item.dianzan}}</span>
+                </div>
             </div>
-            <div class="van-hairline--top-bottom">{{item.replyContent}}</div>
-            <router-link :to="'/scpinlunxiang?pinlunid='+item.replyId">
+            <div class="van-hairline--top-bottom">{{item.title}}</div>
+            <div class="huifu">
+              <div class="huifu-son">
+                {{item.children[0].name}}:{{item.children[0].title}}
+              </div>
+              <div>
+                <van-icon name="good-job-o" :class="{on:item.children[0].isDianzan}" @click="item.children[0].isDianzan=!item.children[0].isDianzan;item.children[0].dianzan=item.children[0].isDianzan?item.children[0].dianzan+1:item.children[0].dianzan-1"   />{{item.children[0].dianzan}}
+              </div>
+            </div>
+            <router-link @click="test" :to="'/scpinlunxiang?pinlunid='+item.replyId" >
               <div class="dengren">
-                <p id="p">查看回复<van-icon name="arrow" /></p>
+                <p id="p">{{item.children[0].name}}等用户{{item.children.length}}条回复</p>
               </div>
             </router-link>
             <van-divider :style="{ color: 'grey', borderColor: 'grey', padding: '10px 5px' }"></van-divider>
             <div class="dianzan">
               <span>
-                <a href="javascript:;" :idn="index" @click="showText({
-                  pinlunid:item.replyId,
-                  userName:item.userInfo.userName,
-                  userId:item.userInfo.userId
+                <a href="javascript:;" :idn="item.replyId" @click="showText({
+                  userId:item.userId,
+                  replyId:item.replyId,
+                  name:item.name
                 })" >
-                  <span class="iconfont icon-liuyan"></span>
+                  <span class="iconfont icon-liuyan" :idn="item.replyId"></span>
                 </a>
               </span>
               <van-popup class="tankuang-1"
@@ -49,16 +59,16 @@
                 position="bottom"
                 :style="{ height: '40vh' }">
                 <div class="van-popup">
-                  <textarea  v-model="moni.zishu"  >
+                  <textarea  v-model="moni.zishu" :placeholder="'回复 '+moni.linshi.name">
                   </textarea>
                 </div>
                 <div class="van2">
-                  <span @click="huifu">发送</span>
+                  <span @click="huifu(item.replyId)">发送</span>
                   <span @click="show=false">取消</span>
                 </div>
               </van-popup>
-              <span class="dd">
-                <span class="iconfont icon-fenxiang"></span>
+              <span class="dd" @click="toast('举报成功')">
+                举报
               </span>
               <span @click="del(item.replyId)">删除</span>
             </div>
@@ -67,9 +77,71 @@
   </div>
 </template>
 <script>
-var pinlun=[]
+var pinlun=[
+  {
+    userId:1,
+    replyId:1,
+    name:"说课稿",
+    title:"看着落得个IE",
+    isDaka:true,
+    imgUrl:"https://hbimg.huabanimg.com/a3dfa8ea88ed753a62304032faace1f6aeba0c1b14ea3-njbb8W",
+    date:"2018.2.5",
+    dianzan:54,
+    isDianzan:true,
+    children:[{
+      userId:2,
+      name:"无敌",
+      title:"二级评论哈哈哈哈哈哈哈",
+      isDaka:true,
+      imgUrl:"https://hbimg.huabanimg.com/b2c11c5eb4d3ef7abd563662f4324abfcf8d772f50b93-iiXayU",
+      date:"2018.2.5",
+      dianzan:4,
+      isDianzan:true
+    }]
+  },{
+    userId:2,
+    replyId:2,
+    name:"看看",
+    title:"看着落得个IE",
+    isDaka:true,
+    imgUrl:"https://hbimg.huabanimg.com/b2c11c5eb4d3ef7abd563662f4324abfcf8d772f50b93-iiXayU",
+    date:"2018.2.5",
+    dianzan:1154,
+    isDianzan:false,
+    children:[{
+      userId:2,
+      name:"无敌",
+      title:"二级评论哈哈哈哈哈哈哈",
+      isDaka:true,
+      imgUrl:"https://hbimg.huabanimg.com/b2c11c5eb4d3ef7abd563662f4324abfcf8d772f50b93-iiXayU",
+      date:"2018.2.5",
+      dianzan:5,
+      isDianzan:true
+    }]
+  },{
+    userId:3,
+    replyId:3,
+    name:"好沉沉",
+    title:"看着落得个IE",
+    isDaka:true,
+    imgUrl:"https://hbimg.huabanimg.com/c1ce4fe1642233039dc4b692b927c267e8cf9dae69c4-yIUpQE",
+    date:"2018.2.5",
+    dianzan:54,
+    isDianzan:false,
+    children:[{
+      userId:2,
+      name:"无敌",
+      title:"二级评论哈哈哈哈哈哈哈",
+      isDaka:true,
+      imgUrl:"https://hbimg.huabanimg.com/b2c11c5eb4d3ef7abd563662f4324abfcf8d772f50b93-iiXayU",
+      date:"2018.2.5",
+      dianzan:541,
+      isDianzan:true
+    }]
+  }
+]
 //通过dynamicId parentId=0获取文章评论信息（空数组push引入）
-import {List,Divider,Popup,Icon,Button,Tab, Tabs } from 'vant'
+import {List,Divider,Popup,Icon,Button,Tab, Tabs ,Toast,} from 'vant'
 export default {
   name:"pinglun",
   data(){
@@ -80,7 +152,8 @@ export default {
         dynamicId:1,
         yonghuid:1,
         pinlun:[],
-        zishu:""
+        zishu:"",
+        linshi:{}//动态存储回复人
       },
       loading:false,
       finished:false,
@@ -88,27 +161,31 @@ export default {
       users:[],
       show:false,
       dianzan:false,
-      linshi:{},//临时存储回复人,
-      lisnhizishu:'',//临时存储回复
       active:2,
       //评论用户
     }
   },
   created (){
+    sessionStorage.setItem("pinlun",JSON.stringify(pinlun));
     // this.moni.pinlun=pinlun;
-    this.axios.post("/dynamic/findOneById",{
-      dynamicId:1
-    })
-    .then(res=>{
 
-      res=res.data.data;
-      for(let i=0;i<res.replies.length;i++){
-        if(res.replies[i].parentId==0){
-          pinlun.push(res.replies[i]);      
-        }
-      }
- 
-    })
+    //没有服务器，使用静态页面
+    // this.axios.post("/dynamic/findOneById",{
+    //   dynamicId:this.$route.query.id
+    // })
+    // .then(res=>{
+    //   console.log(res.data);
+    //   res=res.data.data;
+    //   for(let i=0;i<res.replies.length;i++){
+    //     if(res.replies[i].parentId==0){
+    //       pinlun.push(res.replies[i]);      
+    //     }
+    //   }
+    //   console.log(this.moni.pinlun);
+    // })
+    // .catch(err=>{
+    //   console.log(err)
+    // })
   },
   components:{
     [List.name]:List,
@@ -117,7 +194,8 @@ export default {
     [Icon.name]:Icon,
     [Button.name]:Button,
     [Tab.name]:Tab,
-    [Tabs.name]:Tabs
+    [Tabs.name]:Tabs,
+    [Toast.name]:Toast,
   },
   methods:{
     onLoad(){
@@ -133,56 +211,129 @@ export default {
     },
     showText(a){
       this.show=true;
-      this.linshi=a
+      this.moni.linshi=a;
+      console.log(this.moni.linshi)
     },
     dian(){
       this.dianzan=true;
     },
-    huifu(){
-      // this.lisnhizishu='';
+    huifu(a){
+      console.log(this.moni.zishu)
       this.show=false;
-      this.axios.post("/reply/addReply",{
-        dynamicId:this.moni.dynamicId,
-        replyId:this.linshi.pinlunid,
-        userId:this.moni.userid,
-        replyContent:this.moni.zishu,
-        })
-        .then(res=>{
-          res.data
-          pinlun=[];
-              this.axios.post("/dynamic/findOneById",{
-      dynamicId:1
-    })
-    .then(res=>{
-      res=res.data.data;
-      for(let i=0;i<res.replies.length;i++){
-        if(res.replies[i].parentId==0){
-          pinlun.push(res.replies[i]);      
+
+      
+      for(var i=0;i<pinlun.length;i++){
+        if(pinlun[i].replyId==a){
+          pinlun[i].children.push({
+            userId:2,
+            name:"好啊",
+            title:this.moni.zishu,
+            dianzan:0,
+            date:new Date(),
+            imgUrl:"https://hbimg.huabanimg.com/9134ebad727a9223f3495d384e482da1142eac022e20d-MUJCbz_fw658"
+          })
         }
       }
-    })
-        })
+    sessionStorage.setItem("pinlun",JSON.stringify(this.moni.pinlun));
+this.moni.zishu='';
+
+
+      this.moni.pinlun=[];
+      for(let i=0;i<pinlun.length;i++){
+          this.moni.pinlun.push(pinlun[i]);
+        }
+          this.loading=false;
+          if(this.moni.pinlun.length==pinlun.length){
+          this.finished=true;
+        }
+
+
+//       console.log("文章："+this.moni.dynamicId,this.linshi.pinlunid,this.moni.userid,this.moni.zishu)
+//       this.show=false;
+//       this.axios.post("/reply/addReply",{
+//         dynamicId:this.moni.dynamicId,
+//         replyId:this.linshi.pinlunid,
+//         userId:this.moni.userid,
+//         replyContent:this.moni.zishu,
+//         })
+//         .then(res=>{
+//           console.log(res);
+//           pinlun=[];
+//               this.axios.post("/dynamic/findOneById",{
+//       dynamicId:1
+//     })
+//     .then(res=>{
+//       console.log(res.data);
+//       res=res.data.data;
+//       for(let i=0;i<res.replies.length;i++){
+//         if(res.replies[i].parentId==0){
+//           pinlun.push(res.replies[i]);      
+//         }
+//       }
+//       console.log(this.moni.pinlun);
+//     })
+//     .catch(err=>{
+//       console.log(err)
+//     })
+//         })
+//         .catch(err=>{
+//           console.log(err);
+//         })
         
-this.axios.post("/dynamic/findOneById",{
-      dynamicId:1
-    })
-    .then(res=>{
-      pinlun=[];
-      res=res.data.data;
-      for(let i=0;i<res.replies.length;i++){
-        if(res.replies[i].parentId==0){
-          pinlun.push(res.replies[i]);      
-        }
-      }
-    })
-
-
+// this.axios.post("/dynamic/findOneById",{
+//       dynamicId:1
+//     })
+//     .then(res=>{
+//       pinlun=[];
+//       console.log(res.data);
+//       res=res.data.data;
+//       for(let i=0;i<res.replies.length;i++){
+//         if(res.replies[i].parentId==0){
+//           pinlun.push(res.replies[i]);      
+//         }
+//       }
+//       console.log(this.moni.pinlun);
+//     })
+//     .catch(err=>{
+//       console.log(err)
+//     })
+    },
+      toast(a){
+      Toast(a);
+      this.show=false;
     },
     del(a){
-      this.axios.post("/dynamic/deleteReplyById",{
-        replyId:a
-      })
-
+      console.log(a);
+      
+      for(var i=0;i<pinlun.length;i++){
+        if(pinlun[i].replyId==a){
+          console.log(i)
+          pinlun.splice(i,1);
+        }
+      }
+      console.log(pinlun);
+      this.moni.pinlun=[];
+      for(let i=0;i<pinlun.length;i++){
+          this.moni.pinlun.push(pinlun[i]);
+        }
+          this.loading=false;
+          if(this.moni.pinlun.length==pinlun.length){
+          this.finished=true;
+        }
+      // console.log(a);
+      // this.axios.post("/dynamic/deleteReplyById",{
+      //   replyId:a
+      // })
+      // .then(res=>{
+      //   console.log(res)
+      // })
+      // .catch(err=>{
+      //   console.log(err);
+      // })
+    },
+    test(){
+      console.log(this.moni.pinlun)
+      sessionStorage.setItem("pinlun",JSON.stringify(this.moni.pinlun));
     }
   },
 
@@ -265,7 +416,6 @@ this.axios.post("/dynamic/findOneById",{
 .van-hairline--top-bottom{
   font-size: 18px;
   color: black;
-  background-color: #eee;
   border-radius: 10px;
 }
 .on{
@@ -288,6 +438,17 @@ this.axios.post("/dynamic/findOneById",{
   p{
     font-size: 18px;
   }
+}
+.huifu{
+  background-color: #eee;
+  border-radius: 20px;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  box-sizing: border-box;
+  padding: 10px 10px;
+
 }
 // 人物布局
   .comment-nav{
@@ -341,7 +502,6 @@ this.axios.post("/dynamic/findOneById",{
     }
     .nav-right{
       padding: 5px;
-      text-shadow: 0 0 1px @mainColor;
       border-radius: 30px;
       width: 60px;
       font-size: 16px;

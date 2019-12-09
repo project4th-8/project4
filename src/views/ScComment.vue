@@ -58,7 +58,7 @@
     </div>
     <div class="comment-share">
       <div class="share-content">
-        <span class="span">分享</span>
+        <span class="span" @click="share">分享</span>
         <div class="van-icon-share">
           <span class="iconfont icon-weixin1" @click="fenxiang('微信')">
           </span>
@@ -192,7 +192,7 @@
         
         <div class="guanzhuAite">
           <hr>
-          <div @click="showAite=false">{{yonghu.userid}}下的关注用户</div>
+          <div @click="showAite=false">{{yonghu.userid}}的关注</div>
           <div class="guanzhuUser" v-for="(item,index) in aiteData" :key="index">
             <div class="userimg">
               <img :src="item.userImg[0]" alt="">
@@ -206,7 +206,7 @@
           
         </div>
       </van-popup>
-      <div class="bottom-bar" @click="collect">
+      <div class="bottom-bar" @click="clet">
         <van-icon name="like-o" :class="{on:user.isshoucang}" />
         <span>{{wenzhang.shoucangshu}}</span>
       </div>
@@ -299,7 +299,14 @@ export default {
   },
   created(){
     this.wenzhang.wenzhangId=sessionStorage.getItem('dynamicId');
-  
+    this.axios.post('/dynamic/isCollect',{
+      dynamicId:this.wenzhang.wenzhangId,
+      userId:this.loginUser.userid
+    })
+    .then(res=>{
+      console.log(res.data.data);
+      this.isshoucang=res.data.data;
+    })
       this.axios.post("/dynamic/findOneById",{
       dynamicId:this.wenzhang.wenzhangId
     })
@@ -454,7 +461,22 @@ this.axios.post("/dynamic/findOneById",{
       sessionStorage.setItem("forworddynamicId",this.wenzhang.wenzhangId);
       sessionStorage.setItem("userId",this.loginUser.userid);
       this.$router.push('/forword')
-    }
+    },
+    clet(){
+      this.user.isshoucang=!this.user.isshoucang;
+      this.wenzhang.shoucangshu=this.user.isshoucang?this.wenzhang.shoucangshu+1:this.wenzhang.shoucangshu-1;
+      this.axios.post("/dynamic/changeCollect",{
+        dynamicId:this.wenzhang.wenzhangId,
+        userId:this.loginUser.userid
+      })
+      .then(res=>{
+        console.log(res.data);
+        if(res.data.data==1){
+          this.isshoucang=true
+        }else{this.isshoucang=false}
+        console.log(this.isshoucang);
+      })
+    },
   }
 }
 </script>
@@ -548,7 +570,7 @@ this.axios.post("/dynamic/findOneById",{
     background-color: white;
     border-radius: 5px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin-bottom: 5px;
     h6{
       font-size: 18px;

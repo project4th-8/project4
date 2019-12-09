@@ -1,62 +1,62 @@
 <template>
-  <div class="box">
+  <div class="box" @load="Load">
     <div class="toubu van-hairline--bottom">
       <a href="javascript:history.go(-1)"><van-icon name="arrow-left" /></a>
-      <span>{{moni.pinlunSon.length}}条回复</span>
+      <span>{{moni.pinlun.children.length}}条回复</span>
       <van-icon name="wap-home-o" />
     </div>
     <div class="content">
       <div class="main">
         <div class="contentUser">
           <div class="DauserImg" style="width:40px;height:40px;background-color:#fff">
-            <img :src="moni.pinlun.img.imgUrl" alt="" style="width:100%;height:100%">
+            <img :src="moni.pinlun.imgUrl" alt="" style="width:100%;height:100%">
           </div>
           <div class="pinlun-name">
             <div>
-              <span  style="font-size:18px;" >{{moni.pinlun.userInfo.userName}}</span>
+              <span  style="font-size:18px;" >{{moni.pinlun.name}}</span>
               <img src="../assets/logo.png" alt="aaa">
             </div>
-            <span style="font-size:15px;">2013.26.2</span>
+            <span style="font-size:10px;"> 发表于{{moni.pinlun.date}}</span>
           </div>
         </div>
         <div class="content-right">
-          <van-icon name="good-job-o" /><span class="zan">11</span>
+          <van-icon name="good-job-o" :class="{on:moni.pinlun.isDianzan}" @click="moni.pinlun.isDianzan=!moni.pinlun.isDianzan;moni.pinlun.dianzan=moni.pinlun.isDianzan?moni.pinlun.dianzan+1:moni.pinlun.dianzan-1" /><span class="zan">{{moni.pinlun.dianzan}}</span>
         </div>
       </div>
       <div class="line-1"></div>
       <p class="right"  @click="tankuang({
         id:moni.pinlun.replyId,
-        title:moni.pinlun.replyContent,
-        name:moni.pinlun.userInfo.userName
-        })">{{moni.pinlun.replyContent}}</p>
-      <a :href="'/sccomment?id='+moni.pinlun.replyId" class="right"><span>查看原文</span></a>
-      <div class="van-hairline--bottom backcolor" v-for="(item,index) in moni.pinlunSon" :key="index" >
+        title:moni.pinlun.title,
+        name:moni.pinlun.name
+        })">{{moni.pinlun.title}}</p>
+      <a :href="'/sccomment?id='+moni.pinlun.replyId" class="right" style="color: blue;"><span>查看原文</span></a>
+      <div class="van-hairline--bottom backcolor" v-for="(item,index) in moni.pinlun.children" :key="index" >
         <div class="main">
           <div class="contentUser">
             <div class="DauserImg" style="background-color:#fff">
-              <img :src="item.img.imgUrl" alt="" style="width:100%;height:100%">
+              <img :src="item.imgUrl" alt="" style="width:100%;height:100%">
             </div>
             <div class="pinlun-name">
               <div class="pinlun-p">
-                <span>{{item.userInfo.userName}}</span>
+                <span>{{item.name}}</span>
                 <img src="../assets/logo.png" alt="aa">
               </div>
-              <span>{{item.replyTime}}</span>
+              <span>{{item.date}}</span>
             </div>
           </div>
           <div class="content-right">
-            <van-icon name="good-job-o" /><span class="zan">11</span>
+            <van-icon name="good-job-o" :class="{on:item.isDianzan}" @click="item.isDianzan=!item.isDianzan;item.dianzan=item.isDianzan?item.dianzan+1:item.dianzan-1" /><span class="zan">{{item.dianzan}}</span>
           </div>
       </div>
       <div class="line-1"></div>
         <p class="right" @click="tankuang(
           {
             id:item.replyId,
-        title:item.replyContent,
-        name:item.userInfo.userName
+            title:item.title,
+            name:item.name
           }
         )">
-          {{item.replyContent}}
+          {{item.title}}
         </p>
         <div class="line-2"></div>
       </div>
@@ -80,10 +80,10 @@
     </van-popup>
     <div class="bottom-bars" v-if="!showSon">
       <div class="bottom-bar">
-        <van-icon name="share" />
+        <van-icon name="share"  @click="share"/>
       </div>
       <div class="bottom-bar">
-        <van-icon @click="tankuangSon()" name="chat-o" />
+        <van-icon @click="tankuangSon" name="chat-o" />
       </div>
       <div class="bottom-bar" @click="user.good=!user.good">
         <van-icon name="good-job-o" :class="{on:user.good}" />
@@ -92,6 +92,7 @@
   </div>
 </template>
 <script>
+var pinlun=JSON.parse(sessionStorage.getItem("pinlun"));
 import {Popup,Toast,Uploader,Icon} from 'vant'
 export default {
   name:"pinlunxiang",
@@ -109,9 +110,8 @@ export default {
         userid:sessionStorage.getItem("userId"),
         pinlun:{
         },
-        pinlunSon:[],
         zishu:'',
-        linshi:{}
+        linshi:{}//存储临时回复人
       },
       show:false,
       showSon:false,
@@ -123,27 +123,42 @@ export default {
         good:true
       },
       //临时存储文章相关
-
     }
   },
   created(){
- 
-    this.axios.post("/dynamic/findOneById",{
-      dynamicId:1
-    })
-    .then(res=>{
- 
-      for(let i=0;i<res.data.data.replies.length;i++){
-        if(res.data.data.replies[i].replyId==this.$route.query.pinlunid){
-          this.moni.pinlun=res.data.data.replies[i];
-        }
-        if(res.data.data.replies[i].parentId==this.$route.query.pinlunid){
-          this.moni.pinlunSon.push(res.data.data.replies[i]);
+    pinlun=JSON.parse(sessionStorage.getItem("pinlun"));
+    console.log(pinlun);
+    for(var i=0;i<pinlun.length;i++){
+        if(pinlun[i].replyId==this.$route.query.pinlunid){
+          this.moni.pinlun=pinlun[i];
+          this.moni.pinlun.children.reverse();
         }
       }
- 
+      console.log(this.moni.pinlun);
+    // for(var i=0;i<pinlun.length;i++){
+    //   if(this.$route.query.id==pinlun[i].id){
+    //     this.pinlun=pinlun[i];
+    //   }
+    // }
+    // console.log(this.pinlun.children)
+    // this.axios.post("/dynamic/findOneById",{
+    //   dynamicId:1
+    // })
+    // .then(res=>{
+    //   console.log(res.data.data.replies);
+    //   for(let i=0;i<res.data.data.replies.length;i++){
+    //     if(res.data.data.replies[i].replyId==this.$route.query.pinlunid){
+    //       this.moni.pinlun=res.data.data.replies[i];
+    //     }
+    //     if(res.data.data.replies[i].parentId==this.$route.query.pinlunid){
+    //       this.moni.pinlunSon.push(res.data.data.replies[i]);
+    //     }
+    //   }
+    //   console.log(this.moni.pinlunSon);
+    //   console.log(this.moni.pinlun);
+    //   console.log(this.moni.pinlun.userInfo.userName);
 
-    })
+    // })
   },
   methods:{
     toast(a){
@@ -154,45 +169,72 @@ export default {
     tankuang(a){
       this.moni.linshi=a;
       this.show=true;
+      console.log(this.moni.linshi);
+      this.moni.zishu="你 回复 "+this.moni.linshi.name +":  ";
     },
     tankuangSon(){
       this.showSon=true;
       this.show=false;
-
     },
     fasong(){
       this.showSon=false;
-    
-      this.axios.post("/reply/addReply",{
-        dynamicId:this.moni.wenzhang,
-        replyId:this.moni.pinlun.replyId,
-        userId:this.moni.userid,
-        replyContent:this.moni.zishu
-      })
-      .then(res=>{
-       res.data
-    
-        this.moni.zishu='';
+      console.log(pinlun[0].children);
+      console.log(this.moni.linshi);
+      pinlun[0].children.unshift({
+        replyId:1,
+        userId:2,
+        name:"好啊",
+        title:this.moni.zishu,
+        isDaka:true,
+        imgUrl:"https://hbimg.huabanimg.com/9134ebad727a9223f3495d384e482da1142eac022e20d-MUJCbz_fw658",
+        date:2018,
+        dianzan:0,
+        isDianzan:false
+      });
+      this.moni.linshi='';
+      this.moni.zishu='';
+      console.log(pinlun);
+    //   this.axios.post("/reply/addReply",{
+    //     dynamicId:this.moni.wenzhang,
+    //     replyId:this.moni.pinlun.replyId,
+    //     userId:this.moni.userid,
+    //     replyContent:this.moni.zishu
+    //   })
+    //   .then(res=>{
+    //     console.log(res);
+    //     console.log("成功");
+    //     this.moni.zishu='';
+    // this.axios.post("/dynamic/findOneById",{
+    //   dynamicId:1
+    // })
+    // .then(res=>{
+    //   console.log(res.data.data.replies);
+    //   for(let i=0;i<res.data.data.replies.length;i++){
+    //     if(res.data.data.replies[i].replyId==this.$route.query.pinlunid){
+    //       this.moni.pinlun=res.data.data.replies[i];
+    //     }
+    //     if(res.data.data.replies[i].parentId==this.$route.query.pinlunid){
+    //       this.moni.pinlunSon.push(res.data.data.replies[i]);
+    //     }
+    //   }
+    //   console.log(this.moni.pinlunSon);
+    //   console.log(this.moni.pinlun);
+    //   console.log(this.moni.pinlun.userInfo.userName);
 
-this.moni.pinlunSon=[];
-    this.axios.post("/dynamic/findOneById",{
-      dynamicId:1
-    })
-    .then(res=>{
-
-      for(let i=0;i<res.data.data.replies.length;i++){
-        if(res.data.data.replies[i].replyId==this.$route.query.pinlunid){
-          this.moni.pinlun=res.data.data.replies[i];
-        }
-        if(res.data.data.replies[i].parentId==this.$route.query.pinlunid){
-          this.moni.pinlunSon.push(res.data.data.replies[i]);
-        }
-      }
-  
-
-    })
-      })
+    // })
+    //   })
+    //   .catch(err=>{
+    //     console.log(err);
+    //   })
     },
+    Load(){
+      
+    },
+    share(){
+      sessionStorage.setItem("forworddynamicId",1);
+      sessionStorage.setItem("userId",1);
+      this.$router.push('/forword')
+    }
   },
 }
 </script>
@@ -201,6 +243,8 @@ this.moni.pinlunSon=[];
   color: orange;
 }
   .box{
+    min-height: 100vh;
+    background-color: rgba(170, 154, 82, 0.383);
     span{font-size: 14px;}
     p{font-size: 15px;}
     box-sizing: border-box;
@@ -230,12 +274,14 @@ this.moni.pinlunSon=[];
     height: 20px;
     border-radius: 50%;
     background-color: orange;
+    overflow: hidden;
   }
   .DauserImg{
     width: 30px;
     height: 30px;
     border-radius: 50%;
     background-color: orange;
+    overflow: hidden;
   }
 .contentUser{
   display: flex;
@@ -266,6 +312,7 @@ this.moni.pinlunSon=[];
   margin-left: 40px;
   font-size: 18px;
   margin-bottom: 10px;
+  
 }
 //小标识
 img[alt=aa]{
