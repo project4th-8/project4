@@ -84,7 +84,7 @@ var pinlun=[
     name:"说课稿",
     title:"看着落得个IE",
     isDaka:true,
-    imgUrl:"https://img.yzcdn.cn/vant/logo.png",
+    imgUrl:"https://hbimg.huabanimg.com/a3dfa8ea88ed753a62304032faace1f6aeba0c1b14ea3-njbb8W",
     date:"2018.2.5",
     dianzan:54,
     isDianzan:true,
@@ -93,7 +93,7 @@ var pinlun=[
       name:"无敌",
       title:"二级评论哈哈哈哈哈哈哈",
       isDaka:true,
-      imgUrl:"https://img.yzcdn.cn/vant/logo.png",
+      imgUrl:"https://hbimg.huabanimg.com/b2c11c5eb4d3ef7abd563662f4324abfcf8d772f50b93-iiXayU",
       date:"2018.2.5",
       dianzan:4,
       isDianzan:true
@@ -101,10 +101,10 @@ var pinlun=[
   },{
     userId:2,
     replyId:2,
-    name:"说课稿",
+    name:"看看",
     title:"看着落得个IE",
     isDaka:true,
-    imgUrl:"https://img.yzcdn.cn/vant/logo.png",
+    imgUrl:"https://hbimg.huabanimg.com/b2c11c5eb4d3ef7abd563662f4324abfcf8d772f50b93-iiXayU",
     date:"2018.2.5",
     dianzan:1154,
     isDianzan:false,
@@ -113,7 +113,7 @@ var pinlun=[
       name:"无敌",
       title:"二级评论哈哈哈哈哈哈哈",
       isDaka:true,
-      imgUrl:"https://img.yzcdn.cn/vant/logo.png",
+      imgUrl:"https://hbimg.huabanimg.com/b2c11c5eb4d3ef7abd563662f4324abfcf8d772f50b93-iiXayU",
       date:"2018.2.5",
       dianzan:5,
       isDianzan:true
@@ -121,10 +121,10 @@ var pinlun=[
   },{
     userId:3,
     replyId:3,
-    name:"说课稿",
+    name:"好沉沉",
     title:"看着落得个IE",
     isDaka:true,
-    imgUrl:"https://img.yzcdn.cn/vant/logo.png",
+    imgUrl:"https://hbimg.huabanimg.com/c1ce4fe1642233039dc4b692b927c267e8cf9dae69c4-yIUpQE",
     date:"2018.2.5",
     dianzan:54,
     isDianzan:false,
@@ -133,7 +133,7 @@ var pinlun=[
       name:"无敌",
       title:"二级评论哈哈哈哈哈哈哈",
       isDaka:true,
-      imgUrl:"https://img.yzcdn.cn/vant/logo.png",
+      imgUrl:"https://hbimg.huabanimg.com/b2c11c5eb4d3ef7abd563662f4324abfcf8d772f50b93-iiXayU",
       date:"2018.2.5",
       dianzan:541,
       isDianzan:true
@@ -502,7 +502,6 @@ this.moni.zishu='';
     }
     .nav-right{
       padding: 5px;
-      text-shadow: 0 0 1px @mainColor;
       border-radius: 30px;
       width: 60px;
       font-size: 16px;
